@@ -7,7 +7,8 @@ uses
   UCriptografiaUtil in 'Model\Util\UCriptografiaUtil.pas',
   UClassFuncoes in 'Model\Util\UClassFuncoes.pas',
   UClientesView.pass in 'View\UClientesView.pass.pas' {frmClientes},
-  uMessageUtil in 'Model\Util\uMessageUtil.pas';
+  uMessageUtil in 'Model\Util\uMessageUtil.pas',
+  Consts in 'Model\Util\Consts.pas';
 
 {$R *.res}
 
