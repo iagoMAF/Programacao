@@ -343,7 +343,7 @@ begin
           TMessageUtil.Informacao('Cliente cadastrado com sucesso.'#13+
             'Código cadastrado: ');
 
-            vEstadoTela = etPadrao;
+            vEstadoTela := etPadrao;
             DefineEstadoTela;
 
             Result := True;
@@ -351,7 +351,7 @@ begin
     except
       on E: Exception do
       begin
-          Raise Exception.Creat(
+          Raise Exception.Create(
             'Falha ao incluir os dados do cliente [View]: '#13+
             e.Message);
       end;
@@ -361,6 +361,7 @@ end;
 function TfrmClientes.ProcessaCliente: Boolean;
 begin
   try
+    Result := False;
     if (ProcessaPessoa) and
        (ProcessaEndereco) then
     begin
@@ -368,16 +369,14 @@ begin
 
         Result := True;
     end;
-
   except
-      on E : Excception do
+      on E : Exception do
       begin
         Raise Exception.Create(
-          'Falha ao gravar os dados do cliente [View]: '#13
+          'Falha ao gravar os dados do cliente [View]. '#13+
           e.Message);
       end;
   end;
-
 end;
 
 function TfrmClientes.ProcessaPessoa: Boolean;
@@ -393,7 +392,7 @@ begin
       on E: Exception do
       begin
         Raise Exception.Create(
-          'Falha ao processar os dados da pessoas [View]' #13+
+          'Falha ao processar os dados da pessoas [View] '#13+
           e.Message);
       end;
     end;
@@ -402,7 +401,9 @@ end;
 function TfrmClientes.ProcessaEndereco: Boolean;
 begin
   try
+      Result := False;
 
+      Result := True;
   except
     on E : Exception do
     begin
