@@ -72,6 +72,7 @@ type
 
     function  ProcessaConfirmacao    : Boolean;
     function  ProcessaInclusao       : Boolean;
+    function  ProcessaConsulta       : Boolean;
     function  ProcessaCliente        : Boolean;
 
     function  ProcessaPessoa         : Boolean;
@@ -237,6 +238,34 @@ begin
             if edtNome.CanFocus then
             edtNome.SetFocus;
           end;
+
+          etConsultar:
+          begin
+              stbBarraStatus.Panels[0].Text := 'Consulta';
+
+              CamposEnabled(False);
+
+              if (edtCodigo.Text <> EmptyStr) then
+              begin
+                  edtCodigo.Enabled    := False;
+                  btnAlterar.Enabled   := True;
+                  btnExcluir.Enabled   := True;
+                  btnListar.Enabled    := True;
+                  btnConfirmar.Enabled := False;
+
+                  if (btnAlterar.CanFocus) then
+                      btnAlterar.SetFocus;
+              end
+              else
+              begin
+                lblCodigo.Enabled := True;
+                edtCodigo.Enabled := True;
+
+                if edtCodigo.CanFocus then
+                   edtCodigo.SetFocus;
+              end;
+          end;
+
       end;
 end;
 
@@ -324,8 +353,8 @@ begin
 
     try
       case vEstadoTela of
-          etIncluir: Result := ProcessaInclusao;
-
+          etIncluir: Result    := ProcessaInclusao;
+          etConsultar : Result := ProcessaConsulta;
       end;
 
       if not Result then
@@ -454,6 +483,11 @@ begin
     end;
 
     Result := True;
+end;
+
+function TfrmClientes.ProcessaConsulta: Boolean;
+begin
+    vObjCliente
 end;
 
 end.
