@@ -26,7 +26,7 @@ type
       property Ativo               : Boolean  read vAtivo write vId;
   end;
 
-  TColPessoa = class(Tlist)
+  TColPessoa = Class(Tlist)
     public
         function Retorna(pIndex : Integer) : Tpessoa;
         procedure Adiciona(pPessoa : TPessoa);

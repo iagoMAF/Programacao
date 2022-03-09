@@ -19,11 +19,11 @@ type
       constructor Create;
     published
       property Id                  : Integer  read vId write vId;
-      property Tipo_Pessoa         : Integer  read vTipo_Pessoa write vId;
-      property Nome                : String   read vNome write vId;
-      property Fisica_Juridica     : Integer  read vFisica_Juridica write vId;
-      property IdentificadorPessoa : String   read vIdentificadorPessoa write vId;
-      property Ativo               : Boolean  read vAtivo write vId;
+      property Tipo_Pessoa         : Integer  read vTipo_Pessoa write vTipo_Pessoa;
+      property Nome                : String   read vNome write vNome;
+      property Fisica_Juridica     : Integer  read vFisica_Juridica write vFisica_Juridica;
+      property IdentificadorPessoa : String   read vIdentificadorPessoa write vIdentificadorPessoa;
+      property Ativo               : Boolean  read vAtivo write vAtivo;
   end;
 
   TColPessoa = Class(Tlist)

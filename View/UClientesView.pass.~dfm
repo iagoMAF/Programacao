@@ -432,7 +432,7 @@ object frmClientes: TfrmClientes
         'Jur'#237'dica')
       TabOrder = 2
     end
-    object editCPFCNPJ: TMaskEdit
+    object edtCPFCNPJ: TMaskEdit
       Left = 472
       Top = 28
       Width = 97

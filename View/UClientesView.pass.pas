@@ -4,7 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Buttons, Mask, ExtCtrls, ComCtrls, UEnumerationUtil;
+  Dialogs, StdCtrls, Buttons, Mask, ExtCtrls, ComCtrls, UEnumerationUtil,
+  UCliente, UPessoaController;
 
 type
   TfrmClientes = class(TForm)
@@ -16,7 +17,7 @@ type
     chkAtivo: TCheckBox;
     rdgTipoPessoa: TRadioGroup;
     lblCPFCNPJ: TLabel;
-    editCPFCNPJ: TMaskEdit;
+    edtCPFCNPJ: TMaskEdit;
     lblNome: TLabel;
     edtNome: TEdit;
     grbEndereco: TGroupBox;
@@ -63,17 +64,20 @@ type
 
     // Variáveis de Classes
     vEstadoTela : TEstadoTela;
+    vObjCliente : TCliente;
 
     procedure CamposEnabled(pOpcao : Boolean);
     procedure LimpaTela;
     procedure DefineEstadoTela;
 
-    function  ProcessaConfirmacao : Boolean;
-    function  ProcessaInclusao : Boolean;
-    function  ProcessaCliente : Boolean;
+    function  ProcessaConfirmacao    : Boolean;
+    function  ProcessaInclusao       : Boolean;
+    function  ProcessaCliente        : Boolean;
 
-    function  ProcessaPessoa : Boolean;
-    function  ProcessaEndereco : Boolean;
+    function  ProcessaPessoa         : Boolean;
+    function  ProcessaEndereco       : Boolean;
+
+    function  ValidaCliente          :Boolean;
   public
     { Public declarations }
   end;
@@ -341,7 +345,7 @@ begin
         if ProcessaCliente then
         begin
           TMessageUtil.Informacao('Cliente cadastrado com sucesso.'#13+
-            'Código cadastrado: ');
+            'Código cadastrado: '+ IntToStr(vObjCliente.Id));
 
             vEstadoTela := etPadrao;
             DefineEstadoTela;
@@ -366,6 +370,7 @@ begin
        (ProcessaEndereco) then
     begin
         // Gravação no Banco de dados
+        TPessoaController.getInstancia.GravaPessoa(vObjCliente);
 
         Result := True;
     end;
@@ -384,8 +389,29 @@ begin
     try
       Result := False;
 
-//      if not ValidaCliente then
-//        Exit;
+      if not ValidaCliente then
+        Exit;
+
+      if vEstadoTela = etIncluir then
+      begin
+          if vObjCliente = nil  then
+             vObjCliente := TCliente.Create;
+      end
+      else
+      if vEstadoTeLa = etAlterar then
+      begin
+          if vObjCliente = nil then
+             Exit;
+      end;
+
+      if (vObjCliente = nil) then
+             Exit;
+
+      vObjCliente.Tipo_Pessoa         := 0; //Cliente
+      vObjCliente.Nome                := edtNome.Text;
+      vObjCliente.Fisica_Juridica     := rdgTipoPessoa.ItemIndex;
+      vObjCliente.Ativo               := chkAtivo.Checked;
+      vObjCliente.IdentificadorPessoa := edtCPFCNPJ.Text;
 
       Result := True;
     except
@@ -412,6 +438,22 @@ begin
       e.Message);
     end;
   end;
+end;
+
+function TfrmClientes.ValidaCliente: Boolean;
+begin
+    Result := False;
+
+    if (edtNome.Text = EmptyStr) then
+    begin
+        TMessageUtil.Alerta('Nome do Cliente não pode ficar em branco.');
+
+        if edtNome.CanFocus then
+           edtNome.SetFocus;
+        Exit;
+    end;
+
+    Result := True;
 end;
 
 end.
