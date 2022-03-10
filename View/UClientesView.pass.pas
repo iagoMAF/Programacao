@@ -70,6 +70,9 @@ type
     procedure LimpaTela;
     procedure DefineEstadoTela;
 
+    //Carrega dados padrão na Tela
+    procedure CarregaDadosTela;
+
     function  ProcessaConfirmacao    : Boolean;
     function  ProcessaInclusao       : Boolean;
     function  ProcessaConsulta       : Boolean;
@@ -487,7 +490,62 @@ end;
 
 function TfrmClientes.ProcessaConsulta: Boolean;
 begin
-    vObjCliente
+    try
+        Result := False;
+
+        if (edtCodigo.Text = EmptyStr) then
+        begin
+            TMessageUtil.Alerta('Código do cliente não pode ficar em branco.');
+
+            if edtCodigo.CanFocus then
+               edtCodigo.SetFocus;
+
+            Exit;
+        end;
+
+        vObjCliente :=
+             TCliente(TPessoaController.getInstancia.BuscaPessoa(
+                  StrToIntDef(edtCodigo.Text, 0)));
+
+        if (vObjCliente <> nil) then
+            CarregaDadosTela
+        else
+        begin
+            TMessageUtil.Alerta(
+              'Nenhum cliente encontrado para o código informado.');
+
+            LimpaTela;
+
+            if (edtCodigo.CanFocus) then
+               (edtCodigo.SetFocus);
+
+            Exit;
+        end;
+
+        DefineEstadoTela;
+
+        Result := True;
+    except
+        on E: Exception do
+        begin
+          raise Exception.Create(
+              'Falha ao consultar os dados do cliente [View]. '#13+
+              e.Message);
+        end;
+    end;
+end;
+
+procedure TfrmClientes.CarregaDadosTela;
+begin
+    if (vObjCliente = nil) then
+      Exit;
+
+    edtCodigo.Text            := IntToStr(vObjCliente.Id);
+    rdgTipoPessoa.ItemIndex   := vObjCliente.Fisica_Juridica;
+    edtNome.Text              := vObjCliente.Nome;
+    chkAtivo.Checked          := vObjCliente.Ativo;
+    edtCPFCNPJ.Text           := vObjCliente.IdentificadorPessoa;
+
 end;
 
 end.
