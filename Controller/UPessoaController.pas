@@ -11,6 +11,8 @@ type
       function  GravaPessoa(
                 pPessoa : TPessoa) : Boolean;
 
+      function ExcluiPessoa(pPessoa : Tpessoa) : Boolean;
+
       function  BuscaPessoa(pID : Integer) : Tpessoa;
 
       function RetornaCondicaoPessoa(pID_Pessoa : Integer) : String;
@@ -54,6 +56,42 @@ end;
 constructor TPessoaController.Create;
 begin
     inherited Create;
+end;
+
+function TPessoaController.ExcluiPessoa(pPessoa: Tpessoa): Boolean;
+var
+  xPessoaDAO : TPessoaDAO;
+begin
+    try
+      try
+        Result := False;
+
+        TConexao.get.iniciaTransacao;
+
+        xPessoaDAO := TPessoaDAO.Create(TConexao.get.getConn);
+
+        if (pPessoa.Id = 0) then
+          Exit
+        else
+        begin
+          xPessoaDAO.Deleta(RetornaCondicaoPessoa(pPessoa.Id));
+        end;
+
+        TConexao.get.confirmaTransacao;
+
+        Result := True;
+      finally
+        if xPessoaDAO <> nil then
+           FreeAndNil(xPessoaDAO);
+      end;
+    except
+      on E: Exception do
+      begin
+        raise Exception.Create(
+        'Falha ao excluir os dados da pessoa [Controller]: '#13+
+        e.Message);
+      end;
+    end;
 end;
 
 class function TPessoaController.getInstancia: TPessoaController;
