@@ -166,6 +166,9 @@ begin
            else
            begin
               xPessoaDAO.Atualiza(pPessoa, RetornaCondicaoPessoa(pPessoa.Id));
+
+              xEnderecoDao.Deleta(RetornaCondicaoPessoa(pPessoa.Id, True));
+              xEnderecoDao.InsereLista(pColEndereco);
            end;
 
            TConexao.get.confirmaTransacao;
