@@ -30,7 +30,7 @@ type
       property Cidade         : String  read vCidade        write vCidade;
   end;
 
-  TColEndereco = class(TList)
+  TcolEndereco = class(TList)
     public
         function  Retorna(pIndex : Integer) : TEndereco;
         procedure Adiciona(pEndereco : TEndereco);
@@ -55,15 +55,15 @@ end;
 
 { TcolEndereco }
 
-procedure TColEndereco.Adiciona(pEndereco: TEndereco);
+procedure TcolEndereco.Adiciona(pEndereco: TEndereco);
 begin
     Self.Add(TEndereco(pEndereco));
 end;
 
-function TColEndereco.Retorna(pIndex: Integer): TEndereco;
+function TcolEndereco.Retorna(pIndex: Integer): TEndereco;
 begin
     Result := TEndereco(Self[pIndex]);
 end;
 
 end.
-
+ 

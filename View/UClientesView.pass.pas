@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, Buttons, Mask, ExtCtrls, ComCtrls, UEnumerationUtil,
-  UCliente, UPessoaController;
+  UCliente, UPessoaController, UEndereco;
 
 type
   TfrmClientes = class(TForm)
@@ -64,8 +64,9 @@ type
     vKey : Word;
 
     // Variáveis de Classes
-    vEstadoTela : TEstadoTela;
-    vObjCliente : TCliente;
+    vEstadoTela     : TEstadoTela;
+    vObjCliente     : TCliente;
+    vObjColEndereco : TColEndereco;
 
     procedure CamposEnabled(pOpcao : Boolean);
     procedure LimpaTela;
@@ -84,7 +85,8 @@ type
     function  ProcessaPessoa         : Boolean;
     function  ProcessaEndereco       : Boolean;
 
-    function  ValidaCliente          :Boolean;
+    function  ValidaCliente          : Boolean;
+    function  ValidaEndereco         : Boolean;
   public
     { Public declarations }
   end;
@@ -502,9 +504,14 @@ begin
 end;
 
 function TfrmClientes.ProcessaEndereco: Boolean;
+var
+  xEndereco : TEndereco;
 begin
   try
       Result := False;
+
+      if (not ValidaEndereco) then
+      Exit;
 
       Result := True;
   except
@@ -673,6 +680,71 @@ begin
               e.Message);
         end;
     end;
+end;
+
+function TfrmClientes.ValidaEndereco: Boolean;
+begin
+    Result := False;
+
+    if (Trim(edtEndereco.Text) = EmptyStr) then
+    begin
+      TMessageUtil.Alerta('Endereço do cliente não pode ficar em branco');
+
+      if (edtEndereco.CanFocus) then
+      begin   edtEndereco.SetFocus;
+      Exit;
+      end;
+    end;
+
+    if (Trim(edtNumero.text) = EmptyStr) then
+    begin
+        TMessageUtil.Alerta(
+          'Número de Endereço do Cliente não pode ficar em branco.');
+
+        if (edtNumero.CanFocus) then
+        begin
+           edtNumero.SetFocus;
+           Exit;
+        end;
+    end;
+
+    if (Trim(edtBairro.text) = EmptyStr) then
+    begin
+        TMessageUtil.Alerta(
+          'Bairro não pode ficar em branco. ');
+
+        if (edtBairro.CanFocus) then
+        begin
+            edtBairro.SetFocus;
+        Exit;
+        end;
+    end;
+
+    if (Trim(cmbUF.Text) =  EmptyStr) then
+    begin
+        TMessageUtil.Alerta(
+          'UF não pode ficar em branco. ');
+
+        if (cmbUF.CanFocus)then
+        begin
+            cmbUF.SetFocus;
+        Exit;
+        end;
+    end;
+
+    if (Trim(edtCidade.Text) = EmptyStr) then
+    begin
+        TMessageUtil.Alerta(
+        'Cidade não pode ficar em branco');
+
+        if (edtCidade.CanFocus) then
+        begin
+            edtCidade.SetFocus;
+        Exit;
+        end;
+    end;
+
+    Result := True;
 end;
 
 end.
