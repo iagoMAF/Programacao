@@ -1,7 +1,7 @@
 object frmClientes: TfrmClientes
-  Left = 219
-  Top = 410
-  Width = 601
+  Left = 224
+  Top = 417
+  Width = 645
   Height = 401
   Caption = 'Clientes'
   Color = clBtnFace
@@ -25,7 +25,7 @@ object frmClientes: TfrmClientes
   object stbBarraStatus: TStatusBar
     Left = 0
     Top = 343
-    Width = 585
+    Width = 629
     Height = 19
     Panels = <
       item
@@ -38,7 +38,7 @@ object frmClientes: TfrmClientes
   object pnlBotoes: TPanel
     Left = 0
     Top = 248
-    Width = 585
+    Width = 629
     Height = 95
     Align = alBottom
     TabOrder = 1
@@ -259,7 +259,7 @@ object frmClientes: TfrmClientes
         A780BBA077A890608D652DFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
     end
     object btnConfirmar: TBitBtn
-      Left = 408
+      Left = 432
       Top = 16
       Width = 75
       Height = 25
@@ -296,7 +296,7 @@ object frmClientes: TfrmClientes
         8637288637247C3267A567B7CDB7FFFFFFFFFFFFFFFFFFFFFFFF}
     end
     object btnCancelar: TBitBtn
-      Left = 496
+      Left = 520
       Top = 16
       Width = 75
       Height = 25
@@ -333,7 +333,7 @@ object frmClientes: TfrmClientes
         79F47179F47279F47178F4727AF4727AF47279F49499F6FFFFFF}
     end
     object btnSair: TBitBtn
-      Left = 496
+      Left = 520
       Top = 56
       Width = 75
       Height = 25
@@ -373,7 +373,7 @@ object frmClientes: TfrmClientes
   object pnlArea: TPanel
     Left = 0
     Top = 0
-    Width = 585
+    Width = 629
     Height = 248
     Align = alClient
     TabOrder = 2
@@ -432,11 +432,12 @@ object frmClientes: TfrmClientes
         'F'#237'sica'
         'Jur'#237'dica')
       TabOrder = 2
+      OnClick = rdgTipoPessoaClick
     end
     object edtCPFCNPJ: TMaskEdit
       Left = 472
       Top = 28
-      Width = 97
+      Width = 129
       Height = 21
       EditMask = '000\.000\.000\-00;1;_'
       MaxLength = 14
@@ -446,14 +447,14 @@ object frmClientes: TfrmClientes
     object edtNome: TEdit
       Left = 62
       Top = 61
-      Width = 507
+      Width = 539
       Height = 21
       TabOrder = 4
     end
     object grbEndereco: TGroupBox
       Left = 24
       Top = 96
-      Width = 545
+      Width = 593
       Height = 145
       Caption = ' Endere'#231'o'
       TabOrder = 5
@@ -538,8 +539,9 @@ object frmClientes: TfrmClientes
       object edtEndereco: TEdit
         Left = 72
         Top = 21
-        Width = 465
+        Width = 505
         Height = 21
+        MaxLength = 100
         TabOrder = 0
       end
       object edtNumero: TEdit
@@ -552,14 +554,14 @@ object frmClientes: TfrmClientes
       object edtComplemento: TEdit
         Left = 265
         Top = 48
-        Width = 272
+        Width = 312
         Height = 21
         TabOrder = 2
       end
       object edtBairro: TEdit
         Left = 47
         Top = 79
-        Width = 490
+        Width = 530
         Height = 21
         TabOrder = 3
       end
@@ -577,7 +579,7 @@ object frmClientes: TfrmClientes
       object edtCidade: TEdit
         Left = 160
         Top = 105
-        Width = 377
+        Width = 417
         Height = 21
         TabOrder = 5
       end

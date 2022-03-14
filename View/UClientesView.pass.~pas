@@ -200,6 +200,13 @@ begin
       (Components[i] as TCheckBox).Checked := False;
 
   end;
+
+  if (vObjCliente <> nil ) then
+    FreeAndNil(vObjCliente);
+
+  if (vObjColEndereco <> nil) then
+    FreeAndNil(vObjColEndereco);
+
 end;
 
 Procedure TfrmClientes.DefineEstadoTela;
@@ -402,9 +409,10 @@ begin
 
     try
       case vEstadoTela of
-          etIncluir: Result    := ProcessaInclusao;
-          etAlterar: Result    := ProcessaAlteracao;
-          etConsultar : Result := ProcessaConsulta;
+          etIncluir   : Result    := ProcessaInclusao;
+          etAlterar   : Result    := ProcessaAlteracao;
+          etExcluir   : Result    := ProcessaExclusao;
+          etConsultar : Result    := ProcessaConsulta;
       end;
 
       if not Result then
