@@ -679,7 +679,8 @@ function TfrmClientes.ProcessaExclusao: Boolean;
 begin
     try
         Result := False;
-        if (vObjCliente = nil) then
+        if (vObjCliente = nil) or
+           (vObjColEndereco = nil) then
         begin
             TMessageUtil.Alerta(
             'Não foi possivel carregar todos os dados cadastrados do cliente.');
@@ -695,7 +696,6 @@ begin
           begin
             Screen.Cursor := crHourGlass;
             TPessoaController.getInstancia.ExcluiPessoa(vObjCliente);
-
           end
           else
           begin
