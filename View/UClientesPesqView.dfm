@@ -12,6 +12,7 @@ object frmClientesPesq: TfrmClientesPesq
   Font.Style = []
   KeyPreview = True
   OldCreateOrder = False
+  Position = poScreenCenter
   OnKeyDown = FormKeyDown
   PixelsPerInch = 96
   TextHeight = 13
@@ -35,8 +36,8 @@ object frmClientesPesq: TfrmClientesPesq
       Width = 75
       Height = 25
       Caption = '&Limpar'
-      Enabled = False
       TabOrder = 1
+      OnClick = btnLimparClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -71,8 +72,8 @@ object frmClientesPesq: TfrmClientesPesq
       Width = 75
       Height = 25
       Caption = 'C&onfirmar'
-      Enabled = False
       TabOrder = 0
+      OnClick = btnConfirmarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -107,8 +108,8 @@ object frmClientesPesq: TfrmClientesPesq
       Width = 75
       Height = 25
       Caption = '&Sair'
-      Enabled = False
       TabOrder = 2
+      OnClick = btnSairClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -180,8 +181,8 @@ object frmClientesPesq: TfrmClientesPesq
         Width = 75
         Height = 25
         Caption = '&Filtrar'
-        Enabled = False
         TabOrder = 1
+        OnClick = btnFiltrarClick
         Glyph.Data = {
           36030000424D3603000000000000360000002800000010000000100000000100
           18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -240,6 +241,8 @@ object frmClientesPesq: TfrmClientesPesq
         TitleFont.Height = -11
         TitleFont.Name = 'MS Sans Serif'
         TitleFont.Style = []
+        OnDblClick = dbgClienteDblClick
+        OnKeyDown = dbgClienteKeyDown
         Columns = <
           item
             Expanded = False
@@ -272,6 +275,7 @@ object frmClientesPesq: TfrmClientesPesq
     Active = True
     Aggregates = <>
     Params = <>
+    BeforeDelete = cdsClienteBeforeDelete
     Left = 38
     Top = 136
     Data = {
