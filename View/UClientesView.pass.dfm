@@ -1,6 +1,6 @@
 object frmClientes: TfrmClientes
-  Left = 224
-  Top = 417
+  Left = 501
+  Top = 214
   Width = 645
   Height = 401
   Caption = 'Clientes'
