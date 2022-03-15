@@ -105,9 +105,6 @@ begin
 
     if (edtNome.CanFocus) then
        (edtNome.SetFocus);
-
-    mClienteID   := 0;
-    mClienteNome := EmptyStr;
 end;
 
 procedure TfrmClientesPesq.ProcessaConfirmacao;
@@ -117,6 +114,7 @@ begin
         mClienteID        := cdsClienteID.Value;
         mClienteNome      := cdsClienteNome.Value;
         Self.ModalResult  := mrOk;
+        LimparTela;
         Close;
     end
     else
@@ -193,6 +191,8 @@ end;
 
 procedure TfrmClientesPesq.btnConfirmarClick(Sender: TObject);
 begin
+    mClienteID   := 0;
+    mClienteNome := EmptyStr;
     ProcessaConfirmacao;
 end;
 
@@ -203,6 +203,8 @@ end;
 
 procedure TfrmClientesPesq.btnSairClick(Sender: TObject);
 begin
+    mClienteID   := 0;
+    mClienteNome := EmptyStr;
     LimparTela;
     Close;
 end;

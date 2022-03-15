@@ -107,7 +107,7 @@ begin
        (edtNome.SetFocus);
 
     mClienteID   := 0;
-    mClienteNomo := EmptyStr;
+    mClienteNome := EmptyStr;
 end;
 
 procedure TfrmClientesPesq.ProcessaConfirmacao;

@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, Buttons, Mask, ExtCtrls, ComCtrls, UEnumerationUtil,
-  UCliente, UPessoaController, UEndereco;
+  UCliente, UPessoaController, UEndereco, frxClass, DB, DBClient, frxDBSet;
 
 type
   TfrmClientes = class(TForm)
@@ -42,6 +42,18 @@ type
     btnConfirmar: TBitBtn;
     btnCancelar: TBitBtn;
     btnSair: TBitBtn;
+    frxListagemCliente: TfrxReport;
+    cdsCliente: TClientDataSet;
+    cdsClienteID: TStringField;
+    cdsClienteNome: TStringField;
+    cdsClienteCPFCNPJ: TStringField;
+    cdsClienteAtivo: TStringField;
+    cdsClienteEndereco: TStringField;
+    cdsClienteNumero: TStringField;
+    cdsClienteComplemento: TStringField;
+    cdsClienteBairro: TStringField;
+    cdsClienteCidadeUF: TStringField;
+    frxDBCliente: TfrxDBDataset;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -81,6 +93,7 @@ type
     function  ProcessaAlteracao      : Boolean;
     function  ProcessaExclusao       : Boolean;
     function  ProcessaConsulta       : Boolean;
+    function  ProcessaListagem       : Boolean;
     function  ProcessaCliente        : Boolean;
 
     function  ProcessaPessoa         : Boolean;
@@ -98,7 +111,7 @@ var
 implementation
 
 uses
-    uMessageUtil, UClientesPesqView;
+    uMessageUtil, UClientesPesqView, StrUtils;
 {$R *.dfm}
 
 procedure TfrmClientes.FormKeyDown(Sender: TObject; var Key: Word;
@@ -304,23 +317,41 @@ begin
 
               if (edtCodigo.Text <> EmptyStr) then
               begin
-                  edtCodigo.Enabled    := False;
-                  btnAlterar.Enabled   := True;
-                  btnExcluir.Enabled   := True;
-                  btnListar.Enabled    := True;
-                  btnConfirmar.Enabled := False;
+                  edtCodigo.Enabled         := False;
+                  btnAlterar.Enabled        := True;
+                  btnExcluir.Enabled        := True;
+                  btnListar.Enabled         := True;
+                  btnConfirmar.Enabled      := False;
 
                   if (btnAlterar.CanFocus) then
                       btnAlterar.SetFocus;
               end
               else
               begin
-                lblCodigo.Enabled := True;
-                edtCodigo.Enabled := True;
+                  lblCodigo.Enabled         := True;
+                  edtCodigo.Enabled         := True;
 
-                if edtCodigo.CanFocus then
-                   edtCodigo.SetFocus;
+                  if edtCodigo.CanFocus then
+                    edtCodigo.SetFocus;
               end;
+          end;
+
+          etListar:
+          begin
+              stbBarraStatus.Panels[0].Text := 'Listagem';
+
+              if (edtCodigo.Text <> EmptyStr) then
+                  ProcessaListagem
+              else
+              begin
+                  lblCodigo.Enabled         := True;
+                  edtCodigo.Enabled         := True;
+
+                  if (edtCodigo.CanFocus) then
+                     (edtCodigo.SetFocus);
+              end;
+
+
           end;
 
           etPesquisar:
@@ -732,6 +763,7 @@ begin
           begin
             Screen.Cursor := crHourGlass;
             TPessoaController.getInstancia.ExcluiPessoa(vObjCliente);
+            TMessageUtil.Informacao('Cliente excluído com sucesso.');
           end
           else
           begin
@@ -747,7 +779,6 @@ begin
         end;
 
         Result := True;
-        TMessageUtil.Informacao('Cliente excluído com sucesso.');
         LimpaTela;
         vEstadoTela := etPadrao;
         DefineEstadoTela;
@@ -838,6 +869,37 @@ begin
     begin
       edtCPFCNPJ.Clear;
       edtCPFCNPJ.EditMask := '000\.000\.000\-00;1;_';
+    end;
+end;
+
+function TfrmClientes.ProcessaListagem: Boolean;
+begin
+    try
+      if (not cdsCliente.Active) then
+        Exit;
+
+      cdsCliente.Append;
+      cdsClienteID.Value          := edtCodigo.Text;
+      cdsClienteNome.Value        := edtNome.Text;
+      cdsClienteCPFCNPJ.Value     := edtCPFCNPJ.Text;
+      cdsClienteAtivo.Value       := IfThen(chkAtivo.Checked, 'Sim', 'Não');
+      cdsClienteEndereco.Value    := edtEndereco.Text;
+      cdsClienteNumero.Value      := edtNumero.Text;
+      cdsClienteComplemento.Value := edtComplemento.Text;
+      cdsClienteBairro.Value      := edtBairro.Text;
+      cdsClienteCidadeUF.Value    := edtCidade.Text + '/' + cmbUF.Text;
+      cdsCliente.Post;
+
+      frxListagemCliente.Variables['DATAHORA'] :=
+        QuotedStr(FormatDateTime('DD/MM/YYYY hh:mm', Date + Time));
+      frxListagemCliente.Variables['NOMEEMPRESA'] :=
+        QuotedStr('Nome da empresa');
+      frxListagemCliente.ShowReport();
+
+    finally
+      vEstadoTela := etPadrao;
+      DefineEstadoTela;
+      cdsCliente.EmptyDataSet;
     end;
 end;
 

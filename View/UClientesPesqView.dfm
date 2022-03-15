@@ -1,6 +1,6 @@
 object frmClientesPesq: TfrmClientesPesq
-  Left = 934
-  Top = 188
+  Left = 833
+  Top = 337
   Width = 669
   Height = 353
   Caption = 'Pesquisa de cliente'
@@ -165,14 +165,15 @@ object frmClientesPesq: TfrmClientesPesq
         Left = 47
         Top = 18
         Width = 233
-        Height = 14
+        Height = 13
         Caption = 'Digite parte ou todo o conte'#250'do a ser pesquisado'
       end
       object edtNome: TEdit
         Left = 47
         Top = 39
         Width = 506
-        Height = 22
+        Height = 21
+        CharCase = ecUpperCase
         TabOrder = 0
       end
       object btnFiltrar: TBitBtn
@@ -235,6 +236,7 @@ object frmClientesPesq: TfrmClientesPesq
         Height = 148
         Align = alClient
         DataSource = dtsCliente
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgCancelOnExit]
         TabOrder = 0
         TitleFont.Charset = DEFAULT_CHARSET
         TitleFont.Color = clWindowText
