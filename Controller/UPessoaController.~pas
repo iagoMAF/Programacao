@@ -10,18 +10,19 @@ type
       constructor Create;
       function  GravaPessoa(
                 pPessoa : TPessoa;
-                pColEndereco: TColEndereco) : Boolean;
+                pColEndereco: TColEndereco)    : Boolean;
 
       function ExcluiPessoa(pPessoa : Tpessoa) : Boolean;
 
-      function  BuscaPessoa(pID : Integer) : Tpessoa;
+      function  BuscaPessoa(pID : Integer)     : Tpessoa;
+      function  PesquisaPessoa(pNome : String) : TColPessoa;
       function  BuscaEnderecoPessoa(pID_Pessoa :  Integer ) : TColEndereco;
 
       function RetornaCondicaoPessoa(
                pID_Pessoa : Integer;
                pRelacionada : Boolean = False) : String;
     published
-        class function getInstancia : TPessoaController;
+        class function getInstancia            : TPessoaController;
   end;
 
 implementation
@@ -192,6 +193,38 @@ begin
              e.Message);
         end;
     end;
+end;
+
+function TPessoaController.PesquisaPessoa(pNome: String): TColPessoa;
+var
+  xPessoaDAO : TPessoaDAO;
+  xCondicao  : String;
+begin
+  try
+    try
+      Result     := nil;
+
+      xPessoaDAO := TPessoaDAO.Create(TConexao.get.getConn);
+
+      xCondicao  :=
+        IfThen(pNome <> EmptyStr,
+          'WHERE                              '#13+
+          '    (NOME LIKE ''%'+ pNome + '%'' )'#13+
+          'ORDER BY NOME, ID', EmptyStr);
+
+      Result     := xPessoaDAO.RetornaLista(xCondicao);
+    finally
+      if (xPessoaDAO <> nil) then
+          FreeAndNil(xPessoaDAO);
+    end;
+  except
+    on E: Exception do
+    begin
+      raise Exception.Create(
+        'Falha ao buscas os dados da pessoa [Controller]: '#13+
+        e.Message);
+    end;
+  end;
 end;
 
 function TPessoaController.RetornaCondicaoPessoa(

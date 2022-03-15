@@ -1,6 +1,6 @@
 object frmClientes: TfrmClientes
-  Left = 182
-  Top = 481
+  Left = 519
+  Top = 345
   Width = 645
   Height = 401
   Caption = 'Clientes'
@@ -449,6 +449,7 @@ object frmClientes: TfrmClientes
       Top = 61
       Width = 539
       Height = 21
+      CharCase = ecUpperCase
       TabOrder = 4
     end
     object grbEndereco: TGroupBox

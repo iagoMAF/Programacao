@@ -208,8 +208,9 @@ begin
 
       xCondicao  :=
         IfThen(pNome <> EmptyStr,
-          'WHERE                              '#13+
-          '    (NOME LIKE ''%'+ pNome + '%'' )', EmptyStr);
+          'WHERE                                      '#13+
+          '    (NOME LIKE UPPER(''%'+ pNome + '%'' ) )'#13+
+          'ORDER BY NOME, ID', EmptyStr);
 
       Result     := xPessoaDAO.RetornaLista(xCondicao);
     finally
