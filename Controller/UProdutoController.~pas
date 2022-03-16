@@ -1,0 +1,48 @@
+unit UProdutoController;
+
+interface
+
+uses SysUtils, Math, StrUtils, UConexao, UProduto;
+
+type
+    TProdutoController = class
+      public
+        constructor Create;
+        function  GravaProduto(
+                    pProduto : TProduto) : Boolean;
+
+
+    end;
+
+implementation
+
+{ TProdutoController }
+
+constructor TProdutoController.Create;
+begin
+    inherited Create;
+end;
+
+function TProdutoController.GravaProduto(pProduto: TProduto): Boolean;
+var
+  xProdutoDAO : TProdutoDAO;
+  xAux        : Integer;
+begin
+    try
+        try
+            TConexao.get.iniciaTransacao;
+            Result := False;
+
+            xProdutoDAO :=
+              TProdutoDao.Create(TConexao.get.getConn);
+
+        finally
+
+        end;
+    except
+
+    end;
+end;
+
+end.
+ 

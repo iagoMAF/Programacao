@@ -899,6 +899,7 @@ begin
     finally
       vEstadoTela := etPadrao;
       DefineEstadoTela;
+      cdsCliente.EmptyDataSet;
     end;
 end;
 
