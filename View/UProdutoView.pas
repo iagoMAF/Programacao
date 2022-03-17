@@ -60,6 +60,7 @@ type
     function  ProcessaConfirmacao : Boolean;
     function  ProcessaInclusao    : Boolean;
     function  ProcessaAlteracao   : Boolean;
+    function  ProcessaExclusao    : Boolean;
     function  ProcessaConsulta    : Boolean;
     function  ProcessaProduto     : Boolean;
 
@@ -222,6 +223,22 @@ begin
                   edtCodigo.SetFocus;
             end;
 
+        end;
+
+        etExcluir:
+        begin
+            stbBarraStatus.Panels[0].Text := 'Exclusão';
+
+            if (edtCodigo.Text <> EmptyStr) then
+                ProcessaExclusao
+            else
+            begin
+                lblCodigo.Enabled := True;
+                edtCodigo.Enabled := True;
+
+                if (edtCodigo.CanFocus) then
+                    edtCodigo.SetFocus;
+            end;
         end;
 
         etConsultar:
@@ -546,6 +563,56 @@ begin
       ProcessaConsulta;
 
    vKey := VK_CLEAR;
+end;
+
+function TfrmProduto.ProcessaExclusao: Boolean;
+begin
+   try
+      Result := False;
+
+      if (vObjProduto = nil) then
+      begin
+         TMessageUtil.Alerta(
+            'Não foi possivel carregar os dados cadastrados do produto.');
+
+         LimparTela;
+         vEstadoTela := etPadrao;
+         DefineEstadoTela;
+         Exit;
+      end;
+
+      try
+         if TMessageUtil.Pergunta('Deseja mesmo excluir esse produto?') then
+         begin
+            Screen.Cursor := crHourGlass;
+            TProdutoController.getInstancia.ExcluiProduto(vObjProduto);
+         end
+         else
+         begin
+            LimparTela;
+            vEstadoTela   := etPadrao;
+            DefineEstadoTela;
+            Exit;
+         end;
+      finally
+         Screen.Cursor    := crDefault;
+         Application.ProcessMessages;
+      end;
+
+      Result := True;
+      TMessageUtil.Informacao('O produto foi excluído com sucesso');
+      LimparTela;
+      vEstadoTela := etPadrao;
+      DefineEstadoTela;
+
+   except
+   on E: Exception do
+      begin
+         Raise Exception.Create(
+            'Falha ao excluir os dados do produto '#13+
+            e.Message);
+      end;
+   end;
 end;
 
 end.

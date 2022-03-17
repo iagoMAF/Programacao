@@ -11,8 +11,8 @@ type
         function  GravaProduto(
                     pProduto : TProduto) : Boolean;
 
+        function  ExcluiProduto(pProduto : TProduto) : Boolean;
         function  BuscaProduto(pID : Integer) : TProduto;
-
 
         function RetornaCondicaoProduto(pID_Produto : Integer) :  String;
       published
@@ -59,6 +59,43 @@ end;
 constructor TProdutoController.Create;
 begin
     inherited Create;
+end;
+
+function TProdutoController.ExcluiProduto(pProduto: TProduto): Boolean;
+var
+   xProdutoDAO : TProdutoDAO;
+begin
+   try
+      try
+         Result := True;
+
+         TConexao.get.iniciaTransacao;
+
+         xProdutoDAO := TProdutoDAO.Create(TConexao.get.getConn);
+
+         if (pProduto.Id = 0) then
+            Exit
+         else
+         begin
+            xProdutoDAO.Deleta(RetornaCondicaoProduto(pProduto.Id))
+         end;
+
+         TConexao.get.confirmaTransacao;
+
+         Result := False;
+      finally
+         if xProdutoDAO <> nil then
+            FreeAndNil(xProdutoDAO);
+      end;
+   except
+      on E: Exception do
+      begin
+         TConexao.get.cancelaTransacao;
+         raise Exception.Create(
+            'Falha ao excluir os dados do produto [Controller]: '#13+
+            e.Message);
+      end;
+   end;
 end;
 
 class function TProdutoController.getInstancia: TProdutoController;

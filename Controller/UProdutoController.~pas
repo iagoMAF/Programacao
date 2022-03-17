@@ -10,6 +10,10 @@ type
         constructor Create;
         function  GravaProduto(
                     pProduto : TProduto) : Boolean;
+
+        function  BuscaProduto(pID : Integer) : TProduto;
+
+
         function RetornaCondicaoProduto(pID_Produto : Integer) :  String;
       published
         class function getInstancia : TProdutoController;
@@ -26,6 +30,31 @@ var
   _instance : TProdutoController;
 
 { TProdutoController }
+
+function TProdutoController.BuscaProduto(pID: Integer): TProduto;
+var
+   xProdutoDAO : TProdutoDAO;
+begin
+   try
+      try
+         Result      := nil; // é nil pois não é do tipo boolean
+
+         xProdutoDAO := TProdutoDAO.Create(TConexao.getInstance.getConn);
+         Result      := xProdutoDAO.Retorna(RetornaCondicaoProduto(pID));
+
+      finally
+         if (xProdutoDAO <> nil ) then
+            FreeAndNil(xProdutoDAO);
+      end;
+   except
+      on E: Exception do
+      begin
+         raise Exception.Create(
+            'Falha ao buscar os dados do produto. [Controller] '#13+
+            e.Message);
+      end;
+   end;
+end;
 
 constructor TProdutoController.Create;
 begin

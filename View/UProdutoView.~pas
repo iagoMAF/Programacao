@@ -42,6 +42,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure FormKeyUp(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure edtCodigoExit(Sender: TObject);
   private
     { Private declarations }
     vKey : Word;
@@ -58,6 +59,7 @@ type
 
     function  ProcessaConfirmacao : Boolean;
     function  ProcessaInclusao    : Boolean;
+    function  ProcessaAlteracao   : Boolean;
     function  ProcessaConsulta    : Boolean;
     function  ProcessaProduto     : Boolean;
 
@@ -195,6 +197,33 @@ begin
                (edtUnidade.SetFocus);
         end;
 
+        etAlterar:
+        begin
+            stbBarraStatus.Panels[0].Text := 'Alteração';
+
+            if (edtCodigo.Text <> EmptyStr) then
+            begin
+               CamposEnabled(True);
+
+               edtCodigo.Enabled    := False;
+               btnAlterar.Enabled   := False;
+               btnConfirmar.Enabled := True;
+
+               if chkAtivo.CanFocus then
+                  chkAtivo.SetFocus;
+
+            end
+            else
+            begin
+               lblCodigo.Enabled := True;
+               edtCodigo.Enabled := True;
+
+               if edtCodigo.CanFocus then
+                  edtCodigo.SetFocus;
+            end;
+
+        end;
+
         etConsultar:
         begin
             stbBarraStatus.Panels[0].Text := 'Consulta';
@@ -303,6 +332,7 @@ begin
     try
         case vEstadoTela of
             etIncluir   : Result := ProcessaInclusao;
+            etAlterar   : Result := ProcessaAlteracao;
             etConsultar : Result := ProcessaConsulta;
         end;
 
@@ -484,6 +514,38 @@ begin
    chkAtivo.Checked  := vObjProduto.Ativo;
    edtUnidade.Text   := vObjProduto.Unidade;
    edtDescricao.Text := vObjProduto.Descricao;
+end;
+
+function TfrmProduto.ProcessaAlteracao: Boolean;
+begin
+   try
+      Result := False;
+
+      if ProcessaProduto then
+      begin
+         TMessageUtil.Informacao('Dados do produto alterados com sucesso.');
+
+         vEstadoTela := etPadrao;
+         DefineEstadoTela;
+         Result := True;
+      end;
+
+   except
+      on E: Exception do
+      begin
+         Raise Exception.Create(
+            'Falha ao alterar os dados do produto [View]: '#13+
+            e.Message);
+      end;
+   end;
+end;
+
+procedure TfrmProduto.edtCodigoExit(Sender: TObject);
+begin
+   if vKey = VK_RETURN then
+      ProcessaConsulta;
+
+   vKey := VK_CLEAR;
 end;
 
 end.

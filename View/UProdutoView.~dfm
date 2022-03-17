@@ -1,6 +1,6 @@
 object frmProduto: TfrmProduto
-  Left = 1056
-  Top = 395
+  Left = 950
+  Top = 375
   Width = 533
   Height = 204
   Caption = 'Produto'
@@ -336,7 +336,6 @@ object frmProduto: TfrmProduto
     Width = 517
     Height = 76
     Align = alClient
-    Caption = '.t'
     TabOrder = 2
     object lblCodigo: TLabel
       Left = 11
@@ -377,6 +376,7 @@ object frmProduto: TfrmProduto
       Width = 107
       Height = 21
       TabOrder = 0
+      OnExit = edtCodigoExit
     end
     object chkAtivo: TCheckBox
       Left = 170
