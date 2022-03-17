@@ -53,9 +53,14 @@ type
     procedure LimparTela;
     procedure DefineEstadoTela; //Vai ser utilizada em cada botão
 
+
+    procedure CarregaDadosTela; // Carrega os dados na tela
+
     function  ProcessaConfirmacao : Boolean;
     function  ProcessaInclusao    : Boolean;
+    function  ProcessaConsulta    : Boolean;
     function  ProcessaProduto     : Boolean;
+
 
     function  ProcessaUnidade     : Boolean;
 
@@ -189,6 +194,32 @@ begin
             if (edtUnidade.CanFocus) then
                (edtUnidade.SetFocus);
         end;
+
+        etConsultar:
+        begin
+            stbBarraStatus.Panels[0].Text := 'Consulta';
+
+            CamposEnabled(False);
+
+            if (edtCodigo.Text <> EmptyStr) then
+            begin
+                  edtCodigo.Enabled         := False;
+                  btnAlterar.Enabled        := True;
+                  btnExcluir.Enabled        := True;
+                  btnConfirmar.Enabled      := False;
+
+                  if (btnAlterar.CanFocus) then
+                     (btnAlterar.SetFocus);
+            end
+            else
+            begin
+                  lblCodigo.Enabled         := True;
+                  edtCodigo.Enabled         := True;
+
+                  if edtCodigo.CanFocus then
+                     edtCodigo.SetFocus;
+            end;
+        end;
     end;
 end;
 
@@ -271,7 +302,8 @@ begin
 
     try
         case vEstadoTela of
-            etIncluir : Result := ProcessaInclusao;
+            etIncluir   : Result := ProcessaInclusao;
+            etConsultar : Result := ProcessaConsulta;
         end;
 
         if not Result then
@@ -394,6 +426,64 @@ begin
       end;
 
     Result := True;
+end;
+
+function TfrmProduto.ProcessaConsulta: Boolean;
+begin
+   try
+      Result := False;
+      if (edtCodigo.Text = EmptyStr ) then
+      begin
+         TMessageUtil.Alerta('Código do produto não pode ficar em branco.');
+
+         if edtCodigo.CanFocus then
+            edtCodigo.SetFocus;
+
+         Exit;
+      end;
+
+      vObjProduto :=
+         TCliente(TProdutoController.getInstancia.BuscaProduto(
+            StrToIntDef(edtCodigo.Text, 0)));
+
+      if (vObjProduto <> nil) then
+         CarregaDadosTela
+      else
+      begin
+         TMessageUtil.Alerta(
+            'Nenhum produto foi encontrado para o código informado.');
+
+         LimparTela;
+
+         if (edtCodigo.CanFocus) then
+            (edtCodigo.SetFocus);
+
+         Exit;
+      end;
+
+      DefineEstadoTela; // Para liberar os campos
+
+      Result := True;
+
+   except
+      on E: Exception do
+      begin
+         raise Exception.Create(
+            'Falha ao consultar os dados do produto [View]. '#13+
+             e.Message);
+      end;
+   end;
+end;
+
+procedure TfrmProduto.CarregaDadosTela;
+begin
+   if (vObjProduto = nil) then
+      Exit;
+
+   edtCodigo.Text    := IntToStr(vObjProduto.Id);
+   chkAtivo.Checked  := vObjProduto.Ativo;
+   edtUnidade.Text   := vObjProduto.Unidade;
+   edtDescricao.Text := vObjProduto.Descricao;
 end;
 
 end.
