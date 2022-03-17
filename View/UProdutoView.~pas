@@ -182,7 +182,7 @@ begin
 
             edtCodigo.Enabled := False;
             //Sempre que for incluir um produto ele vem ativo
-            chkAtivo.Enabled  := True;
+            chkAtivo.Checked  := True;
 
             if (edtUnidade.CanFocus) then
                (edtUnidade.SetFocus);

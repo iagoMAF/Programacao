@@ -59,6 +59,8 @@ type
 
     function  ProcessaUnidade     : Boolean;
 
+    function  ValidaProduto       : Boolean;
+
   public
     { Public declarations }
   end;
@@ -333,8 +335,8 @@ begin
     try
         Result := False;
 
-//        if not ValidaProduto then
-//            Exit;
+       if not ValidaProduto then
+            Exit;
 
         if vEstadoTela = etIncluir then
         begin
@@ -365,6 +367,33 @@ begin
               e.Message);
         end;
     end;
+end;
+
+function TfrmProduto.ValidaProduto: Boolean;
+begin
+      Result := False;
+
+      if (edtUnidade.Text = EmptyStr) then
+      begin
+            TMessageUtil.Alerta(
+                  'O Campo da unidade não pode ficar em branco.');
+
+            if edtUnidade.CanFocus then
+               edtUnidade.SetFocus;
+            Exit;
+      end;
+
+      if (edtDescricao.Text = EmptyStr) then
+      begin
+            TMessageUtil.Alerta(
+                  'O Campo da descrição não pode ficar em branco.');
+
+            if edtDescricao.CanFocus then
+               edtDescricao.SetFocus;
+            Exit;
+      end;
+
+    Result := True;
 end;
 
 end.
