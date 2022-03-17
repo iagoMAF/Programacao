@@ -1,6 +1,6 @@
 object frmClientesPesq: TfrmClientesPesq
-  Left = 873
-  Top = 336
+  Left = 885
+  Top = 272
   Width = 669
   Height = 353
   Caption = 'Pesquisa de cliente'
