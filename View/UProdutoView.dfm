@@ -1,6 +1,6 @@
 object frmProduto: TfrmProduto
-  Left = 970
-  Top = 397
+  Left = 1056
+  Top = 395
   Width = 533
   Height = 204
   Caption = 'Produto'
@@ -336,6 +336,7 @@ object frmProduto: TfrmProduto
     Width = 517
     Height = 76
     Align = alClient
+    Caption = '.t'
     TabOrder = 2
     object lblCodigo: TLabel
       Left = 11

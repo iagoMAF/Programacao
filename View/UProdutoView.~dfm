@@ -1,8 +1,8 @@
 object frmProduto: TfrmProduto
-  Left = 929
-  Top = 436
+  Left = 970
+  Top = 397
   Width = 533
-  Height = 259
+  Height = 204
   Caption = 'Produto'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -24,7 +24,7 @@ object frmProduto: TfrmProduto
   TextHeight = 13
   object stbBarraStatus: TStatusBar
     Left = 0
-    Top = 201
+    Top = 146
     Width = 517
     Height = 19
     Panels = <
@@ -34,14 +34,14 @@ object frmProduto: TfrmProduto
   end
   object pnlPBotoes: TPanel
     Left = 0
-    Top = 112
+    Top = 76
     Width = 517
-    Height = 89
+    Height = 70
     Align = alBottom
     TabOrder = 1
     object btnSair: TBitBtn
       Left = 424
-      Top = 56
+      Top = 40
       Width = 75
       Height = 25
       Caption = '&Sair'
@@ -77,7 +77,7 @@ object frmProduto: TfrmProduto
     end
     object btnConfirmar: TBitBtn
       Left = 336
-      Top = 16
+      Top = 8
       Width = 75
       Height = 25
       Caption = 'C&onfirmar'
@@ -114,7 +114,7 @@ object frmProduto: TfrmProduto
     end
     object btnCancelar: TBitBtn
       Left = 424
-      Top = 16
+      Top = 8
       Width = 75
       Height = 25
       Caption = '&Cancelar'
@@ -151,7 +151,7 @@ object frmProduto: TfrmProduto
     end
     object btnExcluir: TBitBtn
       Left = 184
-      Top = 16
+      Top = 8
       Width = 75
       Height = 25
       Caption = '&Excluir'
@@ -187,7 +187,7 @@ object frmProduto: TfrmProduto
     end
     object btnPesquisar: TBitBtn
       Left = 184
-      Top = 56
+      Top = 40
       Width = 75
       Height = 25
       Caption = '&Pesquisar'
@@ -223,7 +223,7 @@ object frmProduto: TfrmProduto
     end
     object btnAlterar: TBitBtn
       Left = 96
-      Top = 16
+      Top = 8
       Width = 75
       Height = 25
       Caption = '&Alterar'
@@ -259,7 +259,7 @@ object frmProduto: TfrmProduto
     end
     object btnIncluir: TBitBtn
       Left = 8
-      Top = 16
+      Top = 8
       Width = 75
       Height = 25
       Caption = '&Incluir'
@@ -295,7 +295,7 @@ object frmProduto: TfrmProduto
     end
     object btnConsultar: TBitBtn
       Left = 8
-      Top = 56
+      Top = 40
       Width = 75
       Height = 25
       Caption = '&Consultar'
@@ -334,19 +334,19 @@ object frmProduto: TfrmProduto
     Left = 0
     Top = 0
     Width = 517
-    Height = 112
+    Height = 76
     Align = alClient
     TabOrder = 2
     object lblCodigo: TLabel
       Left = 11
-      Top = 24
+      Top = 16
       Width = 33
       Height = 13
       Caption = 'C'#243'digo'
     end
     object lblUnidade: TLabel
       Left = 4
-      Top = 63
+      Top = 47
       Width = 48
       Height = 13
       Caption = 'Unidade'
@@ -359,7 +359,7 @@ object frmProduto: TfrmProduto
     end
     object lblDescricao: TLabel
       Left = 169
-      Top = 63
+      Top = 47
       Width = 58
       Height = 13
       Caption = 'Descri'#231#227'o'
@@ -372,14 +372,14 @@ object frmProduto: TfrmProduto
     end
     object edtCodigo: TEdit
       Left = 56
-      Top = 20
+      Top = 12
       Width = 107
       Height = 21
       TabOrder = 0
     end
     object chkAtivo: TCheckBox
       Left = 170
-      Top = 23
+      Top = 15
       Width = 60
       Height = 17
       Caption = 'Ativo'
@@ -387,7 +387,7 @@ object frmProduto: TfrmProduto
     end
     object edtUnidade: TEdit
       Left = 56
-      Top = 60
+      Top = 44
       Width = 107
       Height = 21
       CharCase = ecUpperCase
@@ -396,7 +396,7 @@ object frmProduto: TfrmProduto
     end
     object edtDescricao: TEdit
       Left = 232
-      Top = 60
+      Top = 44
       Width = 281
       Height = 21
       CharCase = ecUpperCase
