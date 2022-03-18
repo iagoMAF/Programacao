@@ -94,7 +94,7 @@ procedure TfrmClientesPesq.LimparTela;
 var
   i : Integer;
 begin
-    for i :=0 to pred(ComponentCount) do
+    for i := 0 to pred(ComponentCount) do
     begin
         if (Components[i] is TEdit) then
            (Components[i] as TEdit).Text := EmptyStr;

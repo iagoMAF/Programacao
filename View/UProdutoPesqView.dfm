@@ -1,6 +1,6 @@
 object frmProdutoPesqView: TfrmProdutoPesqView
-  Left = 857
-  Top = 248
+  Left = 894
+  Top = 262
   Width = 664
   Height = 299
   Caption = 'Pesquisa de cliente'
@@ -12,6 +12,7 @@ object frmProdutoPesqView: TfrmProdutoPesqView
   Font.Style = []
   KeyPreview = True
   OldCreateOrder = False
+  OnKeyDown = FormKeyDown
   PixelsPerInch = 96
   TextHeight = 13
   object StatusBar1: TStatusBar
@@ -30,14 +31,14 @@ object frmProdutoPesqView: TfrmProdutoPesqView
     Width = 648
     Height = 47
     Align = alBottom
-    TabOrder = 1
+    TabOrder = 2
     object btnLimpar: TBitBtn
       Left = 480
       Top = 8
       Width = 75
       Height = 25
       Caption = '&Limpar'
-      TabOrder = 0
+      TabOrder = 1
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -72,7 +73,7 @@ object frmProdutoPesqView: TfrmProdutoPesqView
       Width = 75
       Height = 25
       Caption = '&Sair'
-      TabOrder = 1
+      TabOrder = 2
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -107,7 +108,7 @@ object frmProdutoPesqView: TfrmProdutoPesqView
       Width = 75
       Height = 25
       Caption = 'C&onfirmar'
-      TabOrder = 2
+      TabOrder = 0
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -143,7 +144,7 @@ object frmProdutoPesqView: TfrmProdutoPesqView
     Width = 648
     Height = 81
     Align = alTop
-    TabOrder = 2
+    TabOrder = 3
     object grbFiltrar: TGroupBox
       Left = 1
       Top = 1
@@ -217,6 +218,93 @@ object frmProdutoPesqView: TfrmProdutoPesqView
     Width = 648
     Height = 113
     Align = alClient
-    TabOrder = 3
+    TabOrder = 1
+    object grbGrid: TGroupBox
+      Left = 1
+      Top = 1
+      Width = 646
+      Height = 111
+      Align = alClient
+      Caption = ' Resultado da busca '
+      TabOrder = 0
+      object dbgProduto: TDBGrid
+        Left = 2
+        Top = 15
+        Width = 642
+        Height = 94
+        Align = alClient
+        DataSource = dtsProduto
+        TabOrder = 0
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'MS Sans Serif'
+        TitleFont.Style = []
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'ID'
+            Title.Caption = 'C'#243'digo'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Unidade'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Descricao'
+            Title.Caption = 'Descri'#231#227'o'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DescricaoAtivo'
+            Title.Caption = 'Ativo'
+            Visible = True
+          end>
+      end
+    end
+  end
+  object dtsProduto: TDataSource
+    DataSet = cdsProduto
+    Left = 9
+    Top = 138
+  end
+  object cdsProduto: TClientDataSet
+    Active = True
+    Aggregates = <>
+    Params = <>
+    Left = 41
+    Top = 138
+    Data = {
+      900000009619E0BD010000001800000005000000000003000000900002494404
+      0001000000000007556E69646164650100490000000100055749445448020002
+      0002000944657363726963616F01004900000001000557494454480200020014
+      0005417469766F04000100000000000E44657363726963616F417469766F0100
+      4900000001000557494454480200020003000000}
+    object cdsProdutoID: TIntegerField
+      DisplayWidth = 12
+      FieldName = 'ID'
+    end
+    object cdsProdutoUnidade: TStringField
+      DisplayWidth = 16
+      FieldName = 'Unidade'
+      Size = 2
+    end
+    object cdsProdutoDescricao: TStringField
+      DisplayWidth = 67
+      FieldName = 'Descricao'
+    end
+    object cdsProdutoAtivo: TIntegerField
+      DisplayWidth = 12
+      FieldName = 'Ativo'
+    end
+    object cdsProdutoDescricaoAtivo: TStringField
+      DisplayWidth = 15
+      FieldName = 'DescricaoAtivo'
+      Size = 3
+    end
   end
 end

@@ -17,7 +17,12 @@ uses
   UPessoaController in 'Controller\UPessoaController.pas',
   UEndereco in 'Model\UEndereco.pas',
   UEnderecoDAO in 'Model\UEnderecoDAO.pas',
-  UClientesPesqView in 'View\UClientesPesqView.pas' {frmClientesPesq};
+  UClientesPesqView in 'View\UClientesPesqView.pas' {frmClientesPesq},
+  UProdutoView in 'View\UProdutoView.pas' {frmProduto},
+  UProduto in 'Model\UProduto.pas',
+  UProdutoDAO in 'Model\UProdutoDAO.pas',
+  UUnidade in 'Model\UUnidade.pas',
+  UProdutoController in 'Controller\UProdutoController.pas';
 
 {$R *.res}
 

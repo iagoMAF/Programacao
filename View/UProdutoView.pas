@@ -5,7 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, Buttons, ExtCtrls, ComCtrls, DB, DBClient, Grids,
-  DBGrids, uMessageUtil, UEnumerationUtil, UUnidade, UProdutoController;
+  DBGrids, uMessageUtil, UEnumerationUtil, UUnidade, UProdutoController,
+  UProdutoPesqView;
 
 type
   TfrmProduto = class(TForm)
@@ -77,6 +78,7 @@ var
   frmProduto: TfrmProduto;
 
 implementation
+
 
 {$R *.dfm}
 
@@ -265,6 +267,16 @@ begin
                   if edtCodigo.CanFocus then
                      edtCodigo.SetFocus;
             end;
+        end;
+
+        etPesquisar:
+        begin
+            stbBarraStatus.Panels[0].Text := 'Pesquisa';
+
+            if (frmProdutoPesqView = nil ) then
+                frmProdutoPesqView := TfrmProdutoPesqView.Create(Application);
+
+            frmProdutoPesqView.ShowModal;
         end;
     end;
 end;
