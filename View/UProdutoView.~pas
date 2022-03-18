@@ -273,8 +273,28 @@ begin
         begin
             stbBarraStatus.Panels[0].Text := 'Pesquisa';
 
-            if (frmProdutoPesq = nil ) then
+            if (frmProdutoPesqView = nil ) then
+                frmProdutoPesqView := TfrmProdutoPesqView.Create(Application);
 
+            frmProdutoPesqView.ShowModal;
+
+            if (frmProdutoPesqView.mProdutoID <> 0) then
+            begin
+               edtCodigo.Text := IntToStr(frmProdutoPesqView.mProdutoID);
+               vEstadoTela    := etConsultar;
+               ProcessaConsulta;
+            end
+            else
+            begin
+               vEstadoTela := etPadrao;
+               DefineEstadoTela;
+            end;
+
+            frmProdutoPesqView.mProdutoID        := 0;
+            frmProdutoPesqView.mProdutoDescricao := EmptyStr;
+
+            if edtDescricao.CanFocus then
+               edtDescricao.SetFocus;
         end;
     end;
 end;

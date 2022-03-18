@@ -1,9 +1,9 @@
 object frmProdutoPesqView: TfrmProdutoPesqView
-  Left = 894
-  Top = 262
+  Left = 882
+  Top = 371
   Width = 664
   Height = 299
-  Caption = 'Pesquisa de cliente'
+  Caption = 'Pesquisa de produto'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -12,7 +12,9 @@ object frmProdutoPesqView: TfrmProdutoPesqView
   Font.Style = []
   KeyPreview = True
   OldCreateOrder = False
+  Position = poScreenCenter
   OnKeyDown = FormKeyDown
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object StatusBar1: TStatusBar
@@ -39,6 +41,7 @@ object frmProdutoPesqView: TfrmProdutoPesqView
       Height = 25
       Caption = '&Limpar'
       TabOrder = 1
+      OnClick = btnLimparClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -74,6 +77,7 @@ object frmProdutoPesqView: TfrmProdutoPesqView
       Height = 25
       Caption = '&Sair'
       TabOrder = 2
+      OnClick = btnSairClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -109,6 +113,7 @@ object frmProdutoPesqView: TfrmProdutoPesqView
       Height = 25
       Caption = 'C&onfirmar'
       TabOrder = 0
+      OnClick = btnConfirmarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -182,6 +187,7 @@ object frmProdutoPesqView: TfrmProdutoPesqView
         Height = 25
         Caption = '&Filtrar'
         TabOrder = 1
+        OnClick = btnFiltrarClick
         Glyph.Data = {
           36030000424D3603000000000000360000002800000010000000100000000100
           18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -234,12 +240,15 @@ object frmProdutoPesqView: TfrmProdutoPesqView
         Height = 94
         Align = alClient
         DataSource = dtsProduto
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgCancelOnExit]
         TabOrder = 0
         TitleFont.Charset = DEFAULT_CHARSET
         TitleFont.Color = clWindowText
         TitleFont.Height = -11
         TitleFont.Name = 'MS Sans Serif'
         TitleFont.Style = []
+        OnDblClick = dbgProdutoDblClick
+        OnKeyDown = dbgProdutoKeyDown
         Columns = <
           item
             Expanded = False
@@ -276,6 +285,7 @@ object frmProdutoPesqView: TfrmProdutoPesqView
     Active = True
     Aggregates = <>
     Params = <>
+    BeforeDelete = cdsProdutoBeforeDelete
     Left = 41
     Top = 138
     Data = {

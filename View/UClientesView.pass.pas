@@ -358,8 +358,10 @@ begin
           begin
               stbBarraStatus.Panels[0].Text := 'Pesquisa';
 
-              if (frmClientesPesq  = nil)then   
-                  frmClientesPesq := TfrmClientesPesq.Create(Application);
+
+
+              if (frmClientesPesq  = nil)then
+                  frmClientesPesq := TfrmClientesPesq.Create(nil);
 
               frmClientesPesq.ShowModal;
 

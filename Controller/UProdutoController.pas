@@ -11,10 +11,12 @@ type
         function  GravaProduto(
                     pProduto : TProduto) : Boolean;
 
-        function  ExcluiProduto(pProduto : TProduto) : Boolean;
-        function  BuscaProduto(pID : Integer) : TProduto;
+        function  ExcluiProduto(pProduto : TProduto)           : Boolean;
+        function  BuscaProduto(pID : Integer)                  : TProduto;
+        function  PesquisaProduto(pNome : string)              : TColProduto;
 
         function RetornaCondicaoProduto(pID_Produto : Integer) :  String;
+
       published
         class function getInstancia : TProdutoController;
 
@@ -144,6 +146,38 @@ begin
 
     end;
 end;
+
+function TProdutoController.PesquisaProduto(pNome: string): TColProduto;
+var
+   xProdutoDAO : TProdutoDAO;
+   xCondicao   : string;
+begin
+   try
+      try
+         Result := nil;
+
+         xProdutoDAO := TProdutoDAO.Create(TConexao.get.getConn);
+
+         xCondicao  :=
+            IfThen(pNome <> EmptyStr,
+               'WHERE                                           '#13+
+               '    (DESCRICAO LIKE UPPER(''%'+ pNome + '%''))  '#13+
+               'ORDER BY DESCRICAO, ID', EmptyStr);
+
+         Result := xProdutoDAO.RetornaLista(xCondicao);
+      finally
+         if (xProdutoDAO <> nil) then
+            (FreeAndNil(xProdutoDAO));
+      end;
+   except
+      on E: Exception do
+      begin
+         raise Exception.Create(
+            'Falha ao buscas os dados da produto [Controller]: '#13+
+            e.Message);
+      end;
+   end;
+end;  
 
 function TProdutoController.RetornaCondicaoProduto(
   pID_Produto: Integer): String;

@@ -277,6 +277,24 @@ begin
                 frmProdutoPesqView := TfrmProdutoPesqView.Create(Application);
 
             frmProdutoPesqView.ShowModal;
+
+            if (frmProdutoPesqView.mProdutoID <> 0) then
+            begin
+               edtCodigo.Text := IntToStr(frmProdutoPesqView.mProdutoID);
+               vEstadoTela    := etConsultar;
+               ProcessaConsulta;
+            end
+            else
+            begin
+               vEstadoTela := etPadrao;
+               DefineEstadoTela;
+            end;
+
+            frmProdutoPesqView.mProdutoID        := 0;
+            frmProdutoPesqView.mProdutoDescricao := EmptyStr;
+
+            if edtDescricao.CanFocus then
+               edtDescricao.SetFocus;
         end;
     end;
 end;
@@ -447,6 +465,7 @@ begin
         vObjProduto.Ativo     := chkAtivo.Checked;
         vObjProduto.Unidade   := edtUnidade.Text;
         vObjProduto.Descricao := edtDescricao.Text;
+        
 
         Result := True;
 
@@ -497,6 +516,7 @@ begin
 
          if edtCodigo.CanFocus then
             edtCodigo.SetFocus;
+
 
          Exit;
       end;
