@@ -5,7 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, Buttons, Mask, ExtCtrls, ComCtrls, UEnumerationUtil,
-  UCliente, UPessoaController, UEndereco, frxClass, DB, DBClient, frxDBSet;
+  UCliente, UPessoaController, UEndereco, frxClass, DB, DBClient, frxDBSet,
+  UClassFuncoes;
 
 type
   TfrmClientes = class(TForm)
@@ -72,6 +73,8 @@ type
       Shift: TShiftState);
     procedure edtCodigoExit(Sender: TObject);
     procedure rdgTipoPessoaClick(Sender: TObject);
+   // procedure edtCPFCNPJChange(Sender: TObject);
+    procedure edtCPFCNPJExit(Sender: TObject);
   private
     { Private declarations }
     vKey : Word;
@@ -88,19 +91,22 @@ type
     //Carrega dados padrão na Tela
     procedure CarregaDadosTela;
 
-    function  ProcessaConfirmacao    : Boolean;
-    function  ProcessaInclusao       : Boolean;
-    function  ProcessaAlteracao      : Boolean;
-    function  ProcessaExclusao       : Boolean;
-    function  ProcessaConsulta       : Boolean;
-    function  ProcessaListagem       : Boolean;
-    function  ProcessaCliente        : Boolean;
+    function  ProcessaConfirmacao       : Boolean;
+    function  ProcessaInclusao          : Boolean;
+    function  ProcessaAlteracao         : Boolean;
+    function  ProcessaExclusao          : Boolean;
+    function  ProcessaConsulta          : Boolean;
+    function  ProcessaListagem          : Boolean;
+    function  ProcessaCliente           : Boolean;
 
-    function  ProcessaPessoa         : Boolean;
-    function  ProcessaEndereco       : Boolean;
+    function  ProcessaPessoa            : Boolean;
+    function  ProcessaEndereco          : Boolean;
 
-    function  ValidaCliente          : Boolean;
-    function  ValidaEndereco         : Boolean;
+    function  ValidaCliente             : Boolean;
+    function  ValidaEndereco            : Boolean;
+    function  ValidaCPF(CPF : string)   : Boolean;
+    function  ValidaCNPJ(CNPJ : string) : Boolean;
+
   public
     { Public declarations }
   end;
@@ -903,6 +909,193 @@ begin
       DefineEstadoTela;
       cdsCliente.EmptyDataSet;
     end;
+end;
+
+
+function TfrmClientes.ValidaCPF(CPF: string): Boolean;
+var xDigito10, xDigito11, xAux : string;
+    xS, i, xR, xPeso  : Integer;
+begin
+
+   xAux := TFuncoes.SoNumero(edtCPFCNPJ.Text);
+
+   if (xAux = '00000000000') or (xAux = '11111111111') or
+      (xAux = '22222222222') or (xAux = '33333333333') or
+      (xAux = '44444444444') or (xAux = '55555555555') or
+      (xAux = '66666666666') or (xAux = '77777777777') or
+      (xAux = '88888888888') or (xAux = '99999999999') then
+      //(length(CPF) <> 11)) then
+   begin
+      Result := False;
+      Exit;
+   end;
+
+
+   try
+      // Calculando o primeiro Digito Verificador
+
+      xS := 0;
+      //Peso igual a 10, pois, o primiero digito verificador não foi calculado
+      xPeso := 10;
+
+      for i := 1 to 9 do
+      begin
+         xS := xS + (StrToInt(xAux[i]) * xPeso);
+         xPeso := xPeso - 1;
+      end;
+
+      xR := 11 - (xS mod 11);
+
+      if ((xR = 10) or (xR = 11)) then
+         xDigito10 := '0'
+      else
+         str(xR:1, xDigito10);
+
+      // Calculando o Segundo Digito Verificador
+
+      xS := 0;
+
+      //Peso igual a 11, pois, o primeiro digito verificador já foi calculado
+
+      xPeso := 11;
+
+      for i := 1 to 10 do
+      begin
+         // xS é a variavel a qual vai receber os valores das somas
+         xS := xS + (StrToInt(xAux[i]) * xPeso);
+         // O Peso sempre diminui de uma soma para a outra
+         xPeso := xPeso - 1;
+      end;
+
+      xR := 11 - (xS mod 11);
+
+      if ((xR = 10) or (xR = 11)) then
+         xDigito11 := '0'
+      else
+         str(xR:1, xDigito11);
+
+
+      if ((xDigito10 = xAux[10]) and (xDigito11 = xAux[11])) then
+         Result := true
+      else
+         Result := false;
+
+   except
+
+      Result := false
+
+   end;
+end;
+
+
+procedure TfrmClientes.edtCPFCNPJExit(Sender: TObject);
+var
+   xAux : string;
+begin
+
+   xAux := TFuncoes.SoNumero(edtCPFCNPJ.Text);
+
+   if (rdgTipoPessoa.ItemIndex <> 1) then
+         if (ValidaCPF(edtCPFCNPJ.Text)) = False then
+      begin
+         if (length(xAux) = 11) then
+         begin
+            edtCPFCNPJ.Clear;
+            TMessageUtil.Alerta(
+               'CPF invalido : Digite outro CPF');
+
+           // if edtCPFCNPJ.CanFocus then
+              // edtCPFCNPJ.SetFocus;
+         end;
+      end;
+
+   if (rdgTipoPessoa.ItemIndex = 1) then
+         if (ValidaCNPJ(edtCPFCNPJ.Text)) = False then
+      begin
+        if (length(xAux) = 14) then
+         begin
+            edtCPFCNPJ.Clear;
+            TMessageUtil.Alerta(
+               'CNPJ invalido : Digite outro CNPJ');
+
+           // if edtCPFCNPJ.CanFocus then
+              // edtCPFCNPJ.SetFocus;
+         end;
+      end;
+
+end;
+
+function TfrmClientes.ValidaCNPJ(CNPJ: string): Boolean;
+var   xDigito13, xDigito14, xAux: string;
+      xSM, i, xR, xPeso: integer;
+begin
+
+   xAux := TFuncoes.SoNumero(edtCPFCNPJ.Text);
+
+   if (xAux = '00000000000000') or (xAux = '11111111111111') or
+      (xAux = '22222222222222') or (xAux = '33333333333333') or
+      (xAux = '44444444444444') or (xAux = '55555555555555') or
+      (xAux = '66666666666666') or (xAux = '77777777777777') or
+      (xAux = '88888888888888') or (xAux = '99999999999999') then
+      //(length(CNPJ) <> 14)) then
+   begin
+      Result := false;
+      exit;
+   end;
+
+   try
+
+    //Calculando o primeiro digito verificador
+
+      xSM := 0;
+      xPeso := 2;
+      for i := 12 downto 1 do
+      begin
+         xSM := xSM + (StrToInt(xAux[i]) * xPeso);
+         xPeso := xPeso + 1;
+         if (xPeso = 10) then
+            xPeso := 2;
+      end;
+
+      xR := xSM mod 11;
+
+      if ((xR = 0) or (xR = 1)) then
+         xDigito13 := '0'
+      else
+         str((11 - xR):1, xDigito13);
+
+
+      //Calculando o segundo Digito Verificador
+
+      xSM := 0;
+      xPeso := 2;
+
+      for i := 13 downto 1 do
+      begin
+         xSM := xSM + (StrToInt(xAux[i]) * xPeso);
+         xPeso := xPeso + 1;
+         if (xPeso = 10) then
+            xPeso := 2;
+      end;
+
+      xR := xSM mod 11;
+
+      if ((xR = 0) or (xR = 1)) then
+         xDigito14 := '0'
+      else
+         str((11 - xR):1, xDigito14);
+
+
+      if ((xDigito13 = xAux[13]) and (xDigito14 = xAux[14])) then
+         Result := true
+      else
+         Result := false;
+
+   except
+
+      Result := false
+
+   end;
 end;
 
 end.

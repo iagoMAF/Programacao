@@ -442,6 +442,7 @@ object frmClientes: TfrmClientes
       MaxLength = 14
       TabOrder = 3
       Text = '   .   .   -  '
+      OnExit = edtCPFCNPJExit
     end
     object edtNome: TEdit
       Left = 62
