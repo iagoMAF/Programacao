@@ -14,8 +14,6 @@ type
     pnlInfo: TPanel;
     lblCodigo: TLabel;
     edtCodigo: TEdit;
-    Label1: TLabel;
-    edtProduto: TEdit;
     lblPreco: TLabel;
     edtPreco: TEdit;
     lblEstoque: TLabel;
@@ -181,8 +179,39 @@ begin
 
          edtCodigo.Enabled := False;
 
-         if (edtProduto.CanFocus) then
-            (edtProduto.SetFocus);
+         if (edtDescricao.CanFocus) then
+            (edtDescricao.SetFocus);
+
+      end;
+
+      etAlterar:
+      begin
+
+         stbBarraStatus.Panels[0].Text := 'Alteração';
+
+         if (edtCodigo.Text <> EmptyStr) then
+         begin
+
+            CamposEnabled(True);
+
+            edtCodigo.Enabled    := False;
+            btnAlterar.Enabled   := False;
+            btnConfirmar.Enabled := True;
+
+            if (edtDescricao.CanFocus) then
+               (edtDescricao.SetFocus);
+
+         end
+         else
+         begin
+
+            lblCodigo.Enabled := True;
+            edtCodigo.Enabled := True;
+
+            if (edtCodigo.CanFocus) then
+               (edtCodigo.SetFocus);
+
+         end;
 
       end;
 
@@ -197,7 +226,8 @@ end;
 
 procedure TfrmCadProduto.btnAlterarClick(Sender: TObject);
 begin
-   //btnAlterar
+   vEstadoTela := etAlterar;
+   DefineEstadoTela;
 end;
 
 procedure TfrmCadProduto.btnExcluirClick(Sender: TObject);

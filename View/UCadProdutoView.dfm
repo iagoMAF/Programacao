@@ -1,8 +1,8 @@
 object frmCadProduto: TfrmCadProduto
   Left = 758
-  Top = 322
-  Width = 478
-  Height = 265
+  Top = 341
+  Width = 463
+  Height = 246
   Caption = 'Cadastro de Produto'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -22,12 +22,12 @@ object frmCadProduto: TfrmCadProduto
   TextHeight = 13
   object stbBarraStatus: TStatusBar
     Left = 0
-    Top = 207
-    Width = 462
+    Top = 188
+    Width = 447
     Height = 19
     Panels = <
       item
-        Width = 50
+        Width = 70
       end
       item
         Width = 50
@@ -35,8 +35,8 @@ object frmCadProduto: TfrmCadProduto
   end
   object pnlBotoes: TPanel
     Left = 0
-    Top = 138
-    Width = 462
+    Top = 119
+    Width = 447
     Height = 69
     Align = alBottom
     TabOrder = 1
@@ -334,8 +334,8 @@ object frmCadProduto: TfrmCadProduto
   object pnlInfo: TPanel
     Left = 0
     Top = 0
-    Width = 462
-    Height = 138
+    Width = 447
+    Height = 119
     Align = alClient
     TabOrder = 2
     object lblCodigo: TLabel
@@ -345,22 +345,9 @@ object frmCadProduto: TfrmCadProduto
       Height = 13
       Caption = 'C'#243'digo'
     end
-    object Label1: TLabel
-      Left = 24
-      Top = 51
-      Width = 45
-      Height = 13
-      Caption = 'Produto'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -11
-      Font.Name = 'MS Sans Serif'
-      Font.Style = [fsBold]
-      ParentFont = False
-    end
     object lblPreco: TLabel
       Left = 25
-      Top = 105
+      Top = 83
       Width = 34
       Height = 13
       Caption = 'Pre'#231'o'
@@ -373,7 +360,7 @@ object frmCadProduto: TfrmCadProduto
     end
     object lblEstoque: TLabel
       Left = 184
-      Top = 105
+      Top = 83
       Width = 47
       Height = 13
       Caption = 'Estoque'
@@ -386,7 +373,7 @@ object frmCadProduto: TfrmCadProduto
     end
     object lblDescricao: TLabel
       Left = 25
-      Top = 76
+      Top = 54
       Width = 58
       Height = 13
       Caption = 'Descri'#231#227'o'
@@ -404,33 +391,26 @@ object frmCadProduto: TfrmCadProduto
       Height = 21
       TabOrder = 0
     end
-    object edtProduto: TEdit
-      Left = 88
-      Top = 45
-      Width = 345
-      Height = 21
-      TabOrder = 1
-    end
     object edtPreco: TEdit
       Left = 87
-      Top = 100
+      Top = 78
       Width = 88
       Height = 21
-      TabOrder = 3
+      TabOrder = 2
     end
     object edtEstoque: TEdit
       Left = 244
-      Top = 100
+      Top = 78
       Width = 73
       Height = 21
-      TabOrder = 4
+      TabOrder = 3
     end
     object edtDescricao: TEdit
       Left = 88
-      Top = 72
+      Top = 50
       Width = 345
       Height = 21
-      TabOrder = 2
+      TabOrder = 1
     end
   end
 end

@@ -1,8 +1,8 @@
 object frmCadProduto: TfrmCadProduto
   Left = 758
-  Top = 322
+  Top = 341
   Width = 463
-  Height = 265
+  Height = 246
   Caption = 'Cadastro de Produto'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -11,21 +11,23 @@ object frmCadProduto: TfrmCadProduto
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   FormStyle = fsMDIChild
+  KeyPreview = True
   OldCreateOrder = False
   Position = poDesktopCenter
   Visible = True
   OnClose = FormClose
   OnKeyDown = FormKeyDown
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object stbBarraStatus: TStatusBar
     Left = 0
-    Top = 207
+    Top = 188
     Width = 447
     Height = 19
     Panels = <
       item
-        Width = 50
+        Width = 70
       end
       item
         Width = 50
@@ -33,7 +35,7 @@ object frmCadProduto: TfrmCadProduto
   end
   object pnlBotoes: TPanel
     Left = 0
-    Top = 138
+    Top = 119
     Width = 447
     Height = 69
     Align = alBottom
@@ -45,6 +47,7 @@ object frmCadProduto: TfrmCadProduto
       Height = 25
       Caption = '&Sair'
       TabOrder = 7
+      OnClick = btnSairClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -81,6 +84,7 @@ object frmCadProduto: TfrmCadProduto
       Caption = '&Cancelar'
       Enabled = False
       TabOrder = 6
+      OnClick = btnCancelarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFF5B57D9
@@ -117,6 +121,7 @@ object frmCadProduto: TfrmCadProduto
       Caption = '&Confirmar'
       Enabled = False
       TabOrder = 5
+      OnClick = btnConfirmarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -152,6 +157,7 @@ object frmCadProduto: TfrmCadProduto
       Height = 25
       Caption = '&Incluir'
       TabOrder = 0
+      OnClick = btnIncluirClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -187,6 +193,7 @@ object frmCadProduto: TfrmCadProduto
       Height = 25
       Caption = '&Alterar'
       TabOrder = 1
+      OnClick = btnAlterarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E000000000000000000000A2B95062082
@@ -222,6 +229,7 @@ object frmCadProduto: TfrmCadProduto
       Height = 25
       Caption = '&Excluir'
       TabOrder = 2
+      OnClick = btnExcluirClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -257,6 +265,7 @@ object frmCadProduto: TfrmCadProduto
       Height = 25
       Caption = '&Consultar'
       TabOrder = 3
+      OnClick = btnConsultarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -292,6 +301,7 @@ object frmCadProduto: TfrmCadProduto
       Height = 25
       Caption = '&Pesquisar'
       TabOrder = 4
+      OnClick = btnPesquisarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -325,7 +335,7 @@ object frmCadProduto: TfrmCadProduto
     Left = 0
     Top = 0
     Width = 447
-    Height = 138
+    Height = 119
     Align = alClient
     TabOrder = 2
     object lblCodigo: TLabel
@@ -335,22 +345,9 @@ object frmCadProduto: TfrmCadProduto
       Height = 13
       Caption = 'C'#243'digo'
     end
-    object Label1: TLabel
-      Left = 24
-      Top = 51
-      Width = 45
-      Height = 13
-      Caption = 'Produto'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -11
-      Font.Name = 'MS Sans Serif'
-      Font.Style = [fsBold]
-      ParentFont = False
-    end
     object lblPreco: TLabel
       Left = 25
-      Top = 105
+      Top = 83
       Width = 34
       Height = 13
       Caption = 'Pre'#231'o'
@@ -363,7 +360,7 @@ object frmCadProduto: TfrmCadProduto
     end
     object lblEstoque: TLabel
       Left = 184
-      Top = 105
+      Top = 83
       Width = 47
       Height = 13
       Caption = 'Estoque'
@@ -376,7 +373,7 @@ object frmCadProduto: TfrmCadProduto
     end
     object lblDescricao: TLabel
       Left = 25
-      Top = 76
+      Top = 54
       Width = 58
       Height = 13
       Caption = 'Descri'#231#227'o'
@@ -394,33 +391,26 @@ object frmCadProduto: TfrmCadProduto
       Height = 21
       TabOrder = 0
     end
-    object edtProduto: TEdit
-      Left = 88
-      Top = 45
-      Width = 345
-      Height = 21
-      TabOrder = 1
-    end
     object edtPreco: TEdit
       Left = 87
-      Top = 100
+      Top = 78
       Width = 88
       Height = 21
       TabOrder = 2
     end
     object edtEstoque: TEdit
       Left = 244
-      Top = 100
+      Top = 78
       Width = 73
       Height = 21
       TabOrder = 3
     end
     object edtDescricao: TEdit
       Left = 88
-      Top = 72
+      Top = 50
       Width = 345
       Height = 21
-      TabOrder = 4
+      TabOrder = 1
     end
   end
 end
