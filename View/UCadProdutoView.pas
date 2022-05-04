@@ -9,7 +9,7 @@ uses
 
 type
   TfrmCadProduto = class(TForm)
-    StatusBar1: TStatusBar;
+    stbBarraStatus: TStatusBar;
     pnlBotoes: TPanel;
     pnlInfo: TPanel;
     lblCodigo: TLabel;
@@ -33,6 +33,15 @@ type
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnIncluirClick(Sender: TObject);
+    procedure btnAlterarClick(Sender: TObject);
+    procedure btnExcluirClick(Sender: TObject);
+    procedure btnConsultarClick(Sender: TObject);
+    procedure btnPesquisarClick(Sender: TObject);
+    procedure btnConfirmarClick(Sender: TObject);
+    procedure btnCancelarClick(Sender: TObject);
+    procedure btnSairClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
     vKey : Word;
@@ -67,14 +76,31 @@ begin
 
       VK_RETURN: //Corresponde a tecla <ENTER>
       begin
-         Perform(WM_NEXTDLGCTL, 0, 0);
+         Perform(WM_NEXTDlgCtl, 0, 0);
       end;
 
       VK_ESCAPE:
       begin
-         // Adicionar o comando do Esc depois de fazer a Tela Padrao
-      end;
+         if (vEstadoTela <> etPadrao)then
+         begin
 
+             if (TMessageUtil.Pergunta(
+               'Deseja realmente sair cancelar essa operação? ')) then
+             begin
+               vEstadoTela := etPadrao;
+               DefineEstadoTela;
+             end;
+
+         end
+         else
+         begin
+
+            if (TMessageUtil.Pergunta(
+               'Deseja sair dessa rotina?' ))then
+               Close;
+
+         end;
+      end;
    end;
 end;
 
@@ -133,9 +159,81 @@ begin
       etPadrao:
       begin
 
+         CamposEnabled(False);
+         LimpaTela;
+
+         stbBarraStatus.Panels[0].Text := EmptyStr;
+         stbBarraStatus.Panels[0].Text := EmptyStr;
+
+         if (frmCadProduto <> nil) and
+            (frmCadProduto.Active) and
+            (btnIncluir.CanFocus)  then
+            (btnIncluir.SetFocus);
+
+         Application.ProcessMessages;
       end;
-      
+
+      etIncluir:
+      begin
+
+         stbBarraStatus.Panels[0].Text := 'Inclusão';
+         CamposEnabled(True);
+
+         edtCodigo.Enabled := False;
+
+         if (edtProduto.CanFocus) then
+            (edtProduto.SetFocus);
+
+      end;
+
    end;
+end;
+
+procedure TfrmCadProduto.btnIncluirClick(Sender: TObject);
+begin
+   vEstadoTela := etIncluir;
+   DefineEstadoTela;
+end;
+
+procedure TfrmCadProduto.btnAlterarClick(Sender: TObject);
+begin
+   //btnAlterar
+end;
+
+procedure TfrmCadProduto.btnExcluirClick(Sender: TObject);
+begin
+   //btnExcluir
+end;
+
+procedure TfrmCadProduto.btnConsultarClick(Sender: TObject);
+begin
+   //btnConsultar
+end;
+
+procedure TfrmCadProduto.btnPesquisarClick(Sender: TObject);
+begin
+   //btnPesquisar
+end;
+
+procedure TfrmCadProduto.btnConfirmarClick(Sender: TObject);
+begin
+   //btnConfirmar
+end;
+
+procedure TfrmCadProduto.btnCancelarClick(Sender: TObject);
+begin
+   vEstadoTela := etPadrao;
+   DefineEstadoTela;
+end;
+
+procedure TfrmCadProduto.btnSairClick(Sender: TObject);
+begin
+   //btnSair
+end;
+
+procedure TfrmCadProduto.FormShow(Sender: TObject);
+begin
+   DefineEstadoTela;
 end;
 
 end.

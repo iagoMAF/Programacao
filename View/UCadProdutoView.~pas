@@ -9,7 +9,7 @@ uses
 
 type
   TfrmCadProduto = class(TForm)
-    StatusBar1: TStatusBar;
+    stbBarraStatus: TStatusBar;
     pnlBotoes: TPanel;
     pnlInfo: TPanel;
     lblCodigo: TLabel;
@@ -128,6 +128,26 @@ begin
    btnCancelar.Enabled  :=
       vEstadoTela in [etIncluir, etAlterar, etExcluir, etConsultar];
 
+   case vEstadoTela of
+
+      etPadrao:
+      begin
+
+         CamposEnabled(False);
+         LimpaTela;
+
+         stbBarraStatus.Panels[0].Text := EmptyStr;
+         stbBarraStatus.Panels[0].Text := EmptyStr;
+
+         if (frmCadProduto <> nil) and
+            (frmCadProduto.Active) and
+            (btnIncluir.CanFocus)  then
+            (btnIncluir.SetFocus);
+
+         Application.ProcessMessages;
+      end;
+      
+   end;
 end;
 
 end.

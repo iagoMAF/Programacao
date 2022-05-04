@@ -1,6 +1,6 @@
 object frmCadProduto: TfrmCadProduto
-  Left = 830
-  Top = 258
+  Left = 758
+  Top = 322
   Width = 463
   Height = 265
   Caption = 'Cadastro de Produto'
@@ -18,12 +18,18 @@ object frmCadProduto: TfrmCadProduto
   OnKeyDown = FormKeyDown
   PixelsPerInch = 96
   TextHeight = 13
-  object StatusBar1: TStatusBar
+  object stbBarraStatus: TStatusBar
     Left = 0
     Top = 207
     Width = 447
     Height = 19
-    Panels = <>
+    Panels = <
+      item
+        Width = 50
+      end
+      item
+        Width = 50
+      end>
   end
   object pnlBotoes: TPanel
     Left = 0

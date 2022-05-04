@@ -1,7 +1,7 @@
 object frmCadProduto: TfrmCadProduto
-  Left = 830
-  Top = 258
-  Width = 463
+  Left = 758
+  Top = 322
+  Width = 478
   Height = 265
   Caption = 'Cadastro de Produto'
   Color = clBtnFace
@@ -11,24 +11,32 @@ object frmCadProduto: TfrmCadProduto
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   FormStyle = fsMDIChild
+  KeyPreview = True
   OldCreateOrder = False
   Position = poDesktopCenter
   Visible = True
   OnClose = FormClose
   OnKeyDown = FormKeyDown
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object StatusBar1: TStatusBar
+  object stbBarraStatus: TStatusBar
     Left = 0
     Top = 207
-    Width = 447
+    Width = 462
     Height = 19
-    Panels = <>
+    Panels = <
+      item
+        Width = 50
+      end
+      item
+        Width = 50
+      end>
   end
   object pnlBotoes: TPanel
     Left = 0
     Top = 138
-    Width = 447
+    Width = 462
     Height = 69
     Align = alBottom
     TabOrder = 1
@@ -39,6 +47,7 @@ object frmCadProduto: TfrmCadProduto
       Height = 25
       Caption = '&Sair'
       TabOrder = 7
+      OnClick = btnSairClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -75,6 +84,7 @@ object frmCadProduto: TfrmCadProduto
       Caption = '&Cancelar'
       Enabled = False
       TabOrder = 6
+      OnClick = btnCancelarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFF5B57D9
@@ -111,6 +121,7 @@ object frmCadProduto: TfrmCadProduto
       Caption = '&Confirmar'
       Enabled = False
       TabOrder = 5
+      OnClick = btnConfirmarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -146,6 +157,7 @@ object frmCadProduto: TfrmCadProduto
       Height = 25
       Caption = '&Incluir'
       TabOrder = 0
+      OnClick = btnIncluirClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -181,6 +193,7 @@ object frmCadProduto: TfrmCadProduto
       Height = 25
       Caption = '&Alterar'
       TabOrder = 1
+      OnClick = btnAlterarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E000000000000000000000A2B95062082
@@ -216,6 +229,7 @@ object frmCadProduto: TfrmCadProduto
       Height = 25
       Caption = '&Excluir'
       TabOrder = 2
+      OnClick = btnExcluirClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -251,6 +265,7 @@ object frmCadProduto: TfrmCadProduto
       Height = 25
       Caption = '&Consultar'
       TabOrder = 3
+      OnClick = btnConsultarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -286,6 +301,7 @@ object frmCadProduto: TfrmCadProduto
       Height = 25
       Caption = '&Pesquisar'
       TabOrder = 4
+      OnClick = btnPesquisarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -318,7 +334,7 @@ object frmCadProduto: TfrmCadProduto
   object pnlInfo: TPanel
     Left = 0
     Top = 0
-    Width = 447
+    Width = 462
     Height = 138
     Align = alClient
     TabOrder = 2
@@ -400,21 +416,21 @@ object frmCadProduto: TfrmCadProduto
       Top = 100
       Width = 88
       Height = 21
-      TabOrder = 2
+      TabOrder = 3
     end
     object edtEstoque: TEdit
       Left = 244
       Top = 100
       Width = 73
       Height = 21
-      TabOrder = 3
+      TabOrder = 4
     end
     object edtDescricao: TEdit
       Left = 88
       Top = 72
       Width = 345
       Height = 21
-      TabOrder = 4
+      TabOrder = 2
     end
   end
 end
