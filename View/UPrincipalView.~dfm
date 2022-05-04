@@ -873,6 +873,7 @@ object frmPrincipal: TfrmPrincipal
       end
       object menProdutos: TMenuItem
         Caption = 'Produtos'
+        OnClick = menProdutosClick
       end
     end
     object menRelatorios: TMenuItem
@@ -885,6 +886,7 @@ object frmPrincipal: TfrmPrincipal
       Caption = 'Movimentos'
       object menVendas: TMenuItem
         Caption = 'Vendas'
+        OnClick = menVendasClick
       end
     end
     object menSair: TMenuItem

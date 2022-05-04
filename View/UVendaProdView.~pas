@@ -1,0 +1,24 @@
+unit UVendaProdView;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs;
+
+type
+  TfrmVendaProd = class(TForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmVendaProd: TfrmVendaProd;
+
+implementation
+
+{$R *.dfm}
+
+end.

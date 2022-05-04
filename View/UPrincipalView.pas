@@ -23,11 +23,14 @@ type
     menSair: TMenuItem;
     stbBarraStatus: TStatusBar;
     imgLogo: TImage;
+    Unidade1: TMenuItem;
     // Métodos do formulário
     procedure menSairClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure menClientesClick(Sender: TObject);
     procedure menProdutosClick(Sender: TObject);
+    procedure menVendasClick(Sender: TObject);
+    procedure Unidade1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -40,7 +43,7 @@ var
 implementation
 
 uses
-  Uconexao, UClientesView.pass, UProdutoView;
+  Uconexao, UClientesView.pass, UProdutoView, UVendaProdView, UCadProdutoView;
 
 {$R *.dfm}
 
@@ -73,16 +76,54 @@ end;
 procedure TfrmPrincipal.menProdutosClick(Sender: TObject);
 begin
   try
+
     Screen.Cursor := crHourGlass;
 
-    if frmProduto  = nil then
-      frmProduto := TfrmProduto.Create(Application);
+    if frmCadProduto  = nil then
+      frmCadProduto := TfrmCadProduto.Create(Application);
 
-      frmProduto.Show;
+      frmCadProduto.Show;
+
   finally
       Screen.Cursor := crDefault;
 
   end;
+end;
+
+procedure TfrmPrincipal.menVendasClick(Sender: TObject);
+begin
+   try
+
+      Screen.Cursor  := crHourGlass;
+
+      if frmVendaProd = nil then
+         frmVendaProd := TfrmVendaProd.Create(Application);
+
+      frmVendaProd.Show;
+
+   finally
+
+      Screen.Cursor := crDefault;
+
+   end;
+end;
+
+procedure TfrmPrincipal.Unidade1Click(Sender: TObject);
+begin
+   try
+
+      Screen.Cursor := crHourGlass;
+
+      if frmProduto  = nil then
+         frmProduto := TfrmProduto.Create(Application);
+
+         frmProduto.Show;
+
+   finally
+
+         Screen.Cursor := crDefault;
+
+   end;
 end;
 
 end.

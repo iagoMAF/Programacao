@@ -1004,8 +1004,8 @@ begin
             TMessageUtil.Alerta(
                'CPF invalido : Digite outro CPF');
 
-            if edtCPFCNPJ.CanFocus then
-               edtCPFCNPJ.SetFocus;
+           // if edtCPFCNPJ.CanFocus then
+              // edtCPFCNPJ.SetFocus;
          end;
       end;
 
@@ -1018,8 +1018,8 @@ begin
             TMessageUtil.Alerta(
                'CNPJ invalido : Digite outro CNPJ');
 
-            if edtCPFCNPJ.CanFocus then
-               edtCPFCNPJ.SetFocus;
+           // if edtCPFCNPJ.CanFocus then
+              // edtCPFCNPJ.SetFocus;
          end;
       end;
 
