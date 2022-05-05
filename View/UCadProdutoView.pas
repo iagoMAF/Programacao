@@ -457,17 +457,37 @@ end;
 
 function TfrmCadProduto.ValidaProduto: Boolean;
 begin
-      Result := False;
+   Result := False;
 
-      if (edtDescricao.Text = EmptyStr) then
-      begin
-            TMessageUtil.Alerta(
-                  'O Campo da descrição não pode ficar em branco.');
+   if (edtDescricao.Text = EmptyStr) then
+   begin
+      TMessageUtil.Alerta(
+         'O Campo da descrição não pode ficar em branco.');
 
-            if edtDescricao.CanFocus then
-               edtDescricao.SetFocus;
-            Exit;
-      end;
+      if edtDescricao.CanFocus then
+         edtDescricao.SetFocus;
+         Exit;
+   end;
+
+   if (edtPreco.Text = EmptyStr) then
+   begin
+      TMessageUtil.Alerta(
+         'O Campo do preço não pode ficar em branco.');
+
+      if edtPreco.CanFocus then
+         edtPreco.SetFocus;
+         Exit;
+   end;
+
+   if (edtEstoque.Text = EmptyStr) then
+   begin
+      TMessageUtil.Alerta(
+         'O Campo do estoque não pode ficar em branco.');
+
+      if edtEstoque.CanFocus then
+         edtEstoque.SetFocus;
+
+   end;
 
     Result := True;
 end;

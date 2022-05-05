@@ -58,6 +58,9 @@ type
     function  ProcessaInclusao     : Boolean;
     function  ProcessaCadProduto   : Boolean;
 
+    function  ProcessaUnidade     : Boolean;
+    function  ValidaProduto       : Boolean;
+
   public
     { Public declarations }
   end;
@@ -392,7 +395,7 @@ begin
    try
 
       Result := False;
-      if (ProcessaCadProduto) then
+      if (ProcessaUnidade) then
       begin
         // Gravação no Banco de dados
          TCadProdutoController.getInstancia.GravaCadProduto(vObjCadProduto);
@@ -410,6 +413,63 @@ begin
       end;
 
    end;
+end;
+
+function TfrmCadProduto.ProcessaUnidade: Boolean;
+begin
+   try
+        Result := False;
+
+       if not ValidaProduto then
+            Exit;
+
+        if vEstadoTela = etIncluir then
+        begin
+            if vObjCadProduto = nil then
+               vObjCadProduto := TCadProduto.Create;
+        end
+        else
+        if vEstadoTela = etAlterar then
+        begin
+            if vObjCadProduto = nil then
+                Exit;
+        end;
+
+        if (vObjCadProduto = nil) then
+            Exit;
+
+        vObjCadProduto.Descricao := edtDescricao.Text;
+        vObjCadProduto.Precovenda := StrToFloat(edtPreco.Text);
+        vObjCadProduto.Estoque := StrToInt(edtEstoque.Text);
+
+
+        Result := True;
+
+   except
+    on E: Exception do
+        begin
+            Raise Exception.Create(
+              'Falha ao gravar os dados dessa Unidade [View]: '#13+
+              e.Message);
+        end;
+    end;
+end;
+
+function TfrmCadProduto.ValidaProduto: Boolean;
+begin
+      Result := False;
+
+      if (edtDescricao.Text = EmptyStr) then
+      begin
+            TMessageUtil.Alerta(
+                  'O Campo da descrição não pode ficar em branco.');
+
+            if edtDescricao.CanFocus then
+               edtDescricao.SetFocus;
+            Exit;
+      end;
+
+    Result := True;
 end;
 
 end.
