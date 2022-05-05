@@ -71,7 +71,10 @@ end;
 
 class function TCadProdutoController.getInstancia: TCadProdutoController;
 begin
-   //Get
+   if _instance = nil then
+       _instance := TCadProdutoController.Create;
+
+    Result := _instance;
 end;
 
 function TCadProdutoController.GravaCadProduto(
@@ -95,11 +98,11 @@ begin
             end
             else
             begin
-               xCadProdutoDAO.Atualiza(
-                  pCadProduto, RetornaCondicaoCadProduto(pCadProduto.Id));
+               xCadProdutoDAO.Atualiza(pCadProduto, RetornaCondicaoCadProduto(pCadProduto.Id));
             end;
 
             TConexao.get.confirmaTransacao;
+
         finally
             if xCadProdutoDAO <> nil then
                FreeAndNil(xCadProdutoDAO);
@@ -118,8 +121,35 @@ end;
 
 function TCadProdutoController.PesquisaCadProduto(
   pDescricao: string): TColCadProduto;
+//var
+//   xCadProdutoDAO : TCadProdutoDAO;
+//   xCondicao   : string;
 begin
-   //PesquisaProduto
+//   try
+//      try
+//         Result := nil;
+//
+//         xCadProdutoDAO := TCadProdutoDAO.Create(TConexao.get.getConn);
+//
+//         xCondicao  :=
+//            IfThen(pDescricao <> EmptyStr,
+//               'WHERE                                           '#13+
+//               '    (DESCRICAO LIKE UPPER(''%'+ pDescricao + '%''))  '#13+
+//               'ORDER BY DESCRICAO, ID', EmptyStr);
+//
+//         Result := xCadProdutoDAO.RetornaLista(xCondicao);
+//      finally
+//         if (xCadProdutoDAO <> nil) then
+//            (FreeAndNil(xCadProdutoDAO));
+//      end;
+//   except
+//      on E: Exception do
+//      begin
+//         raise Exception.Create(
+//            'Falha ao buscas os dados da produto [Controller]: '#13+
+//            e.Message);
+//      end;
+//   end;
 end;
 
 function TCadProdutoController.RetornaCondicaoCadProduto(

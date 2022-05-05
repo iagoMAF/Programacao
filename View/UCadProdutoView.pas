@@ -29,6 +29,7 @@ type
     btnExcluir: TBitBtn;
     btnConsultar: TBitBtn;
     btnPesquisar: TBitBtn;
+    Label1: TLabel;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -41,6 +42,7 @@ type
     procedure btnCancelarClick(Sender: TObject);
     procedure btnSairClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure edtCodigoExit(Sender: TObject);
   private
     { Private declarations }
     vKey : Word;
@@ -54,9 +56,13 @@ type
     procedure LimpaTela;
     procedure DefineEstadoTela;
 
+    procedure CarregaDadosTela;
+
     function  ProcessaConfirmacao  : Boolean;
     function  ProcessaInclusao     : Boolean;
+    function  ProcessaConsulta     : Boolean;
     function  ProcessaCadProduto   : Boolean;
+
 
     function  ProcessaUnidade     : Boolean;
     function  ValidaProduto       : Boolean;
@@ -347,7 +353,7 @@ begin
           etIncluir   : Result    := ProcessaInclusao;
           //etAlterar   : Result    := ProcessaAlteracao;
           //etExcluir   : Result    := ProcessaExclusao;
-          //etConsultar : Result    := ProcessaConsulta;
+          etConsultar : Result    := ProcessaConsulta;
       end;
 
       if not Result then
@@ -446,17 +452,20 @@ begin
         Result := True;
 
    except
+
     on E: Exception do
         begin
             Raise Exception.Create(
               'Falha ao gravar os dados dessa Unidade [View]: '#13+
               e.Message);
         end;
-    end;
+        
+   end;
 end;
 
 function TfrmCadProduto.ValidaProduto: Boolean;
 begin
+
    Result := False;
 
    if (edtDescricao.Text = EmptyStr) then
@@ -486,10 +495,81 @@ begin
 
       if edtEstoque.CanFocus then
          edtEstoque.SetFocus;
-
+         Exit;
    end;
 
     Result := True;
+
+end;
+
+function TfrmCadProduto.ProcessaConsulta: Boolean;
+begin
+   try
+      Result := False;
+
+      if (edtCodigo.Text = EmptyStr ) then
+      begin
+         TMessageUtil.Alerta('Código do produto não pode ficar em branco.');
+
+         if edtCodigo.CanFocus then
+            edtCodigo.SetFocus;
+
+         Exit;
+      end;
+
+      vObjCadProduto :=
+         TCadProduto(TCadProdutoController.getInstancia.BuscaCadProduto(
+            StrToIntDef(edtCodigo.Text, 0)));
+
+      if (vObjCadProduto <> nil) then
+         CarregaDadosTela
+      else
+      begin
+         TMessageUtil.Alerta(
+            'Nenhum produto foi encontrado para o código informado.');
+
+         LimpaTela;
+
+         if (edtCodigo.CanFocus) then
+            (edtCodigo.SetFocus);
+
+         Exit;
+      end;
+
+      DefineEstadoTela; // Para liberar os campos
+
+      Result := True;
+
+   except
+      on E: Exception do
+      begin
+         raise Exception.Create(
+            'Falha ao consultar os dados do produto [View]. '#13+
+             e.Message);
+      end;
+   end;
+end;
+
+procedure TfrmCadProduto.CarregaDadosTela;
+begin
+   if (vObjCadProduto = nil) then
+      Exit;
+
+//edtPreco.Text  := FloatToStr(FormatFloat('#0.00',vObjCadProduto.Precovenda));
+
+   edtCodigo.Text    := IntToStr(vObjCadProduto.Id);
+   edtDescricao.Text := vObjCadProduto.Descricao;
+   edtPreco.Text     := FloatToStr(vObjCadProduto.Precovenda);
+   edtEstoque.Text   := IntToStr(vObjCadProduto.Estoque);
+
+end;
+
+procedure TfrmCadProduto.edtCodigoExit(Sender: TObject);
+begin
+   if vKey = VK_RETURN then
+      ProcessaConsulta;
+
+   vKey := VK_CLEAR;
 end;
 
 end.

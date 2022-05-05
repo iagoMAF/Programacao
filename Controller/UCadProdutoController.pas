@@ -138,6 +138,7 @@ begin
 //               'ORDER BY DESCRICAO, ID', EmptyStr);
 //
 //         Result := xCadProdutoDAO.RetornaLista(xCondicao);
+//
 //      finally
 //         if (xCadProdutoDAO <> nil) then
 //            (FreeAndNil(xCadProdutoDAO));

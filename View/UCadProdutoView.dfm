@@ -1,6 +1,6 @@
 object frmCadProduto: TfrmCadProduto
-  Left = 758
-  Top = 341
+  Left = 1103
+  Top = 531
   Width = 463
   Height = 246
   Caption = 'Cadastro de Produto'
@@ -384,12 +384,20 @@ object frmCadProduto: TfrmCadProduto
       Font.Style = [fsBold]
       ParentFont = False
     end
+    object Label1: TLabel
+      Left = 61
+      Top = 83
+      Width = 20
+      Height = 13
+      Caption = '(R$)'
+    end
     object edtCodigo: TEdit
       Left = 88
       Top = 19
       Width = 121
       Height = 21
       TabOrder = 0
+      OnExit = edtCodigoExit
     end
     object edtPreco: TEdit
       Left = 87
@@ -410,6 +418,7 @@ object frmCadProduto: TfrmCadProduto
       Top = 50
       Width = 345
       Height = 21
+      CharCase = ecUpperCase
       TabOrder = 1
     end
   end
