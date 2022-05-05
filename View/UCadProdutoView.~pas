@@ -62,6 +62,8 @@ type
     function  ProcessaInclusao     : Boolean;
     function  ProcessaConsulta     : Boolean;
     function  ProcessaCadProduto   : Boolean;
+    function  ProcessaAlteracao    : Boolean;
+    function  ProcessaExclusao     : Boolean;
 
 
     function  ProcessaUnidade     : Boolean;
@@ -351,7 +353,7 @@ begin
    try
       case vEstadoTela of
           etIncluir   : Result    := ProcessaInclusao;
-          //etAlterar   : Result    := ProcessaAlteracao;
+          etAlterar   : Result    := ProcessaAlteracao;
           //etExcluir   : Result    := ProcessaExclusao;
           etConsultar : Result    := ProcessaConsulta;
       end;
@@ -570,6 +572,84 @@ begin
       ProcessaConsulta;
 
    vKey := VK_CLEAR;
+end;
+
+function TfrmCadProduto.ProcessaAlteracao: Boolean;
+begin
+   try
+      Result := False;
+
+      if ProcessaCadProduto then
+      begin
+         TMessageUtil.Informacao('Dados do produto alterados com sucesso.');
+
+         vEstadoTela := etPadrao;
+         DefineEstadoTela;
+         Result := True;
+      end;
+
+   except
+      on E: Exception do
+      begin
+         Raise Exception.Create(
+            'Falha ao alterar os dados do produto [View]: '#13+
+            e.Message);
+      end;
+   end;
+end;
+
+function TfrmCadProduto.ProcessaExclusao: Boolean;
+begin
+   try
+
+      Result := False;
+
+      if (vObjCadProduto = nil) then
+      begin
+         TMessageUtil.Alerta(
+            'Não foi possivel carregar os dados cadastrados do produto.');
+
+         LimpaTela;
+         vEstadoTela := etPadrao;
+         DefineEstadoTela;
+         Exit;
+      end;
+
+      try
+         if TMessageUtil.Pergunta('Deseja mesmo excluir esse produto?') then
+         begin
+            Screen.Cursor := crHourGlass;
+            TCadProdutoController.getInstancia.ExcluiCadProduto(vObjCadProduto);
+         end
+         else
+         begin
+            LimpaTela;
+            vEstadoTela   := etPadrao;
+            DefineEstadoTela;
+            Exit;
+         end;
+      finally
+         Screen.Cursor    := crDefault;
+         Application.ProcessMessages;
+      end;
+
+      Result := True;
+      TMessageUtil.Informacao('O produto foi excluído com sucesso');
+      LimpaTela;
+      vEstadoTela := etPadrao;
+      DefineEstadoTela;
+
+   except
+
+   on E: Exception do
+      begin
+         Raise Exception.Create(
+            'Falha ao excluir os dados do produto '#13+
+            e.Message);
+      end;
+
+   end;
+
 end;
 
 end.
