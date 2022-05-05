@@ -62,6 +62,7 @@ type
     function  ProcessaInclusao     : Boolean;
     function  ProcessaConsulta     : Boolean;
     function  ProcessaCadProduto   : Boolean;
+    function  ProcessaAlteracao    : Boolean;
 
 
     function  ProcessaUnidade     : Boolean;
@@ -351,7 +352,7 @@ begin
    try
       case vEstadoTela of
           etIncluir   : Result    := ProcessaInclusao;
-          //etAlterar   : Result    := ProcessaAlteracao;
+          etAlterar   : Result    := ProcessaAlteracao;
           //etExcluir   : Result    := ProcessaExclusao;
           etConsultar : Result    := ProcessaConsulta;
       end;
@@ -570,6 +571,30 @@ begin
       ProcessaConsulta;
 
    vKey := VK_CLEAR;
+end;
+
+function TfrmCadProduto.ProcessaAlteracao: Boolean;
+begin
+   try
+      Result := False;
+
+      if ProcessaCadProduto then
+      begin
+         TMessageUtil.Informacao('Dados do produto alterados com sucesso.');
+
+         vEstadoTela := etPadrao;
+         DefineEstadoTela;
+         Result := True;
+      end;
+
+   except
+      on E: Exception do
+      begin
+         Raise Exception.Create(
+            'Falha ao alterar os dados do produto [View]: '#13+
+            e.Message);
+      end;
+   end;
 end;
 
 end.

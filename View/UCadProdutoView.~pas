@@ -555,6 +555,8 @@ begin
    if (vObjCadProduto = nil) then
       Exit;
 
+//edtPreco.Text  := FloatToStr(FormatFloat('#0.00',vObjCadProduto.Precovenda));
+
    edtCodigo.Text    := IntToStr(vObjCadProduto.Id);
    edtDescricao.Text := vObjCadProduto.Descricao;
    edtPreco.Text     := FloatToStr(vObjCadProduto.Precovenda);
