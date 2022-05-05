@@ -5,7 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, ComCtrls, StdCtrls, Buttons, UEnumerationUtil, frxClass,
-  DB, frxDBSet, UClassFuncoes, uMessageUtil;
+  DB, frxDBSet, UClassFuncoes, uMessageUtil, UCadProduto, UCadProdutoDAO,
+  UCadProdutoController, UMercadoria;
 
 type
   TfrmCadProduto = class(TForm)
@@ -47,10 +48,18 @@ type
     // Variaveis de Classe
 
     vEstadoTela : TEstadoTela;
+    vObjCadProduto : TCadProduto;
 
     procedure CamposEnabled(pOpcao : Boolean);
     procedure LimpaTela;
     procedure DefineEstadoTela;
+
+    function  ProcessaConfirmacao  : Boolean;
+    function  ProcessaInclusao     : Boolean;
+    function  ProcessaCadProduto   : Boolean;
+
+    function  ProcessaUnidade     : Boolean;
+    function  ValidaProduto       : Boolean;
 
   public
     { Public declarations }
@@ -212,7 +221,54 @@ begin
                (edtCodigo.SetFocus);
 
          end;
+      end;
 
+      etExcluir:
+      begin
+
+         stbBarraStatus.Panels[0].Text := 'Exclusão';
+
+         if (edtCodigo.Text <> EmptyStr) then
+            //Processa Exclusão
+         else
+         begin
+
+            lblCodigo.Enabled := True;
+            edtCodigo.Enabled := True;
+
+            if (edtCodigo.CanFocus) then
+               (edtCodigo.SetFocus);
+
+         end;
+      end;
+
+      etConsultar:
+      begin
+         stbBarraStatus.Panels[0].Text := 'Consulta';
+
+         CamposEnabled(False);
+
+         if (edtCodigo.Text <> EmptyStr) then
+         begin
+
+            edtCodigo.Enabled         := False;
+            btnAlterar.Enabled        := True;
+            btnExcluir.Enabled        := True;
+            btnConfirmar.Enabled      := False;
+
+            if (btnAlterar.CanFocus) then
+               (btnAlterar.SetFocus);
+         end
+         else
+         begin
+
+            lblCodigo.Enabled := True;
+            edtCodigo.Enabled := True;
+
+            if (edtCodigo.CanFocus) then
+               (edtCodigo.SetFocus);
+
+         end;
       end;
 
    end;
@@ -232,12 +288,14 @@ end;
 
 procedure TfrmCadProduto.btnExcluirClick(Sender: TObject);
 begin
-   //btnExcluir
+   vEstadoTela := etExcluir;
+   DefineEstadoTela;
 end;
 
 procedure TfrmCadProduto.btnConsultarClick(Sender: TObject);
 begin
-   //btnConsultar
+   vEstadoTela := etConsultar;
+   DefineEstadoTela;
 end;
 
 procedure TfrmCadProduto.btnPesquisarClick(Sender: TObject);
@@ -247,7 +305,7 @@ end;
 
 procedure TfrmCadProduto.btnConfirmarClick(Sender: TObject);
 begin
-   //btnConfirmar
+   ProcessaConfirmacao;
 end;
 
 procedure TfrmCadProduto.btnCancelarClick(Sender: TObject);
@@ -258,12 +316,160 @@ end;
 
 procedure TfrmCadProduto.btnSairClick(Sender: TObject);
 begin
-   //btnSair
+
+   if (vEstadoTela <> etPadrao) then
+      begin
+         if (TMessageUtil.Pergunta(
+            'Deseja realmente fechar essa tela?')) then
+         begin
+
+            vEstadoTela := etPadrao;
+            DefineEstadoTela;
+
+         end;
+      end
+   else
+      Close;
+
 end;
 
 procedure TfrmCadProduto.FormShow(Sender: TObject);
 begin
    DefineEstadoTela;
+end;
+
+function TfrmCadProduto.ProcessaConfirmacao: Boolean;
+begin
+   Result := False;
+
+   try
+      case vEstadoTela of
+          etIncluir   : Result    := ProcessaInclusao;
+          //etAlterar   : Result    := ProcessaAlteracao;
+          //etExcluir   : Result    := ProcessaExclusao;
+          //etConsultar : Result    := ProcessaConsulta;
+      end;
+
+      if not Result then
+         Exit;
+   except
+      on E: Exception do
+         TMessageUtil.Alerta(E.Message);
+   end;
+
+   Result := True;
+
+end;
+
+function TfrmCadProduto.ProcessaInclusao: Boolean;
+begin
+   try
+      Result := False;
+
+      if ProcessaCadProduto then
+      begin
+
+         TMessageUtil.Informacao('Produto cadastrado com sucesso.'#13+
+            'Código cadastrado: '+ IntToStr(vObjCadProduto.Id));
+
+         vEstadoTela := etPadrao;
+         DefineEstadoTela;
+
+         Result := True;
+
+      end;
+
+   except
+      on E: Exception do
+      begin
+          Raise Exception.Create(
+            'Falha ao incluir os dados do produto [View]: '#13+
+            e.Message);
+      end;
+   end;
+
+end;
+
+function TfrmCadProduto.ProcessaCadProduto: Boolean;
+begin
+   try
+
+      Result := False;
+      if (ProcessaUnidade) then
+      begin
+        // Gravação no Banco de dados
+         TCadProdutoController.getInstancia.GravaCadProduto(vObjCadProduto);
+
+         Result := True;
+      end;
+
+   except
+
+      on E : Exception do
+      begin
+         Raise Exception.Create(
+            'Falha ao gravar os dados do produto [View]. '#13+
+            e.Message);
+      end;
+
+   end;
+end;
+
+function TfrmCadProduto.ProcessaUnidade: Boolean;
+begin
+   try
+        Result := False;
+
+       if not ValidaProduto then
+            Exit;
+
+        if vEstadoTela = etIncluir then
+        begin
+            if vObjCadProduto = nil then
+               vObjCadProduto := TCadProduto.Create;
+        end
+        else
+        if vEstadoTela = etAlterar then
+        begin
+            if vObjCadProduto = nil then
+                Exit;
+        end;
+
+        if (vObjCadProduto = nil) then
+            Exit;
+
+        vObjCadProduto.Descricao := edtDescricao.Text;
+        vObjCadProduto.Precovenda := StrToFloat(edtPreco.Text);
+        vObjCadProduto.Estoque := StrToInt(edtEstoque.Text);
+
+
+        Result := True;
+
+   except
+    on E: Exception do
+        begin
+            Raise Exception.Create(
+              'Falha ao gravar os dados dessa Unidade [View]: '#13+
+              e.Message);
+        end;
+    end;
+end;
+
+function TfrmCadProduto.ValidaProduto: Boolean;
+begin
+      Result := False;
+
+      if (edtDescricao.Text = EmptyStr) then
+      begin
+            TMessageUtil.Alerta(
+                  'O Campo da descrição não pode ficar em branco.');
+
+            if edtDescricao.CanFocus then
+               edtDescricao.SetFocus;
+            Exit;
+      end;
+
+    Result := True;
 end;
 
 end.

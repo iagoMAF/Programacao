@@ -161,7 +161,8 @@ begin
          xCondicao  :=
             IfThen(pNome <> EmptyStr,
                'WHERE                                           '#13+
-               '    (DESCRICAO LIKE ''%'+ pNome + '%'')', EmptyStr);
+               '    (DESCRICAO LIKE UPPER(''%'+ pNome + '%''))  '#13+
+               'ORDER BY DESCRICAO, ID', EmptyStr);
 
          Result := xProdutoDAO.RetornaLista(xCondicao);
       finally

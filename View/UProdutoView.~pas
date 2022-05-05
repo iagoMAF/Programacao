@@ -465,6 +465,7 @@ begin
         vObjProduto.Ativo     := chkAtivo.Checked;
         vObjProduto.Unidade   := edtUnidade.Text;
         vObjProduto.Descricao := edtDescricao.Text;
+        
 
         Result := True;
 
@@ -515,6 +516,7 @@ begin
 
          if edtCodigo.CanFocus then
             edtCodigo.SetFocus;
+
 
          Exit;
       end;
