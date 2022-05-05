@@ -1,6 +1,6 @@
 object frmCadProduto: TfrmCadProduto
-  Left = 1103
-  Top = 531
+  Left = 1022
+  Top = 391
   Width = 463
   Height = 246
   Caption = 'Cadastro de Produto'
@@ -399,13 +399,6 @@ object frmCadProduto: TfrmCadProduto
       TabOrder = 0
       OnExit = edtCodigoExit
     end
-    object edtPreco: TEdit
-      Left = 87
-      Top = 78
-      Width = 88
-      Height = 21
-      TabOrder = 2
-    end
     object edtEstoque: TEdit
       Left = 244
       Top = 78
@@ -420,6 +413,17 @@ object frmCadProduto: TfrmCadProduto
       Height = 21
       CharCase = ecUpperCase
       TabOrder = 1
+    end
+    object edtPreco: TNumEdit
+      Left = 88
+      Top = 80
+      Width = 81
+      Height = 21
+      Alignment = taRightJustify
+      Decimals = 2
+      ShowSeparator = True
+      TabOrder = 2
+      OnExit = edtPrecoExit
     end
   end
 end

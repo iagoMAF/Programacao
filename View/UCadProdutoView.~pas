@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, ComCtrls, StdCtrls, Buttons, UEnumerationUtil, frxClass,
   DB, frxDBSet, UClassFuncoes, uMessageUtil, UCadProduto, UCadProdutoDAO,
-  UCadProdutoController, UMercadoria;
+  UCadProdutoController, UMercadoria, NumEdit;
 
 type
   TfrmCadProduto = class(TForm)
@@ -16,7 +16,6 @@ type
     lblCodigo: TLabel;
     edtCodigo: TEdit;
     lblPreco: TLabel;
-    edtPreco: TEdit;
     lblEstoque: TLabel;
     edtEstoque: TEdit;
     lblDescricao: TLabel;
@@ -30,6 +29,7 @@ type
     btnConsultar: TBitBtn;
     btnPesquisar: TBitBtn;
     Label1: TLabel;
+    edtPreco: TNumEdit;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -43,6 +43,7 @@ type
     procedure btnSairClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure edtCodigoExit(Sender: TObject);
+    procedure edtPrecoExit(Sender: TObject);
   private
     { Private declarations }
     vKey : Word;
@@ -137,6 +138,9 @@ begin
       if (Components[i] is TEdit) then
          (Components[i] as TEdit).Enabled := pOpcao;
 
+      if (Components[i] is TNumEdit) then
+         (Components[i] as TNumEdit).Enabled := pOpcao;
+
    end;
 end;
 
@@ -150,6 +154,9 @@ begin
 
       if (Components[i] is TEdit) then
          (Components[i] as TEdit).Text := EmptyStr;
+
+      if (Components[i] is TNumEdit) then
+         (Components[i] as TNumEdit).Text := EmptyStr;
 
    end;
 end;
@@ -237,7 +244,7 @@ begin
          stbBarraStatus.Panels[0].Text := 'Exclusão';
 
          if (edtCodigo.Text <> EmptyStr) then
-            //Processa Exclusão
+            ProcessaExclusao
          else
          begin
 
@@ -557,11 +564,11 @@ begin
    if (vObjCadProduto = nil) then
       Exit;
 
-//edtPreco.Text  := FloatToStr(FormatFloat('#0.00',vObjCadProduto.Precovenda));
+   edtPreco.Text  := FormatFloat('#0.00',vObjCadProduto.Precovenda);
 
    edtCodigo.Text    := IntToStr(vObjCadProduto.Id);
    edtDescricao.Text := vObjCadProduto.Descricao;
-   edtPreco.Text     := FloatToStr(vObjCadProduto.Precovenda);
+   //edtPreco.Text   := FloatToStr(vObjCadProduto.Precovenda);
    edtEstoque.Text   := IntToStr(vObjCadProduto.Estoque);
 
 end;
@@ -648,6 +655,33 @@ begin
             e.Message);
       end;
 
+   end;
+
+end;
+
+procedure TfrmCadProduto.edtPrecoExit(Sender: TObject);
+begin
+
+   if (edtPreco.Value < 0 ) then
+   begin
+      TMessageUtil.Alerta(
+         'O Campo do preço não pode ser negativo.');
+
+      edtPreco.Text := EmptyStr;
+
+      if edtPreco.CanFocus then
+         edtPreco.SetFocus;
+   end;
+
+   if (edtPreco.Value = 0 ) then
+   begin
+      TMessageUtil.Alerta(
+         'O Campo do preço não pode ser igual a zero.');
+
+      edtPreco.Text := EmptyStr;
+
+      if edtPreco.CanFocus then
+         edtPreco.SetFocus;
    end;
 
 end;
