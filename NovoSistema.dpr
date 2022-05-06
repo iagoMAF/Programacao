@@ -29,7 +29,8 @@ uses
   UCadProdutoDAO in 'Model\UCadProdutoDAO.pas',
   UCadProduto in 'Model\UCadProduto.pas',
   UMercadoria in 'Model\UMercadoria.pas',
-  UCadProdutoController in 'Controller\UCadProdutoController.pas';
+  UCadProdutoController in 'Controller\UCadProdutoController.pas',
+  UCadProdutoPesqView in 'View\UCadProdutoPesqView.pas' {frmCadProdutoPesq};
 
 {$R *.res}
 

@@ -165,6 +165,7 @@ begin
                'ORDER BY DESCRICAO, ID', EmptyStr);
 
          Result := xProdutoDAO.RetornaLista(xCondicao);
+
       finally
          if (xProdutoDAO <> nil) then
             (FreeAndNil(xProdutoDAO));

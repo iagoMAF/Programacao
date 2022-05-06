@@ -1,6 +1,6 @@
 object frmProdutoPesqView: TfrmProdutoPesqView
-  Left = 917
-  Top = 267
+  Left = 882
+  Top = 371
   Width = 664
   Height = 299
   Caption = 'Pesquisa de produto'
@@ -14,6 +14,7 @@ object frmProdutoPesqView: TfrmProdutoPesqView
   OldCreateOrder = False
   Position = poScreenCenter
   OnKeyDown = FormKeyDown
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object StatusBar1: TStatusBar

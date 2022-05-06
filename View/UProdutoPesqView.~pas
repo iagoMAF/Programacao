@@ -39,7 +39,8 @@ type
     procedure cdsProdutoBeforeDelete(DataSet: TDataSet);
     procedure dbgProdutoDblClick(Sender: TObject);
     procedure dbgProdutoKeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
+     Shift: TShiftState);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
     vKey : Word;
@@ -110,8 +111,6 @@ begin
    if (edtNome.CanFocus) then
       (edtNome.SetFocus);
 
-   mProdutoID        := 0;
-   mProdutoDescricao := EmptyStr;
 end;
 
 procedure TfrmProdutoPesqView.ProcessaConfirmacao;
@@ -122,7 +121,7 @@ begin
       mProdutoUnidade   := cdsProdutoUnidade.Value;
       mProdutoDescricao := cdsProdutoDescricao.Value;
       Self.ModalResult  := mrOk;
-     //LimparTela;
+      LimparTela;
       Close;
    end
    else
@@ -196,11 +195,15 @@ procedure TfrmProdutoPesqView.btnFiltrarClick(Sender: TObject);
 begin
    mProdutoID        := 0;
    mProdutoDescricao := EmptyStr;
+   mProdutoUnidade   := EmptyStr;
    ProcessaPesquisa;
 end;
 
 procedure TfrmProdutoPesqView.btnConfirmarClick(Sender: TObject);
 begin
+   mProdutoID        := 0;
+   mProdutoDescricao := EmptyStr;
+   mProdutoUnidade   := EmptyStr;
    ProcessaConfirmacao;
 end;
 
@@ -211,6 +214,9 @@ end;
 
 procedure TfrmProdutoPesqView.btnSairClick(Sender: TObject);
 begin
+   mProdutoID        := 0;
+   mProdutoDescricao := EmptyStr;
+   mProdutoUnidade   := EmptyStr;
    LimparTela;
    Close;
 end;
@@ -231,6 +237,13 @@ begin
    if (Key =  VK_RETURN) and
       (btnConfirmar.CanFocus) then
          (btnConfirmar.SetFocus);
+end;
+
+procedure TfrmProdutoPesqView.FormShow(Sender: TObject);
+begin
+   if edtNome.CanFocus then
+      edtNome.SetFocus;
+
 end;
 
 end.

@@ -14,7 +14,7 @@ type
       function  InsereLista(pColCadProduto : TColCadProduto) : Boolean;
       function  Atualiza(pCadProduto : TCadProduto; pCondicao : String) : Boolean;
       function  Retorna(pCondicao : String) : TCadProduto;
-      function  RetornaLista(pCondicao : String = '') : TCadProduto;
+      function  RetornaLista(pCondicao : String = '') : TColCadProduto;
   end;
 
 implementation
@@ -51,9 +51,9 @@ begin
    Result := TCadProduto(inherited Retorna(pCondicao));
 end;
 
-function TCadProdutoDAO.RetornaLista(pCondicao: String): TCadProduto;
+function TCadProdutoDAO.RetornaLista(pCondicao: String): TColCadProduto;
 begin
-   Result := TCadProduto(inherited RetornaLista(pCondicao));
+   Result := TColCadProduto(inherited RetornaLista(pCondicao));
 end;
 
 end.

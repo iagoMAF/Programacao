@@ -13,7 +13,7 @@ type
 
         function  ExcluiCadProduto(pCadProduto : TCadProduto)  : Boolean;
         function  BuscaCadProduto(pID : Integer)               : TCadProduto;
-        function  PesquisaCadProduto(pDescricao : string)      : TColCadProduto;
+        function  PesquisaCadProduto(pNome : string)      : TColCadProduto;
 
         function RetornaCondicaoCadProduto(pID_CadProduto : Integer) :  String;
 
@@ -155,37 +155,37 @@ begin
 end;
 
 function TCadProdutoController.PesquisaCadProduto(
-  pDescricao: string): TColCadProduto;
-//var
-//   xCadProdutoDAO : TCadProdutoDAO;
-//   xCondicao   : string;
+  pNome: string): TColCadProduto;
+var
+   xCadProdutoDAO : TCadProdutoDAO;
+   xCondicao   : string;
 begin
-//   try
-//      try
-//         Result := nil;
-//
-//         xCadProdutoDAO := TCadProdutoDAO.Create(TConexao.get.getConn);
-//
-//         xCondicao  :=
-//            IfThen(pDescricao <> EmptyStr,
-//               'WHERE                                           '#13+
-//               '    (DESCRICAO LIKE UPPER(''%'+ pDescricao + '%''))  '#13+
-//               'ORDER BY DESCRICAO, ID', EmptyStr);
-//
-//         Result := xCadProdutoDAO.RetornaLista(xCondicao);
-//
-//      finally
-//         if (xCadProdutoDAO <> nil) then
-//            (FreeAndNil(xCadProdutoDAO));
-//      end;
-//   except
-//      on E: Exception do
-//      begin
-//         raise Exception.Create(
-//            'Falha ao buscas os dados da produto [Controller]: '#13+
-//            e.Message);
-//      end;
-//   end;
+   try
+      try
+         Result := nil;
+
+         xCadProdutoDAO := TCadProdutoDAO.Create(TConexao.get.getConn);
+
+         xCondicao  :=
+            IfThen( pNome <> EmptyStr,
+               'WHERE                                           '#13+
+               '    (DESCRICAO LIKE UPPER(''%'+ pNome + '%''))  '#13+
+               'ORDER BY DESCRICAO, ID', EmptyStr);
+
+         Result := xCadProdutoDAO.RetornaLista(xCondicao);
+
+      finally
+         if (xCadProdutoDAO <> nil) then
+            (FreeAndNil(xCadProdutoDAO));
+      end;
+   except
+      on E: Exception do
+      begin
+         raise Exception.Create(
+            'Falha ao buscas os dados do produto [Controller]: '#13+
+            e.Message);
+      end;
+   end;
 end;
 
 function TCadProdutoController.RetornaCondicaoCadProduto(
@@ -194,7 +194,7 @@ var
   xChave : string;
 begin
    xChave := 'ID';
-  
+
    Result :=
       'WHERE                                                    '#13+
       '   '+xChave + ' = '+ QuotedStr(IntToStr(pID_CadProduto))+ ' '#13;

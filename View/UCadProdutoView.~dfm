@@ -405,6 +405,7 @@ object frmCadProduto: TfrmCadProduto
       Width = 73
       Height = 21
       TabOrder = 3
+      OnKeyPress = edtEstoqueKeyPress
     end
     object edtDescricao: TEdit
       Left = 88

@@ -44,7 +44,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure edtCodigoExit(Sender: TObject);
     procedure edtPrecoExit(Sender: TObject);
-    procedure edtEstoqueExit(Sender: TObject);
+    procedure edtEstoqueKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
     vKey : Word;
@@ -67,6 +67,8 @@ type
     function  ProcessaAlteracao    : Boolean;
     function  ProcessaExclusao     : Boolean;
 
+    function ValidateField(var Key: Char; TipoFiltro: Byte = 0) : Boolean;
+
 
     function  ProcessaUnidade     : Boolean;
     function  ValidaProduto       : Boolean;
@@ -79,6 +81,8 @@ var
   frmCadProduto: TfrmCadProduto;
 
 implementation
+
+uses UCadProdutoPesqView;
 
 {$R *.dfm}
 
@@ -287,6 +291,34 @@ begin
          end;
       end;
 
+      etPesquisar:
+      begin
+         stbBarraStatus.Panels[0].Text := 'Pesquisa';
+
+            if (frmCadProdutoPesq = nil ) then
+                frmCadProdutoPesq := TfrmCadProdutoPesq.Create(Application);
+
+            frmCadProdutoPesq.ShowModal;
+
+            if (frmCadProdutoPesq.mProdutoID <> 0) then
+            begin
+               edtCodigo.Text := IntToStr(frmCadProdutoPesq.mProdutoID);
+               vEstadoTela    := etConsultar;
+               ProcessaConsulta;
+            end
+            else
+            begin
+               vEstadoTela := etPadrao;
+               DefineEstadoTela;
+            end;
+
+            frmCadProdutoPesq.mProdutoID        := 0;
+            frmCadProdutoPesq.mProdutoDescricao := EmptyStr;
+
+            if edtDescricao.CanFocus then
+               edtDescricao.SetFocus;
+      end;
+
    end;
 end;
 
@@ -316,7 +348,8 @@ end;
 
 procedure TfrmCadProduto.btnPesquisarClick(Sender: TObject);
 begin
-   //btnPesquisar
+   vEstadoTela := etPesquisar;
+   DefineEstadoTela;
 end;
 
 procedure TfrmCadProduto.btnConfirmarClick(Sender: TObject);
@@ -687,9 +720,34 @@ begin
 
 end;
 
-procedure TfrmCadProduto.edtEstoqueExit(Sender: TObject);
+function TfrmCadProduto.ValidateField(var Key: Char;
+  TipoFiltro: Byte): Boolean;
+function IsDigit(Key : Char) : Boolean;
+   begin
+      Result := (Key in ['0'..'9']);
+   end;
 begin
-   //xAux := TFuncoes.SoNumero(edtEstoque.Text);
+
+   if not (Key in [#8, #37, #38, #39, #40, #46]) then
+   case TipoFiltro of
+
+      2 : if not (IsDigit(Key)) then Key := #0;
+
+   else
+        raise Exception.Create('Tipo de filtro inválido.');
+   end;
+
+  Result := (not (Key = #0));
+
 end;
+
+procedure TfrmCadProduto.edtEstoqueKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+
+   ValidateField(Key, 2);
+
+end;
+
 
 end.

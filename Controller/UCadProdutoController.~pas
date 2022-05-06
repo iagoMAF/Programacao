@@ -65,8 +65,43 @@ end;
 
 function TCadProdutoController.ExcluiCadProduto(
   pCadProduto: TCadProduto): Boolean;
+var
+   xCadProdutoDAO : TCadProdutoDAO;
 begin
-   // Exclui
+   try
+   try
+      Result := True;
+
+      TConexao.get.iniciaTransacao;
+
+      xCadProdutoDAO := TCadProdutoDAO.Create(TConexao.get.getConn);
+
+      if (pCadProduto.Id = 0) then
+         Exit
+      else
+      begin
+         xCadProdutoDAO.Deleta(RetornaCondicaoCadProduto(pCadProduto.Id))
+      end;
+
+      TConexao.get.confirmaTransacao;
+
+      Result := False;
+
+   finally
+
+      if xCadProdutoDAO <> nil then
+         FreeAndNil(xCadProdutoDAO);
+   end;
+   except
+      on E: Exception do
+      begin
+         TConexao.get.cancelaTransacao;
+         raise Exception.Create(
+            'Falha ao excluir os dados do produto [Controller]: '#13+
+            e.Message);
+      end;
+   end;
+
 end;
 
 class function TCadProdutoController.getInstancia: TCadProdutoController;

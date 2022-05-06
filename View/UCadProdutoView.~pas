@@ -44,6 +44,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure edtCodigoExit(Sender: TObject);
     procedure edtPrecoExit(Sender: TObject);
+    procedure edtEstoqueKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
     vKey : Word;
@@ -65,6 +66,8 @@ type
     function  ProcessaCadProduto   : Boolean;
     function  ProcessaAlteracao    : Boolean;
     function  ProcessaExclusao     : Boolean;
+
+    function ValidateField(var Key: Char; TipoFiltro: Byte = 0) : Boolean;
 
 
     function  ProcessaUnidade     : Boolean;
@@ -685,5 +688,35 @@ begin
    end;
 
 end;
+
+function TfrmCadProduto.ValidateField(var Key: Char;
+  TipoFiltro: Byte): Boolean;
+function IsDigit(Key : Char) : Boolean;
+   begin
+      Result := (Key in ['0'..'9']);
+   end;
+begin
+
+   if not (Key in [#8, #37, #38, #39, #40, #46]) then
+   case TipoFiltro of
+
+      2 : if not (IsDigit(Key)) then Key := #0;
+
+   else
+        raise Exception.Create('Tipo de filtro inválido.');
+   end;
+
+  Result := (not (Key = #0));
+
+end;
+
+procedure TfrmCadProduto.edtEstoqueKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+
+   ValidateField(Key, 2);
+
+end;
+
 
 end.
