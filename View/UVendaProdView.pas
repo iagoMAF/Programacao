@@ -5,11 +5,11 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, ComCtrls, DB, DBClient, Grids, DBGrids, StdCtrls,
-  Mask, Buttons;
+  Mask, Buttons, uMessageUtil, UEnumerationUtil, NumEdit;
 
 type
   TfrmVendaProd = class(TForm)
-    StatusBar1: TStatusBar;
+    stbBarraStatus: TStatusBar;
     pnlInfo: TPanel;
     pnlBotoes: TPanel;
     btnConsultar: TBitBtn;
@@ -22,18 +22,40 @@ type
     edtNumeroCliente: TEdit;
     edtNomeCliente: TEdit;
     Label1: TLabel;
-    edtValorTotal: TEdit;
     lblData: TLabel;
-    MaskEdit1: TMaskEdit;
+    edtDataPedido: TMaskEdit;
     GroupBox1: TGroupBox;
-    DBGrid1: TDBGrid;
+    dbgVenda: TDBGrid;
     DataSource1: TDataSource;
-    ClientDataSet1: TClientDataSet;
+    cdsVenda: TClientDataSet;
     btnConfirmar: TBitBtn;
     btnCancelar: TBitBtn;
-    btnSalvar: TBitBtn;
+    btnLimpar: TBitBtn;
+    btnIncluir: TBitBtn;
+    edtValorTotal: TNumEdit;
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnIncluirClick(Sender: TObject);
+    procedure btnAlterarClick(Sender: TObject);
+    procedure btnConsultarClick(Sender: TObject);
+    procedure btnPesquisarClick(Sender: TObject);
+    procedure btnConfirmarClick(Sender: TObject);
+    procedure btnCancelarClick(Sender: TObject);
+    procedure btnLimparClick(Sender: TObject);
+    procedure btnSairClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
+
+    vKey : Word;
+
+    vEstadoTela : TEstadoTela;
+
+    procedure CamposEnabled(pOpcao : Boolean);
+    procedure LimparTela;
+    procedure DefineEstadoTela;
+
   public
     { Public declarations }
   end;
@@ -44,5 +66,214 @@ var
 implementation
 
 {$R *.dfm}
+
+procedure TfrmVendaProd.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+
+   vKey := Key;
+
+   case vKey of
+
+      VK_RETURN: //Tecla <Enter>
+      begin
+         Perform(WM_NEXTDlgCtl, 0, 0);
+      end;
+
+      VK_ESCAPE:
+      begin
+         if (vEstadoTela <> etPadrao)then
+         begin
+
+             if (TMessageUtil.Pergunta(
+               'Deseja realmente sair cancelar essa operação? ')) then
+             begin
+               vEstadoTela := etPadrao;
+               DefineEstadoTela;
+             end;
+
+         end
+         else
+         begin
+
+            if (TMessageUtil.Pergunta(
+               'Deseja sair dessa rotina?' ))then
+               Close;
+
+         end;
+      end;
+
+   end;
+end;
+
+procedure TfrmVendaProd.CamposEnabled(pOpcao: Boolean);
+var
+   i : Integer;
+begin
+
+   for i := 0 to pred(ComponentCount) do
+   begin
+
+      if (Components[i] is TEdit) then
+         (Components[i] as TEdit).Enabled     := pOpcao;
+
+      if (Components[i] is TMaskEdit) then
+         (Components[i] as TMaskEdit).Enabled := pOpcao;
+
+      if (Components[i] is TNumEdit) then
+         (Components[i] as TNumEdit).Enabled  := pOpcao;
+
+   end;
+
+end;
+
+
+procedure TfrmVendaProd.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+   Action       := caFree;
+   frmVendaProd := nil;
+end;
+
+procedure TfrmVendaProd.LimparTela;
+var
+   i : Integer;
+begin
+
+   for i := 0 to pred(ComponentCount) do
+   begin
+
+      if (Components[i] is TEdit) then
+         (Components[i] as TEdit).Text     := EmptyStr;
+
+      if (Components[i] is TMaskEdit) then
+         (Components[i] as TMaskEdit).Text := EmptyStr ;
+
+      if (Components[i] is TNumEdit) then
+         (Components[i] as TNumEdit).Text  := EmptyStr;
+
+   end;
+
+end;
+
+procedure TfrmVendaProd.DefineEstadoTela;
+begin
+
+   btnIncluir.Enabled   := (vEstadoTela in [etPadrao]);
+   btnAlterar.Enabled   := (vEstadoTela in [etPadrao]);
+   btnConsultar.Enabled := (vEstadoTela in [etPadrao]);
+   btnPesquisar.Enabled := (vEstadoTela in [etPadrao]);
+   //btnExcluir.Enabled := (vEstadoTela in [etPadrao]);
+
+   btnConfirmar.Enabled :=
+      vEstadoTela in [etIncluir, etAlterar, etConsultar];
+
+   btnCancelar.Enabled  :=
+      vEstadoTela in [etIncluir, etAlterar, etConsultar];
+
+   case vEstadoTela of
+
+      etPadrao:
+      begin
+
+         CamposEnabled(False);
+         LimparTela;
+
+         stbBarraStatus.Panels[0].Text := EmptyStr;
+         stbBarraStatus.Panels[0].Text := EmptyStr;
+
+         if (frmVendaProd <> nil) and
+            (frmVendaProd.Active) and
+            (btnIncluir.CanFocus) then
+            (btnIncluir.SetFocus);
+
+         Application.ProcessMessages;
+
+      end;
+
+      etIncluir:
+      begin
+
+         stbBarraStatus.Panels[0].Text := 'Inclusão de Venda';
+         CamposEnabled(True);
+
+         edtNumeroPedido.Enabled := False;
+         edtDataPedido.Enabled   := False;
+
+
+         if (edtNumeroCliente.CanFocus) then
+            (edtNumeroCliente.SetFocus);
+
+      end;
+
+   end;
+
+end;
+
+procedure TfrmVendaProd.btnIncluirClick(Sender: TObject);
+begin
+   // Click Incluir
+   vEstadoTela := etIncluir;
+   DefineEstadoTela;
+end;
+
+procedure TfrmVendaProd.btnAlterarClick(Sender: TObject);
+begin
+   // Click Alterar
+end;
+
+procedure TfrmVendaProd.btnConsultarClick(Sender: TObject);
+begin
+   // Click Consultar
+end;
+
+procedure TfrmVendaProd.btnPesquisarClick(Sender: TObject);
+begin
+   // Click Pesquisar
+end;
+
+procedure TfrmVendaProd.btnConfirmarClick(Sender: TObject);
+begin
+   // Click Confirmar
+end;
+
+procedure TfrmVendaProd.btnCancelarClick(Sender: TObject);
+begin
+   // Click Cancelar
+   vEstadoTela := etPadrao;
+   DefineEstadoTela;
+end;
+
+procedure TfrmVendaProd.btnLimparClick(Sender: TObject);
+begin
+   // Click Limpar
+   LimparTela;
+   //DefineEstadoTela;
+end;
+
+procedure TfrmVendaProd.btnSairClick(Sender: TObject);
+begin
+
+   if (vEstadoTela <> etPadrao) then
+   begin
+
+      if (TMessageUtil.Pergunta(
+         'Deseja realmente sair dessa rotina?')) then
+      begin
+
+         vEstadoTela := etPadrao;
+         DefineEstadoTela;
+      end;
+
+   end
+   else
+      close;
+
+end;
+
+procedure TfrmVendaProd.FormShow(Sender: TObject);
+begin
+   DefineEstadoTela;
+end;
 
 end.

@@ -1,6 +1,6 @@
 object frmVendaProd: TfrmVendaProd
-  Left = 490
-  Top = 233
+  Left = 1003
+  Top = 235
   Width = 593
   Height = 485
   Caption = 'Venda'
@@ -10,18 +10,22 @@ object frmVendaProd: TfrmVendaProd
   Font.Height = -11
   Font.Name = 'MS Sans Serif'
   Font.Style = []
+  KeyPreview = True
   OldCreateOrder = False
   Position = poDesktopCenter
+  OnClose = FormClose
+  OnKeyDown = FormKeyDown
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object StatusBar1: TStatusBar
+  object stbBarraStatus: TStatusBar
     Left = 0
     Top = 427
     Width = 577
     Height = 19
     Panels = <
       item
-        Width = 75
+        Width = 120
       end
       item
         Width = 50
@@ -40,7 +44,8 @@ object frmVendaProd: TfrmVendaProd
       Width = 75
       Height = 25
       Caption = '&Consultar'
-      TabOrder = 0
+      TabOrder = 4
+      OnClick = btnConsultarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -75,7 +80,8 @@ object frmVendaProd: TfrmVendaProd
       Width = 75
       Height = 25
       Caption = '&Sair'
-      TabOrder = 6
+      TabOrder = 7
+      OnClick = btnSairClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -110,7 +116,8 @@ object frmVendaProd: TfrmVendaProd
       Width = 75
       Height = 25
       Caption = '&Pesquisar'
-      TabOrder = 1
+      TabOrder = 5
+      OnClick = btnPesquisarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -145,7 +152,8 @@ object frmVendaProd: TfrmVendaProd
       Width = 75
       Height = 25
       Caption = '&Alterar'
-      TabOrder = 2
+      TabOrder = 6
+      OnClick = btnAlterarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E000000000000000000000A2B95062082
@@ -181,7 +189,8 @@ object frmVendaProd: TfrmVendaProd
       Height = 25
       Caption = '&Confirmar'
       Enabled = False
-      TabOrder = 3
+      TabOrder = 1
+      OnClick = btnConfirmarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -217,7 +226,8 @@ object frmVendaProd: TfrmVendaProd
       Height = 25
       Caption = 'C&ancelar'
       Enabled = False
-      TabOrder = 4
+      TabOrder = 2
+      OnClick = btnCancelarClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFF5B57D9
@@ -246,13 +256,14 @@ object frmVendaProd: TfrmVendaProd
         F37990F5819DF79299F4FFFFFF969BF7747BF47177F4747CF47279F47279F471
         79F47179F47279F47178F4727AF4727AF47279F49499F6FFFFFF}
     end
-    object btnSalvar: TBitBtn
+    object btnLimpar: TBitBtn
       Left = 486
       Top = 8
       Width = 75
       Height = 25
       Caption = '&Limpar'
-      TabOrder = 5
+      TabOrder = 3
+      OnClick = btnLimparClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -280,6 +291,42 @@ object frmVendaProd: TfrmVendaProd
         CBBDA2FFFFFFFFFFFFFAF7F6F0E8DFDFD7C7D8C6B1C1AA859F824CB29569FFFF
         FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC4B293CEBDA4CCBBA1C9B79BC8B699C5
         AF8DC2AA84AA9161A98B5DFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
+    end
+    object btnIncluir: TBitBtn
+      Left = 245
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = '&Incluir'
+      TabOrder = 0
+      OnClick = btnIncluirClick
+      Glyph.Data = {
+        36030000424D3603000000000000360000002800000010000000100000000100
+        18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
+        FFFFFFFFFFFFBAE3C170CE8426B7461DB9401DB94026B74670CE84BAE3C1FFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF9FDFA4EB86119C1401FCE4C24DC5827
+        DD5C27DD5C24DC581FCE4C19C1404EB861F9FDFAFFFFFFFFFFFFFFFFFFFAFDFB
+        21A93A1ED04E22D55521D35503B82C00A71200A71203B82C21D35522D5551ED0
+        4E21A93AFAFDFBFFFFFFFFFFFF4DB15A1ECE4D21D3541FCC4D0FCC4500AD13FF
+        FFFFFFFFFF00AD130FCC451FCC4D21D3541ECE4D4DB15AFFFFFFBCDEBE17BA3F
+        21DA5A1ECC5120D0530DC74200BE25FFFFFFFFFFFF00BE250DC74220D0531ECC
+        5121DA5A17BA3FBCDEBE6ABB7317D15120D45F0BCC4A04CA4300C13300BC22FF
+        FFFFFFFFFF00BD2700C23B10CA4B0ECC4C20D45F17D1516ABB7330A03E33E67A
+        00B62D00AD1300AD1300AD1300AD13FFFFFFFFFFFF00AD1300BD2700BD2300AD
+        1300B62D33E67A30A14030A34281FCC300AF21FFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00AF2181FCC430A04122943685FDCC
+        2AC262FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FF2AC26285FDCC22943532923C7BFAC33CD07D71C7801EBF5921C05B0ABA4DFF
+        FFFFFFFFFF10BC5122C05C1EBF5971C7803CD07D7BFAC332923C67AA668AE5B9
+        65EAB050DF9756DF9C41DB8D22C05CFFFFFFFFFFFF22C05C49DC9356DF9C50DF
+        9765EAB08AE5B967AA66B9D3B94EB068AFFFEA5EE0A156E19F45DE9766D589FF
+        FFFFFFFFFF23C05B50E09E56E19F5EE0A1AFFFEA4EB068B9D3B9FFFFFF458845
+        7BDCA8B6FFEF76E5B551DFA366D589FFFFFFFFFFFF24BF5956E2A876E5B5B6FF
+        EF7BDCA8458845FFFFFFFFFFFFFAFCFA1572156DD6A3B7FFF5AAF7E370E0B022
+        C05C22C05C74E2B3ABF7E4B7FFF56DD6A3157215FAFCFAFFFFFFFFFFFFFFFFFF
+        F9FBF945854538A75E7FE1B8A9FFECB9FFFBB9FFFBA9FFEC7FE1B838A75E4585
+        45F9FBF9FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB7CDB767A567247C3228
+        8637288637247C3267A567B7CDB7FFFFFFFFFFFFFFFFFFFFFFFF}
     end
   end
   object pnlInfo: TPanel
@@ -362,14 +409,7 @@ object frmVendaProd: TfrmVendaProd
       Height = 21
       TabOrder = 2
     end
-    object edtValorTotal: TEdit
-      Left = 85
-      Top = 327
-      Width = 92
-      Height = 21
-      TabOrder = 4
-    end
-    object MaskEdit1: TMaskEdit
+    object edtDataPedido: TMaskEdit
       Left = 488
       Top = 8
       Width = 73
@@ -385,8 +425,8 @@ object frmVendaProd: TfrmVendaProd
       Width = 545
       Height = 258
       Caption = ' Lista de Produtos '
-      TabOrder = 5
-      object DBGrid1: TDBGrid
+      TabOrder = 4
+      object dbgVenda: TDBGrid
         Left = 3
         Top = 16
         Width = 537
@@ -399,12 +439,22 @@ object frmVendaProd: TfrmVendaProd
         TitleFont.Style = []
       end
     end
+    object edtValorTotal: TNumEdit
+      Left = 85
+      Top = 324
+      Width = 101
+      Height = 21
+      Alignment = taRightJustify
+      Decimals = 2
+      ShowSeparator = True
+      TabOrder = 5
+    end
   end
   object DataSource1: TDataSource
     Left = 23
     Top = 121
   end
-  object ClientDataSet1: TClientDataSet
+  object cdsVenda: TClientDataSet
     Aggregates = <>
     Params = <>
     Left = 57
