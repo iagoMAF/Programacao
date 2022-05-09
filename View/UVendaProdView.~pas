@@ -206,6 +206,8 @@ begin
       begin
 
          stbBarraStatus.Panels[0].Text := 'Inclusão de Venda';
+         //edtDataPedido.Text := DateToStr(Date());
+
          CamposEnabled(True);
 
          edtNumeroPedido.Enabled := False;
@@ -377,9 +379,7 @@ begin
               'Falha ao consultar os dados do cliente [View]. '#13+
               e.Message);
         end;
-    end;
-
-
+   end;
 
 end;
 
