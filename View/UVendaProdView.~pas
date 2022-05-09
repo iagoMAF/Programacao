@@ -206,12 +206,13 @@ begin
       begin
 
          stbBarraStatus.Panels[0].Text := 'Inclusão de Venda';
-         //edtDataPedido.Text := DateToStr(Date());
+         edtDataPedido.Text := DateToStr(Date());
 
          CamposEnabled(True);
 
          edtNumeroPedido.Enabled := False;
          edtDataPedido.Enabled   := False;
+         edtValorTotal.Enabled   := False;
 
 
          if (edtNumeroCliente.CanFocus) then
@@ -357,7 +358,9 @@ begin
         else
         begin
             TMessageUtil.Alerta(
-              'Nenhum cliente encontrado para o código informado.');
+              'Nenhum cliente encontrado para o código informado. '#13 +
+              'Confirme o código do cliente ou cadastre caso necessário. '#13+
+              'Cadastro -> Clientes');
 
             LimparTela;
 

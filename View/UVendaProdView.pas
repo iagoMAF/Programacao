@@ -206,7 +206,7 @@ begin
       begin
 
          stbBarraStatus.Panels[0].Text := 'Inclusão de Venda';
-         //edtDataPedido.Text := DateToStr(Date());
+         edtDataPedido.Text := DateToStr(Date());
 
          CamposEnabled(True);
 
@@ -272,7 +272,7 @@ begin
    begin
 
       if (TMessageUtil.Pergunta(
-         'Deseja realmente sair dessa rotina?')) then
+         'Deseja realmente sair desaa rotina?')) then
       begin
 
          vEstadoTela := etPadrao;
