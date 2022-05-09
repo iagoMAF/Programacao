@@ -220,20 +220,49 @@ begin
 
       end;
 
+      etAlterar:
+      begin
+
+         stbBarraStatus.Panels[0].Text := 'Alteração';
+
+         if (edtNumeroPedido.Text <> EmptyStr) then
+         begin
+
+            CamposEnabled(True);
+            edtNumeroPedido.Enabled := False;
+            btnAlterar.Enabled      := False;
+            btnConfirmar.Enabled    := True;
+
+            if (edtNumeroCliente.CanFocus) then
+               (edtNumeroCliente.SetFocus);
+
+         end
+         else
+         begin
+
+            edtNumeroPedido.Enabled := True;
+
+            if (edtNumeroPedido.CanFocus) then
+               (edtNumeroPedido.SetFocus);
+
+         end;
+
+      end;
+
    end;
 
 end;
 
 procedure TfrmVendaProd.btnIncluirClick(Sender: TObject);
 begin
-   // Click Incluir
    vEstadoTela := etIncluir;
    DefineEstadoTela;
 end;
 
 procedure TfrmVendaProd.btnAlterarClick(Sender: TObject);
 begin
-   // Click Alterar
+   vEstadoTela := etAlterar;
+   DefineEstadoTela;
 end;
 
 procedure TfrmVendaProd.btnConsultarClick(Sender: TObject);

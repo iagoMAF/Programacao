@@ -272,7 +272,7 @@ begin
    begin
 
       if (TMessageUtil.Pergunta(
-         'Deseja realmente sair dessa rotina?')) then
+         'Deseja realmente sair desaa rotina?')) then
       begin
 
          vEstadoTela := etPadrao;
