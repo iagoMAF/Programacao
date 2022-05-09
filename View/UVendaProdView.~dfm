@@ -25,7 +25,7 @@ object frmVendaProd: TfrmVendaProd
     Height = 19
     Panels = <
       item
-        Width = 75
+        Width = 120
       end
       item
         Width = 50
@@ -401,6 +401,7 @@ object frmVendaProd: TfrmVendaProd
       Width = 36
       Height = 21
       TabOrder = 1
+      OnExit = edtNumeroClienteExit
     end
     object edtNomeCliente: TEdit
       Left = 117

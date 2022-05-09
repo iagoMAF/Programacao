@@ -5,7 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, ComCtrls, DB, DBClient, Grids, DBGrids, StdCtrls,
-  Mask, Buttons, uMessageUtil, UEnumerationUtil, NumEdit;
+  Mask, Buttons, uMessageUtil, UEnumerationUtil, NumEdit, UCliente,
+  UPessoaController;
 
 type
   TfrmVendaProd = class(TForm)
@@ -45,16 +46,26 @@ type
     procedure btnLimparClick(Sender: TObject);
     procedure btnSairClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure edtNumeroClienteExit(Sender: TObject);
   private
     { Private declarations }
 
     vKey : Word;
 
+    //Variaveis de Classe
     vEstadoTela : TEstadoTela;
+    vObjCliente : TCliente;
 
     procedure CamposEnabled(pOpcao : Boolean);
     procedure LimparTela;
     procedure DefineEstadoTela;
+
+    procedure CarregaDadosCliente;
+
+
+    function  ProcessaConfirmacao  : Boolean;
+    function  ProcessaConsulta     : Boolean;
+
 
   public
     { Public declarations }
@@ -194,7 +205,7 @@ begin
       etIncluir:
       begin
 
-         stbBarraStatus.Panels[0].Text := 'Inclusão de venda';
+         stbBarraStatus.Panels[0].Text := 'Inclusão de Venda';
          CamposEnabled(True);
 
          edtNumeroPedido.Enabled := False;
@@ -274,6 +285,102 @@ end;
 procedure TfrmVendaProd.FormShow(Sender: TObject);
 begin
    DefineEstadoTela;
+end;
+
+procedure TfrmVendaProd.CarregaDadosCliente;
+begin
+
+   if (vObjCliente = nil) then
+      Exit;
+
+    edtNumeroCliente.Text     := IntToStr(vObjCliente.Id);
+    edtNomeCliente.Text       := vObjCliente.Nome;
+
+end;
+
+procedure TfrmVendaProd.edtNumeroClienteExit(Sender: TObject);
+begin
+
+  if vKey = VK_RETURN then
+        ProcessaConsulta;
+    vKey := VK_CLEAR;
+
+end;
+
+function TfrmVendaProd.ProcessaConfirmacao: Boolean;
+begin
+
+//   Result := False;
+//
+//    try
+//      case vEstadoTela of
+//          etIncluir   : Result    := ProcessaInclusao;
+//          tAlterar   : Result    := ProcessaAlteracao;
+//          etExcluir   : Result    := ProcessaExclusao;
+//          etConsultar : Result    := ProcessaConsulta;
+//      end;
+//
+//      if not Result then
+//        Exit;
+//    except
+//      on E: Exception do
+//        TMessageUtil.Alerta(E.Message);
+//    end;
+//    Result := True;
+
+end;
+
+function TfrmVendaProd.ProcessaConsulta: Boolean;
+begin
+
+   try
+        Result := False;
+
+        if (edtNumeroCliente.Text = EmptyStr) then
+        begin
+            TMessageUtil.Alerta('Código do cliente não pode ficar em branco.');
+
+            if edtNumeroCliente.CanFocus then
+               edtNumeroCliente.SetFocus;
+
+            Exit;
+        end;
+
+        vObjCliente :=
+             TCliente(TPessoaController.getInstancia.BuscaPessoa(
+                  StrToIntDef(edtNumeroCliente.Text, 0)));
+
+        if (vObjCliente <> nil) then
+            CarregaDadosCliente
+        else
+        begin
+            TMessageUtil.Alerta(
+              'Nenhum cliente encontrado para o código informado.');
+
+            LimparTela;
+
+            if (edtNumeroCliente.CanFocus) then
+               (edtNumeroCliente.SetFocus);
+
+            Exit;
+        end;
+
+        DefineEstadoTela;
+
+        Result := True;
+
+
+   except
+        on E: Exception do
+        begin
+          raise Exception.Create(
+              'Falha ao consultar os dados do cliente [View]. '#13+
+              e.Message);
+        end;
+    end;
+
+
+
 end;
 
 end.
