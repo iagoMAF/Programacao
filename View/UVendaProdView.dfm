@@ -1,6 +1,6 @@
 object frmVendaProd: TfrmVendaProd
-  Left = 1003
-  Top = 235
+  Left = 893
+  Top = 233
   Width = 593
   Height = 485
   Caption = 'Venda'
@@ -432,12 +432,48 @@ object frmVendaProd: TfrmVendaProd
         Top = 16
         Width = 537
         Height = 236
+        DataSource = DataSource1
         TabOrder = 0
         TitleFont.Charset = DEFAULT_CHARSET
         TitleFont.Color = clWindowText
         TitleFont.Height = -11
         TitleFont.Name = 'MS Sans Serif'
         TitleFont.Style = []
+        OnKeyPress = dbgVendaKeyPress
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'Codigo'
+            Title.Caption = 'C'#243'digo'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Descricao'
+            Title.Caption = 'Descri'#231#227'o'
+            Width = 255
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Unidade'
+            Title.Caption = 'Quantidade'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Preco'
+            Title.Caption = 'Pre'#231'o'#13#10
+            Width = 48
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'PrecoTotal'
+            Title.Caption = 'Pre'#231'o Total'
+            Width = 61
+            Visible = True
+          end>
       end
     end
     object edtValorTotal: TNumEdit
@@ -452,13 +488,41 @@ object frmVendaProd: TfrmVendaProd
     end
   end
   object DataSource1: TDataSource
+    DataSet = cdsVenda
     Left = 23
     Top = 121
   end
   object cdsVenda: TClientDataSet
+    Active = True
     Aggregates = <>
     Params = <>
     Left = 57
     Top = 122
+    Data = {
+      780000009619E0BD010000001800000005000000000003000000780006436F64
+      69676F04000100000000000944657363726963616F0100490000000100055749
+      44544802000200640007556E6964616465040001000000000005507265636F08
+      000400000000000A507265636F546F74616C08000400000000000000}
+    object cdsVendaCodigo: TIntegerField
+      DisplayWidth = 12
+      FieldName = 'Codigo'
+    end
+    object cdsVendaDescricao: TStringField
+      DisplayWidth = 51
+      FieldName = 'Descricao'
+      Size = 100
+    end
+    object cdsVendaUnidade: TIntegerField
+      DisplayWidth = 12
+      FieldName = 'Unidade'
+    end
+    object cdsVendaPreco: TFloatField
+      DisplayWidth = 12
+      FieldName = 'Preco'
+    end
+    object cdsVendaPrecoTotal: TFloatField
+      DisplayWidth = 12
+      FieldName = 'PrecoTotal'
+    end
   end
 end

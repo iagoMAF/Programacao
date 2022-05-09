@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, ComCtrls, DB, DBClient, Grids, DBGrids, StdCtrls,
   Mask, Buttons, uMessageUtil, UEnumerationUtil, NumEdit, UCliente,
-  UPessoaController;
+  UCadProdutoPesqView, UPessoaController;
 
 type
   TfrmVendaProd = class(TForm)
@@ -34,6 +34,11 @@ type
     btnLimpar: TBitBtn;
     btnIncluir: TBitBtn;
     edtValorTotal: TNumEdit;
+    cdsVendaCodigo: TIntegerField;
+    cdsVendaDescricao: TStringField;
+    cdsVendaUnidade: TIntegerField;
+    cdsVendaPreco: TFloatField;
+    cdsVendaPrecoTotal: TFloatField;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -47,6 +52,7 @@ type
     procedure btnSairClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure edtNumeroClienteExit(Sender: TObject);
+    procedure dbgVendaKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
 
@@ -403,6 +409,8 @@ begin
 
         Result := True;
 
+        if dbgVenda.CanFocus then
+           dbgVenda.Setfocus;
 
    except
         on E: Exception do
@@ -414,5 +422,22 @@ begin
    end;
 
 end;
+
+procedure TfrmVendaProd.dbgVendaKeyPress(Sender: TObject; var Key: Char);
+begin
+   //vKey := Key;
+   if (vKey = 13) and (dbgVenda.SelectedIndex = 0) then
+      try
+
+         Screen.Cursor  := crHourGlass;
+         if frmCadProdutoPesq = nil then
+            frmCadProdutoPesq := TfrmCadProdutoPesq.Create(Application);
+         frmCadProdutoPesq.Show;
+
+      finally
+         Screen.Cursor := crDefault;
+      end;
+end;
+
 
 end.
