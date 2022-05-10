@@ -1,7 +1,7 @@
 object frmVendaProd: TfrmVendaProd
-  Left = 893
-  Top = 233
-  Width = 593
+  Left = 818
+  Top = 283
+  Width = 597
   Height = 485
   Caption = 'Venda'
   Color = clBtnFace
@@ -21,7 +21,7 @@ object frmVendaProd: TfrmVendaProd
   object stbBarraStatus: TStatusBar
     Left = 0
     Top = 427
-    Width = 577
+    Width = 581
     Height = 19
     Panels = <
       item
@@ -34,7 +34,7 @@ object frmVendaProd: TfrmVendaProd
   object pnlBotoes: TPanel
     Left = 0
     Top = 354
-    Width = 577
+    Width = 581
     Height = 73
     Align = alBottom
     TabOrder = 1
@@ -332,7 +332,7 @@ object frmVendaProd: TfrmVendaProd
   object pnlInfo: TPanel
     Left = 0
     Top = 0
-    Width = 577
+    Width = 581
     Height = 354
     Align = alClient
     TabOrder = 2
@@ -428,11 +428,11 @@ object frmVendaProd: TfrmVendaProd
       Caption = ' Lista de Produtos '
       TabOrder = 4
       object dbgVenda: TDBGrid
-        Left = 3
+        Left = 4
         Top = 16
         Width = 537
-        Height = 236
-        DataSource = DataSource1
+        Height = 241
+        DataSource = dtsVenda
         TabOrder = 0
         TitleFont.Charset = DEFAULT_CHARSET
         TitleFont.Color = clWindowText
@@ -443,35 +443,26 @@ object frmVendaProd: TfrmVendaProd
         Columns = <
           item
             Expanded = False
-            FieldName = 'Codigo'
+            FieldName = 'ID'
             Title.Caption = 'C'#243'digo'
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'Descricao'
-            Title.Caption = 'Descri'#231#227'o'
-            Width = 255
+            Title.Caption = 'Nome do Produto'
+            Width = 264
             Visible = True
           end
           item
             Expanded = False
-            FieldName = 'Unidade'
-            Title.Caption = 'Quantidade'
+            FieldName = 'Quantidade'
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'Preco'
-            Title.Caption = 'Pre'#231'o'#13#10
-            Width = 48
-            Visible = True
-          end
-          item
-            Expanded = False
-            FieldName = 'PrecoTotal'
-            Title.Caption = 'Pre'#231'o Total'
-            Width = 61
+            Title.Caption = 'Pre'#231'o'
             Visible = True
           end>
       end
@@ -487,42 +478,38 @@ object frmVendaProd: TfrmVendaProd
       TabOrder = 5
     end
   end
-  object DataSource1: TDataSource
+  object dtsVenda: TDataSource
     DataSet = cdsVenda
-    Left = 23
-    Top = 121
+    Left = 24
+    Top = 128
   end
   object cdsVenda: TClientDataSet
     Active = True
     Aggregates = <>
     Params = <>
-    Left = 57
-    Top = 122
+    Left = 54
+    Top = 125
     Data = {
-      780000009619E0BD010000001800000005000000000003000000780006436F64
-      69676F04000100000000000944657363726963616F0100490000000100055749
-      44544802000200640007556E6964616465040001000000000005507265636F08
-      000400000000000A507265636F546F74616C08000400000000000000}
-    object cdsVendaCodigo: TIntegerField
+      640000009619E0BD010000001800000004000000000003000000640002494404
+      000100000000000944657363726963616F010049000000010005574944544802
+      00020064000A5175616E746964616465040001000000000005507265636F0800
+      0400000000000000}
+    object cdsVendaID: TIntegerField
       DisplayWidth = 12
-      FieldName = 'Codigo'
+      FieldName = 'ID'
     end
     object cdsVendaDescricao: TStringField
-      DisplayWidth = 51
+      DisplayWidth = 64
       FieldName = 'Descricao'
       Size = 100
     end
-    object cdsVendaUnidade: TIntegerField
+    object cdsVendaQuantidade: TIntegerField
       DisplayWidth = 12
-      FieldName = 'Unidade'
+      FieldName = 'Quantidade'
     end
     object cdsVendaPreco: TFloatField
       DisplayWidth = 12
       FieldName = 'Preco'
-    end
-    object cdsVendaPrecoTotal: TFloatField
-      DisplayWidth = 12
-      FieldName = 'PrecoTotal'
     end
   end
 end

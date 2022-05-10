@@ -6,7 +6,8 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, ComCtrls, DB, DBClient, Grids, DBGrids, StdCtrls,
   Mask, Buttons, uMessageUtil, UEnumerationUtil, NumEdit, UCliente,
-  UCadProdutoPesqView, UPessoaController;
+  UCadProdutoPesqView, UPessoaController, UCadProduto, UCadProdutoController,
+  UMercadoria;
 
 type
   TfrmVendaProd = class(TForm)
@@ -26,19 +27,18 @@ type
     lblData: TLabel;
     edtDataPedido: TMaskEdit;
     GroupBox1: TGroupBox;
-    dbgVenda: TDBGrid;
-    DataSource1: TDataSource;
-    cdsVenda: TClientDataSet;
     btnConfirmar: TBitBtn;
     btnCancelar: TBitBtn;
     btnLimpar: TBitBtn;
     btnIncluir: TBitBtn;
     edtValorTotal: TNumEdit;
-    cdsVendaCodigo: TIntegerField;
+    dbgVenda: TDBGrid;
+    dtsVenda: TDataSource;
+    cdsVenda: TClientDataSet;
+    cdsVendaID: TIntegerField;
     cdsVendaDescricao: TStringField;
-    cdsVendaUnidade: TIntegerField;
+    cdsVendaQuantidade: TIntegerField;
     cdsVendaPreco: TFloatField;
-    cdsVendaPrecoTotal: TFloatField;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -53,6 +53,8 @@ type
     procedure FormShow(Sender: TObject);
     procedure edtNumeroClienteExit(Sender: TObject);
     procedure dbgVendaKeyPress(Sender: TObject; var Key: Char);
+    procedure dbgVendaDblClick(Sender: TObject);
+    procedure dbgVendaExit(Sender: TObject);
   private
     { Private declarations }
 
@@ -69,12 +71,25 @@ type
     procedure CarregaDadosCliente;
 
 
+    //Parte da pesquisa
+    procedure ProcessaConfirmacaoPesq;
+    procedure ProcessaPesquisaEntrada;
+
+    function  DadosProduto         : Boolean;
+
+
     function  ProcessaConfirmacao  : Boolean;
     function  ProcessaConsulta     : Boolean;
 
 
   public
     { Public declarations }
+
+    mProdutoID        : Integer;
+    mProdutoDescricao : String;
+   // mProdutoEstoque   : Integer;
+    mProdutoPreco     : Double;
+
   end;
 
 var
@@ -170,6 +185,9 @@ begin
          (Components[i] as TNumEdit).Text  := EmptyStr;
 
    end;
+
+   if (not cdsVenda.IsEmpty) then
+      (cdsVenda.EmptyDataSet);
 
 end;
 
@@ -347,25 +365,7 @@ end;
 
 function TfrmVendaProd.ProcessaConfirmacao: Boolean;
 begin
-
-//   Result := False;
-//
-//    try
-//      case vEstadoTela of
-//          etIncluir   : Result    := ProcessaInclusao;
-//          tAlterar   : Result    := ProcessaAlteracao;
-//          etExcluir   : Result    := ProcessaExclusao;
-//          etConsultar : Result    := ProcessaConsulta;
-//      end;
-//
-//      if not Result then
-//        Exit;
-//    except
-//      on E: Exception do
-//        TMessageUtil.Alerta(E.Message);
-//    end;
-//    Result := True;
-
+   //ProcessaConfirmacao
 end;
 
 function TfrmVendaProd.ProcessaConsulta: Boolean;
@@ -425,19 +425,68 @@ end;
 
 procedure TfrmVendaProd.dbgVendaKeyPress(Sender: TObject; var Key: Char);
 begin
-   //vKey := Key;
+
    if (vKey = 13) and (dbgVenda.SelectedIndex = 0) then
-      try
+   begin
+      DadosProduto;
+   end;
+
+end;
+
+procedure TfrmVendaProd.ProcessaConfirmacaoPesq;
+begin
+   //ProcessaConfirmaçãoPesq
+end;
+
+procedure TfrmVendaProd.ProcessaPesquisaEntrada;
+begin
+   //Pesq.Entrad.
+end;
+
+procedure TfrmVendaProd.dbgVendaDblClick(Sender: TObject);
+begin
+   //ProcessaConfirmacaoPesq;
+end;
+
+procedure TfrmVendaProd.dbgVendaExit(Sender: TObject);
+begin
+   //ProcessaConfirmacaoPesq;
+end;
+
+function TfrmVendaProd.DadosProduto: Boolean;
+begin
+
+   if (vKey = 13) and (dbgVenda.SelectedIndex = 0) then
+   try
 
          Screen.Cursor  := crHourGlass;
          if frmCadProdutoPesq = nil then
-            frmCadProdutoPesq := TfrmCadProdutoPesq.Create(Application);
-         frmCadProdutoPesq.Show;
+         frmCadProdutoPesq := TfrmCadProdutoPesq.Create(Application);
+         frmCadProdutoPesq.ShowModal;
 
-      finally
+   finally
          Screen.Cursor := crDefault;
-      end;
-end;
+   end;
 
+
+   if (frmCadProdutoPesq.mProdutoID <> 0) then
+   begin
+
+      cdsVenda.Insert;
+
+      cdsVendaID.Value         := frmCadProdutoPesq.mProdutoID;
+      cdsVendaDescricao.Text   := frmCadProdutoPesq.mProdutoDescricao;
+      cdsVendaQuantidade.Value := 1;
+      cdsVendaPreco.Value      := frmCadProdutoPesq.mProdutoPreco;
+
+      cdsVenda.Post;
+
+   end
+   else
+   begin
+      TMessageUtil.Alerta('Nenhum produto foi selecionado. ');
+   end;
+
+end;
 
 end.
