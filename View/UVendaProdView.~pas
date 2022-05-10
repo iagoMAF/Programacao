@@ -39,6 +39,7 @@ type
     cdsVendaDescricao: TStringField;
     cdsVendaQuantidade: TIntegerField;
     cdsVendaPreco: TFloatField;
+    btnMaisProduto: TBitBtn;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -55,6 +56,7 @@ type
     procedure dbgVendaKeyPress(Sender: TObject; var Key: Char);
     procedure dbgVendaDblClick(Sender: TObject);
     procedure dbgVendaExit(Sender: TObject);
+    procedure btnMaisProdutoClick(Sender: TObject);
   private
     { Private declarations }
 
@@ -74,6 +76,8 @@ type
     //Parte da pesquisa
     procedure ProcessaConfirmacaoPesq;
     procedure ProcessaPesquisaEntrada;
+
+    function  DadosProduto         : Boolean;
 
 
     function  ProcessaConfirmacao  : Boolean;
@@ -314,6 +318,7 @@ begin
    // Click Limpar
    LimparTela;
    //DefineEstadoTela;
+   btnMaisProduto.Enabled := False;
 end;
 
 procedure TfrmVendaProd.btnSairClick(Sender: TObject);
@@ -425,24 +430,47 @@ procedure TfrmVendaProd.dbgVendaKeyPress(Sender: TObject; var Key: Char);
 begin
 
    if (vKey = 13) and (dbgVenda.SelectedIndex = 0) then
-      try
+   begin
+      DadosProduto;
+   end;
+
+end;
+
+procedure TfrmVendaProd.ProcessaConfirmacaoPesq;
+begin
+   //ProcessaConfirmaçãoPesq
+end;
+
+procedure TfrmVendaProd.ProcessaPesquisaEntrada;
+begin
+   //Pesq.Entrad.
+end;
+
+procedure TfrmVendaProd.dbgVendaDblClick(Sender: TObject);
+begin
+   //ProcessaConfirmacaoPesq;
+end;
+
+procedure TfrmVendaProd.dbgVendaExit(Sender: TObject);
+begin
+   //ProcessaConfirmacaoPesq;
+end;
+
+function TfrmVendaProd.DadosProduto: Boolean;
+begin
+
+   if (vKey = 13) and (dbgVenda.SelectedIndex = 0) then
+   try
 
          Screen.Cursor  := crHourGlass;
          if frmCadProdutoPesq = nil then
          frmCadProdutoPesq := TfrmCadProdutoPesq.Create(Application);
-         frmCadProdutoPesq.Show;
+         frmCadProdutoPesq.ShowModal;
 
-      finally
+   finally
          Screen.Cursor := crDefault;
-      end;
+   end;
 
-   ProcessaConfirmacaoPesq;
-
-end;
-
-
-procedure TfrmVendaProd.ProcessaConfirmacaoPesq;
-begin
 
    if (frmCadProdutoPesq.mProdutoID <> 0) then
    begin
@@ -462,21 +490,16 @@ begin
       TMessageUtil.Alerta('Nenhum produto foi selecionado. ');
    end;
 
+   btnMaisProduto.Enabled := True;
+
+   if btnMaisProduto.CanFocus then
+      btnMaisProduto.SetFocus;
+
 end;
 
-procedure TfrmVendaProd.ProcessaPesquisaEntrada;
+procedure TfrmVendaProd.btnMaisProdutoClick(Sender: TObject);
 begin
-   //Pesq.Entrad.
-end;
-
-procedure TfrmVendaProd.dbgVendaDblClick(Sender: TObject);
-begin
-   //ProcessaConfirmacaoPesq;
-end;
-
-procedure TfrmVendaProd.dbgVendaExit(Sender: TObject);
-begin
-   //ProcessaConfirmacaoPesq;
+   DadosProduto;
 end;
 
 end.

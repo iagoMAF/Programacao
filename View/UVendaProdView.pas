@@ -39,6 +39,7 @@ type
     cdsVendaDescricao: TStringField;
     cdsVendaQuantidade: TIntegerField;
     cdsVendaPreco: TFloatField;
+    btnMaisProduto: TBitBtn;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -55,6 +56,7 @@ type
     procedure dbgVendaKeyPress(Sender: TObject; var Key: Char);
     procedure dbgVendaDblClick(Sender: TObject);
     procedure dbgVendaExit(Sender: TObject);
+    procedure btnMaisProdutoClick(Sender: TObject);
   private
     { Private declarations }
 
@@ -309,6 +311,7 @@ begin
    // Click Cancelar
    vEstadoTela := etPadrao;
    DefineEstadoTela;
+   btnMaisProduto.Enabled := False;
 end;
 
 procedure TfrmVendaProd.btnLimparClick(Sender: TObject);
@@ -316,6 +319,7 @@ begin
    // Click Limpar
    LimparTela;
    //DefineEstadoTela;
+   btnMaisProduto.Enabled := False;
 end;
 
 procedure TfrmVendaProd.btnSairClick(Sender: TObject);
@@ -487,6 +491,16 @@ begin
       TMessageUtil.Alerta('Nenhum produto foi selecionado. ');
    end;
 
+   btnMaisProduto.Enabled := True;
+
+   if btnMaisProduto.CanFocus then
+      btnMaisProduto.SetFocus;
+
+end;
+
+procedure TfrmVendaProd.btnMaisProdutoClick(Sender: TObject);
+begin
+   DadosProduto;
 end;
 
 end.
