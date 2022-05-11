@@ -276,6 +276,42 @@ begin
 
       end;
 
+      etPesquisar:
+      begin
+
+         stbBarraStatus.Panels[0].Text := 'Pesquisa';
+
+      end;
+
+      etConsultar:
+      begin
+
+         stbBarraStatus.Panels[0].Text := 'Consulta';
+
+         CamposEnabled(False);
+
+         if (edtNumeroPedido.Text <> EmptyStr) then
+         begin
+
+            edtNumeroPedido.Enabled := False;
+            btnAlterar.Enabled      := True;
+            btnConfirmar.Enabled    := False;
+
+            if (btnAlterar.CanFocus) then
+               (btnAlterar.SetFocus);
+         end
+         else
+         begin
+
+            edtNumeroPedido.Enabled := True;
+
+            if (edtNumeroPedido.CanFocus) then
+               (edtNumeroPedido.SetFocus);
+
+         end;
+
+      end;
+
    end;
 
 end;
@@ -294,7 +330,8 @@ end;
 
 procedure TfrmVendaProd.btnConsultarClick(Sender: TObject);
 begin
-   // Click Consultar
+   vEstadoTela := etConsultar;
+   DefineEstadoTela;
 end;
 
 procedure TfrmVendaProd.btnPesquisarClick(Sender: TObject);
@@ -309,7 +346,6 @@ end;
 
 procedure TfrmVendaProd.btnCancelarClick(Sender: TObject);
 begin
-   // Click Cancelar
    vEstadoTela := etPadrao;
    DefineEstadoTela;
    btnMaisProduto.Enabled := False;
@@ -317,7 +353,6 @@ end;
 
 procedure TfrmVendaProd.btnLimparClick(Sender: TObject);
 begin
-   // Click Limpar
    LimparTela;
    //DefineEstadoTela;
    btnMaisProduto.Enabled := False;

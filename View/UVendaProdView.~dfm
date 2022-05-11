@@ -1,6 +1,6 @@
 object frmVendaProd: TfrmVendaProd
-  Left = 1001
-  Top = 232
+  Left = 968
+  Top = 189
   Width = 597
   Height = 485
   Caption = 'Venda'
@@ -388,6 +388,13 @@ object frmVendaProd: TfrmVendaProd
       Font.Style = [fsBold]
       ParentFont = False
     end
+    object Label2: TLabel
+      Left = 82
+      Top = 330
+      Width = 20
+      Height = 13
+      Caption = '(R$)'
+    end
     object edtNumeroPedido: TEdit
       Left = 101
       Top = 8
@@ -505,9 +512,9 @@ object frmVendaProd: TfrmVendaProd
         8637288637247C3267A567B7CDB7FFFFFFFFFFFFFFFFFFFFFFFF}
     end
     object edtValorTotal: TNumEdit
-      Left = 88
-      Top = 328
-      Width = 121
+      Left = 107
+      Top = 326
+      Width = 65
       Height = 21
       Alignment = taRightJustify
       Decimals = 2
