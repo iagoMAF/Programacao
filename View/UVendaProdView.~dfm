@@ -1,8 +1,8 @@
 object frmVendaProd: TfrmVendaProd
   Left = 968
-  Top = 189
+  Top = 188
   Width = 597
-  Height = 485
+  Height = 486
   Caption = 'Venda'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -20,7 +20,7 @@ object frmVendaProd: TfrmVendaProd
   TextHeight = 13
   object stbBarraStatus: TStatusBar
     Left = 0
-    Top = 427
+    Top = 428
     Width = 581
     Height = 19
     Panels = <
@@ -33,7 +33,7 @@ object frmVendaProd: TfrmVendaProd
   end
   object pnlBotoes: TPanel
     Left = 0
-    Top = 354
+    Top = 355
     Width = 581
     Height = 73
     Align = alBottom
@@ -333,7 +333,7 @@ object frmVendaProd: TfrmVendaProd
     Left = 0
     Top = 0
     Width = 581
-    Height = 354
+    Height = 355
     Align = alClient
     TabOrder = 2
     object lblNumeroPedido: TLabel
@@ -417,23 +417,13 @@ object frmVendaProd: TfrmVendaProd
       Height = 21
       TabOrder = 2
     end
-    object edtDataPedido: TMaskEdit
-      Left = 488
-      Top = 8
-      Width = 73
-      Height = 21
-      EditMask = '!99/99/0000;1;_'
-      MaxLength = 10
-      TabOrder = 3
-      Text = '  /  /    '
-    end
     object GroupBox1: TGroupBox
       Left = 14
       Top = 61
       Width = 545
       Height = 258
       Caption = ' Lista de Produtos '
-      TabOrder = 4
+      TabOrder = 3
       object dbgVenda: TDBGrid
         Left = 4
         Top = 24
@@ -481,7 +471,7 @@ object frmVendaProd: TfrmVendaProd
       Height = 25
       Caption = 'Produtos'
       Enabled = False
-      TabOrder = 5
+      TabOrder = 4
       OnClick = btnMaisProdutoClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
@@ -519,6 +509,13 @@ object frmVendaProd: TfrmVendaProd
       Alignment = taRightJustify
       Decimals = 2
       ShowSeparator = True
+      TabOrder = 5
+    end
+    object edtDataPedido: TEdit
+      Left = 488
+      Top = 8
+      Width = 73
+      Height = 21
       TabOrder = 6
     end
   end

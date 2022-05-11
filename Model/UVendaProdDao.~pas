@@ -1,0 +1,22 @@
+unit UVendaProdDao;
+
+interface
+
+uses SqlExpr, DBXpress, SimpleDS, Db, Classes, SysUtils, DateUtils,
+     StdCtrls, UGenericDAO, UVendaProd;
+
+type
+
+  TVendaProdDAO = Class(TGenericDAO)
+    public
+      constructor Create(pConexao :  TSQLConnection);
+      function  Insere(pVendaProd : TVendaProd) : Boolean;
+      function  InsereLista(pColVendaProd : TColVendaProd) : Boolean;
+      function  Atualiza(pVendaProd : TVendaProd; pCondicao : String) : Boolean;
+      function  Retorna(pCondicao : String) : TVendaProd;
+      function  RetornaLista(pCondicao : String = '') : TColVendaProd;
+  end
+
+implementation
+
+end.
