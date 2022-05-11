@@ -1,6 +1,6 @@
 object frmVendaProd: TfrmVendaProd
-  Left = 568
-  Top = 260
+  Left = 1001
+  Top = 232
   Width = 597
   Height = 485
   Caption = 'Venda'
@@ -429,7 +429,7 @@ object frmVendaProd: TfrmVendaProd
       TabOrder = 4
       object dbgVenda: TDBGrid
         Left = 4
-        Top = 16
+        Top = 24
         Width = 537
         Height = 241
         DataSource = dtsVenda
@@ -467,16 +467,6 @@ object frmVendaProd: TfrmVendaProd
           end>
       end
     end
-    object edtValorTotal: TNumEdit
-      Left = 85
-      Top = 324
-      Width = 101
-      Height = 21
-      Alignment = taRightJustify
-      Decimals = 2
-      ShowSeparator = True
-      TabOrder = 5
-    end
     object btnMaisProduto: TBitBtn
       Left = 480
       Top = 323
@@ -484,7 +474,7 @@ object frmVendaProd: TfrmVendaProd
       Height = 25
       Caption = 'Produtos'
       Enabled = False
-      TabOrder = 6
+      TabOrder = 5
       OnClick = btnMaisProdutoClick
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
@@ -513,6 +503,16 @@ object frmVendaProd: TfrmVendaProd
         F9FBF945854538A75E7FE1B8A9FFECB9FFFBB9FFFBA9FFEC7FE1B838A75E4585
         45F9FBF9FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB7CDB767A567247C3228
         8637288637247C3267A567B7CDB7FFFFFFFFFFFFFFFFFFFFFFFF}
+    end
+    object edtValorTotal: TNumEdit
+      Left = 88
+      Top = 328
+      Width = 121
+      Height = 21
+      Alignment = taRightJustify
+      Decimals = 2
+      ShowSeparator = True
+      TabOrder = 6
     end
   end
   object dtsVenda: TDataSource

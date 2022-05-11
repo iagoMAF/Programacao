@@ -31,7 +31,6 @@ type
     btnCancelar: TBitBtn;
     btnLimpar: TBitBtn;
     btnIncluir: TBitBtn;
-    edtValorTotal: TNumEdit;
     dbgVenda: TDBGrid;
     dtsVenda: TDataSource;
     cdsVenda: TClientDataSet;
@@ -40,6 +39,8 @@ type
     cdsVendaQuantidade: TIntegerField;
     cdsVendaPreco: TFloatField;
     btnMaisProduto: TBitBtn;
+    edtValorTotal: TNumEdit;
+    Label2: TLabel;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -458,6 +459,8 @@ begin
 end;
 
 function TfrmVendaProd.DadosProduto: Boolean;
+var
+   PrimeiroNumero, SegundoNumero, Resultado : Double;
 begin
 
    if (vKey = 13) and (dbgVenda.SelectedIndex = 0) then
@@ -485,11 +488,23 @@ begin
 
       cdsVenda.Post;
 
+      PrimeiroNumero := StrToFloat(dbgVenda.columns.items[3].field.text);
+      Resultado := 0;
+      SegundoNumero := edtValorTotal.Value;
+      Resultado := (PrimeiroNumero) + SegundoNumero;
+      edtValorTotal.Value := (Resultado);
+
    end
    else
    begin
       TMessageUtil.Alerta('Nenhum produto foi selecionado. ');
    end;
+
+//   PrimeiroNumero := StrToFloat(dbgVenda.columns.items[3].field.text);
+//   Resultado := 0;
+//   SegundoNumero := edtValorTotal.Value;
+//   Resultado := (PrimeiroNumero) + SegundoNumero;
+//   edtValorTotal.Value := (Resultado);
 
    btnMaisProduto.Enabled := True;
 
