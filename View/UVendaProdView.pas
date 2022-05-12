@@ -770,7 +770,7 @@ end;
 function TfrmVendaProd.ProcessaGridVenda: Boolean;
 var
    xGridVenda  : TGridVenda;
-   xID_Venda  : Integer;
+   xID_Venda   : Integer;
 begin
    try
 
@@ -794,6 +794,7 @@ begin
       
          xGridVenda               := TGridVenda.Create;
          xGridVenda.ID_Venda      := xID_Venda;
+         xGridVenda.ID_Produto    := cdsVendaID.Value;
          xGridVenda.Descricao     := cdsVendaDescricao.Text;
          xGridVenda.Quantidade    := cdsVendaQuantidade.Value;
          xGridVenda.ValorUnitario := cdsVendaPreco.Value;
