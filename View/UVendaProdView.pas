@@ -82,19 +82,20 @@ type
     procedure ProcessaConfirmacaoPesq;
     procedure ProcessaPesquisaEntrada;
 
-    function  DadosProduto         : Boolean;
+    function  DadosProduto          : Boolean;
 
 
-    function  ProcessaConfirmacao  : Boolean;
-    function  ProcessaInclusao     : Boolean;
-    function  ProcessaVendaProd    : Boolean;
+    function  ProcessaConfirmacao   : Boolean;
+    function  ProcessaInclusao      : Boolean;
+    function  ProcessaVendaProd     : Boolean;
 
-    function  ProcessaVenda        : Boolean;
-    function  ProcessaGridVenda    : Boolean;
+    function  ProcessaVenda         : Boolean;
+    function  ProcessaGridVenda     : Boolean;
 
-    function  ValidaVenda          : Boolean;
+    function  ValidaVenda           : Boolean;
 
-    function  ProcessaConsulta     : Boolean;
+    function  ProcessaConsulta      : Boolean;
+    function  ProcessaConsultaVenda : Boolean;
 
 
 
@@ -425,7 +426,6 @@ end;
 
 function TfrmVendaProd.ProcessaConfirmacao: Boolean;
 begin
-   //ProcessaConfirmacao
    Result := False;
 
    try
@@ -433,7 +433,7 @@ begin
           etIncluir   : Result    := ProcessaInclusao;
          //etAlterar   : Result    := ProcessaAlteracao;
          //etExcluir   : Result    := ProcessaExclusao;
-         //etConsultar : Result    := ProcessaConsulta;
+         etConsultar : Result    := ProcessaConsultaVenda;
       end;
 
       if not Result then
@@ -600,7 +600,7 @@ begin
       if ProcessaVendaProd then
       begin
 
-         TMessageUtil.Informacao('Venda cadastrado com sucesso.'#13+
+         TMessageUtil.Informacao('Venda cadastrada com sucesso.'#13+
             'Código cadastrado: '+ IntToStr(vObjVendaProd.Id));
 
          vEstadoTela := etPadrao;
@@ -685,7 +685,7 @@ begin
     on E: Exception do
         begin
             Raise Exception.Create(
-              'Falha ao gravar os dados dessa Unidade [View]: '#13+
+              'Falha ao gravar os dados dessa Venda. [View]: '#13+
               e.Message);
         end;
         
@@ -811,9 +811,61 @@ begin
       on E : Exception do
       begin
          Raise Exception.Create(
-         'Falha ao preencher os dados de endereço [View]. '#13+
+         'Falha ao preencher os dados da venda do Grid [View]. '#13+
          e.Message);
       end;
+   end;
+end;
+
+function TfrmVendaProd.ProcessaConsultaVenda: Boolean;
+begin
+   try
+        Result := False;
+
+        if (edtNumeroPedido.Text = EmptyStr) then
+        begin
+            TMessageUtil.Alerta(
+               'Código do numero da venda não pode ficar em branco.');
+
+            if edtNumeroPedido.CanFocus then
+               edtNumeroPedido.SetFocus;
+
+            Exit;
+        end;
+
+        vObjVendaProd :=
+             TVendaProd(TVendaProdController.getInstancia.BuscaVendaProd(
+                  StrToIntDef(edtNumeroPedido.Text, 0)));
+
+        vObjColGridVenda :=
+             TVendaProdController.getInstancia.BuscaGridVenda(
+                  StrToIntDef(edtNumeroPedido.Text, 0));
+
+        if (vObjVendaProd <> nil) then
+            CarregaDadosTela
+        else
+        begin
+            TMessageUtil.Alerta(
+              'Nenhuma venda encontrada para o código informado.');
+
+            LimparTela;
+
+            if (edtNumeroPedido.CanFocus) then
+               (edtNumeroPedido.SetFocus);
+
+            Exit;
+        end;
+
+        DefineEstadoTela;
+
+        Result := True;
+   except
+        on E: Exception do
+        begin
+          raise Exception.Create(
+              'Falha ao consultar os dados da venda [View]. '#13+
+              e.Message);
+        end;
    end;
 end;
 

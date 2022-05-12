@@ -425,7 +425,6 @@ end;
 
 function TfrmVendaProd.ProcessaConfirmacao: Boolean;
 begin
-   //ProcessaConfirmacao
    Result := False;
 
    try
@@ -600,7 +599,7 @@ begin
       if ProcessaVendaProd then
       begin
 
-         TMessageUtil.Informacao('Venda cadastrado com sucesso.'#13+
+         TMessageUtil.Informacao('Venda cadastrada com sucesso.'#13+
             'Código cadastrado: '+ IntToStr(vObjVendaProd.Id));
 
          vEstadoTela := etPadrao;
@@ -685,7 +684,7 @@ begin
     on E: Exception do
         begin
             Raise Exception.Create(
-              'Falha ao gravar os dados dessa Unidade [View]: '#13+
+              'Falha ao gravar os dados dessa Venda. [View]: '#13+
               e.Message);
         end;
         
@@ -770,7 +769,7 @@ end;
 function TfrmVendaProd.ProcessaGridVenda: Boolean;
 var
    xGridVenda  : TGridVenda;
-   xID_Venda  : Integer;
+   xID_Venda   : Integer;
 begin
    try
 
@@ -794,6 +793,7 @@ begin
       
          xGridVenda               := TGridVenda.Create;
          xGridVenda.ID_Venda      := xID_Venda;
+         xGridVenda.ID_Produto    := cdsVendaID.Value;
          xGridVenda.Descricao     := cdsVendaDescricao.Text;
          xGridVenda.Quantidade    := cdsVendaQuantidade.Value;
          xGridVenda.ValorUnitario := cdsVendaPreco.Value;
@@ -810,7 +810,7 @@ begin
       on E : Exception do
       begin
          Raise Exception.Create(
-         'Falha ao preencher os dados de endereço [View]. '#13+
+         'Falha ao preencher os dados da venda do Grid [View]. '#13+
          e.Message);
       end;
    end;

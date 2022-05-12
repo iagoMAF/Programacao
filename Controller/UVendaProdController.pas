@@ -60,7 +60,7 @@ begin
       on E : Exception do
       begin
          Raise Exception.Create(
-            'Falha ao retornar os dados do endereço da pessoa [Controller]: '#13+
+            'Falha ao retornar os dados da venda [Controller]: '#13+
             e.Message);
       end;
    end;
@@ -86,7 +86,7 @@ begin
       on E: Exception do
       begin
          raise Exception.Create(
-            'Falha ao buscar os dados do produto. [Controller] '#13+
+            'Falha ao buscar os dados da venda. [Controller] '#13+
             e.Message);
       end;
    end;
@@ -132,7 +132,7 @@ begin
       begin
          TConexao.get.cancelaTransacao;
          raise Exception.Create(
-            'Falha ao excluir os dados do produto [Controller]: '#13+
+            'Falha ao excluir os dados da venda [Controller]: '#13+
             e.Message);
       end;
    end;
