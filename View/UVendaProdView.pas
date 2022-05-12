@@ -796,7 +796,7 @@ begin
          xGridVenda.ID_Venda      := xID_Venda;
          xGridVenda.Descricao     := cdsVendaDescricao.Text;
          xGridVenda.Quantidade    := cdsVendaQuantidade.Value;
-         xGridVenda.ValorUnitario := cdsVendaPreco.Precision;
+         xGridVenda.ValorUnitario := cdsVendaPreco.Value;
 
          vObjColGridVenda.Add(xGridVenda);
 

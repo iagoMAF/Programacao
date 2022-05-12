@@ -11,7 +11,7 @@ type
          vID_Produto    : Integer;
          vID_Venda      : Integer;
          vDescricao     : String;
-         vValorUnitario : Integer;
+         vValorUnitario : Double;
          vQuantidade    : Integer;
 
     public
@@ -23,7 +23,7 @@ type
       property ID_Venda      : Integer read vID_Venda   write vID_Venda;
       property Descricao     : String  read vDescricao  write vDescricao;
       property Quantidade    : Integer read vQuantidade write vQuantidade;
-      property ValorUnitario : Integer  read vValorUnitario write vValorUnitario;
+      property ValorUnitario : Double  read vValorUnitario write vValorUnitario;
 
    end;
 

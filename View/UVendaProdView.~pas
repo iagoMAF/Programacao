@@ -7,7 +7,7 @@ uses
   Dialogs, ExtCtrls, ComCtrls, DB, DBClient, Grids, DBGrids, StdCtrls,
   Mask, Buttons, uMessageUtil, UEnumerationUtil, NumEdit, UCliente,
   UCadProdutoPesqView, UPessoaController, UVendaProd, UVendaProdController,
-  UComercio;
+  UComercio, UGridVenda, UClassFuncoes, frxClass, frxDBSet;
 
 type
   TfrmVendaProd = class(TForm)
@@ -68,6 +68,7 @@ type
     vObjCliente : TCliente;
 
     vObjVendaProd : TVendaProd;
+    vObjColGridVenda : TColGridVenda;
 
     procedure CamposEnabled(pOpcao : Boolean);
     procedure LimparTela;
@@ -87,7 +88,9 @@ type
     function  ProcessaConfirmacao  : Boolean;
     function  ProcessaInclusao     : Boolean;
     function  ProcessaVendaProd    : Boolean;
+
     function  ProcessaVenda        : Boolean;
+    function  ProcessaGridVenda    : Boolean;
 
     function  ValidaVenda          : Boolean;
 
@@ -624,10 +627,12 @@ begin
    try
 
       Result := False;
-      if (ProcessaVenda) then
+      if (ProcessaVenda) and
+         (ProcessaGridVenda) then
       begin
         // Gravação no Banco de dados
-         TVendaProdController.getInstancia.GravaVendaProd(vObjVendaProd);
+         TVendaProdController.getInstancia.GravaVendaProd(
+         vObjVendaProd, vObjColGridVenda);
 
          Result := True;
       end;
@@ -688,6 +693,8 @@ begin
 end;
 
 procedure TfrmVendaProd.CarregaDadosTela;
+var
+   i : Integer;
 begin
    if (vObjVendaProd = nil) then
       Exit;
@@ -696,6 +703,30 @@ begin
    edtNumeroCliente.Text := IntToStr(vObjVendaProd.Id_Cliente);
    edtDataPedido.Text    := DateToStr(vObjVendaProd.DataVenda);
    edtValorTotal.Value   := (vObjVendaProd.TotalVenda);
+
+   if (vObjColGridVenda <> nil) then
+   begin
+
+      cdsVenda.First;
+
+      for i := 0 to pred(vObjColGridVenda.Count) do
+      begin
+
+         cdsVenda.Edit;
+
+         cdsVendaID.Value         := vObjColGridVenda.Retorna(i).Id;
+         cdsVendaPreco.Value      := vObjColGridVenda.Retorna(i).ValorUnitario;
+         cdsVendaDescricao.Text   := vObjColGridVenda.Retorna(i).Descricao;
+         cdsVendaQuantidade.Value := vObjColGridVenda.Retorna(i).Quantidade;
+
+         ProcessaConsulta;
+
+         cdsVenda.Append;
+
+      end;
+   end;
+
+
 
 end;
 
@@ -734,6 +765,55 @@ begin
 //   end;
 
     Result := True;
+end;
+
+function TfrmVendaProd.ProcessaGridVenda: Boolean;
+var
+   xGridVenda  : TGridVenda;
+   xID_Venda  : Integer;
+begin
+   try
+
+      Result := False;
+
+      xGridVenda  := nil;
+      xID_Venda   := 0;
+
+      if (vObjColGridVenda <> nil) then
+        FreeAndNil(vObjColGridVenda);
+
+      vObjColGridVenda := TColGridVenda.Create;
+
+      if (vEstadoTela = etAlterar) then
+          xID_Venda := StrToIntDef(edtNumeroPedido.Text, 0);
+
+      cdsVenda.First;
+
+      while  not cdsVenda.Eof do
+      begin
+      
+         xGridVenda               := TGridVenda.Create;
+         xGridVenda.ID_Venda      := xID_Venda;
+         xGridVenda.Descricao     := cdsVendaDescricao.Text;
+         xGridVenda.Quantidade    := cdsVendaQuantidade.Value;
+         xGridVenda.ValorUnitario := cdsVendaPreco.Precision;
+
+         vObjColGridVenda.Add(xGridVenda);
+
+         cdsVenda.Next;
+
+      end;
+
+      Result := True;
+
+   except
+      on E : Exception do
+      begin
+         Raise Exception.Create(
+         'Falha ao preencher os dados de endereço [View]. '#13+
+         e.Message);
+      end;
+   end;
 end;
 
 end.
