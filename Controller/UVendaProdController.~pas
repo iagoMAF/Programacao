@@ -124,7 +124,7 @@ begin
             Result := False;
 
             xVendaProdDAO :=
-              TVendaProdoDao.Create(TConexao.get.getConn);
+              TVendaProdDao.Create(TConexao.get.getConn);
 
             if pVendaProd.Id = 0 then
             begin
@@ -159,32 +159,32 @@ var
    xVendaProdDAO : TVendaProdDAO;
    xCondicao   : string;
 begin
-   try
-      try
-         Result := nil;
-
-         xVendaProdDAO := TVendaProdDAO.Create(TConexao.get.getConn);
-
-         xCondicao  :=
-            IfThen( pNome <> EmptyStr,
-               'WHERE                                           '#13+
-               '    (DESCRICAO LIKE UPPER(''%'+ pNome + '%''))  '#13+
-               'ORDER BY DESCRICAO, ID', EmptyStr);
-
-         Result := xVendaProd.RetornaLista(xCondicao);
-
-      finally
-         if (xVendaProdDAO <> nil) then
-            (FreeAndNil(xVendaProdDAO));
-      end;
-   except
-      on E: Exception do
-      begin
-         raise Exception.Create(
-            'Falha ao buscas os dados do produto [Controller]: '#13+
-            e.Message);
-      end;
-   end;
+//   try
+//      try
+//         Result := nil;
+//
+//         xVendaProdDAO := TVendaProdDAO.Create(TConexao.get.getConn);
+//
+//         xCondicao  :=
+//            IfThen( pNome <> EmptyStr,
+//               'WHERE                                           '#13+
+//               '    (DESCRICAO LIKE UPPER(''%'+ pNome + '%''))  '#13+
+//               'ORDER BY DESCRICAO, ID', EmptyStr);
+//
+//         Result := xVendaProd.RetornaLista(xCondicao);
+//
+//      finally
+//         if (xVendaProdDAO <> nil) then
+//            (FreeAndNil(xVendaProdDAO));
+//      end;
+//   except
+//      on E: Exception do
+//      begin
+//         raise Exception.Create(
+//            'Falha ao buscas os dados do produto [Controller]: '#13+
+//            e.Message);
+//      end;
+//   end;
 end;
 
 function TVendaProdController.RetornaCondicaoVendaProd(

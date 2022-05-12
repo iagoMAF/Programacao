@@ -30,7 +30,11 @@ uses
   UCadProduto in 'Model\UCadProduto.pas',
   UMercadoria in 'Model\UMercadoria.pas',
   UCadProdutoController in 'Controller\UCadProdutoController.pas',
-  UCadProdutoPesqView in 'View\UCadProdutoPesqView.pas' {frmCadProdutoPesq};
+  UCadProdutoPesqView in 'View\UCadProdutoPesqView.pas' {frmCadProdutoPesq},
+  UVendaProd in 'Model\UVendaProd.pas',
+  UVendaProdController in 'Controller\UVendaProdController.pas',
+  UVendaProdDao in 'Model\UVendaProdDao.pas',
+  UComercio in 'Model\UComercio.pas';
 
 {$R *.res}
 

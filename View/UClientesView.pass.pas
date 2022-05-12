@@ -709,12 +709,14 @@ begin
     begin
       for i := 0 to pred(vObjColEndereco.Count) do
       begin
+
         edtEndereco.Text    := vObjColEndereco.Retorna(i).Endereco;
         edtNumero.Text      := vObjColEndereco.Retorna(i).Numero;
         edtComplemento.Text := vObjColEndereco.Retorna(i).Complemento;
         edtBairro.Text      := vObjColEndereco.Retorna(i).Bairro;
         cmbUF.Text          := vObjColEndereco.Retorna(i).UF;
         edtCidade.Text      := vObjColEndereco.Retorna(i).Cidade;
+
       end;
     end;
 end;
