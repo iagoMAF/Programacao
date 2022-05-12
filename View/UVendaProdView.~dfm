@@ -401,6 +401,7 @@ object frmVendaProd: TfrmVendaProd
       Width = 92
       Height = 21
       TabOrder = 0
+      OnExit = edtNumeroPedidoExit
     end
     object edtNumeroCliente: TEdit
       Left = 69
@@ -426,7 +427,7 @@ object frmVendaProd: TfrmVendaProd
       TabOrder = 3
       object dbgVenda: TDBGrid
         Left = 4
-        Top = 24
+        Top = 13
         Width = 537
         Height = 241
         DataSource = dtsVenda

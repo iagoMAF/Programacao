@@ -58,6 +58,7 @@ type
     procedure dbgVendaDblClick(Sender: TObject);
     procedure dbgVendaExit(Sender: TObject);
     procedure btnMaisProdutoClick(Sender: TObject);
+    procedure edtNumeroPedidoExit(Sender: TObject);
   private
     { Private declarations }
 
@@ -87,6 +88,8 @@ type
 
     function  ProcessaConfirmacao   : Boolean;
     function  ProcessaInclusao      : Boolean;
+    function  ProcessaAlteracao     : Boolean;
+
     function  ProcessaVendaProd     : Boolean;
 
     function  ProcessaVenda         : Boolean;
@@ -255,6 +258,8 @@ begin
 
          CamposEnabled(True);
 
+         dbgVenda.Enabled := True;
+
          edtNumeroPedido.Enabled := False;
          edtDataPedido.Enabled   := False;
          edtValorTotal.Enabled   := False;
@@ -271,6 +276,10 @@ begin
          stbBarraStatus.Panels[0].Text := 'Alteração';
          edtDataPedido.Text := DateToStr(Date);
 
+         dbgVenda.Enabled := True;
+         btnMaisProduto.Enabled := True;
+         edtDataPedido.Enabled := False;
+
          if (edtNumeroPedido.Text <> EmptyStr) then
          begin
 
@@ -278,15 +287,20 @@ begin
             edtNumeroPedido.Enabled := False;
             btnAlterar.Enabled      := False;
             btnConfirmar.Enabled    := True;
+            edtDataPedido.Enabled := False;
 
             if (edtNumeroCliente.CanFocus) then
                (edtNumeroCliente.SetFocus);
+
+            edtNumeroCliente.Enabled := False;
+            edtNomeCliente.Enabled := False;
 
          end
          else
          begin
 
             edtNumeroPedido.Enabled := True;
+            edtDataPedido.Enabled := False;
 
             if (edtNumeroPedido.CanFocus) then
                (edtNumeroPedido.SetFocus);
@@ -308,6 +322,8 @@ begin
 
          stbBarraStatus.Panels[0].Text := 'Consulta';
          edtDataPedido.Text := DateToStr(Date);
+
+         dbgVenda.Enabled := False;
 
          CamposEnabled(False);
 
@@ -430,8 +446,8 @@ begin
 
    try
       case vEstadoTela of
-          etIncluir   : Result    := ProcessaInclusao;
-         //etAlterar   : Result    := ProcessaAlteracao;
+         etIncluir   : Result    := ProcessaInclusao;
+         etAlterar   : Result    := ProcessaAlteracao;
          //etExcluir   : Result    := ProcessaExclusao;
          etConsultar : Result    := ProcessaConsultaVenda;
       end;
@@ -866,6 +882,39 @@ begin
               'Falha ao consultar os dados da venda [View]. '#13+
               e.Message);
         end;
+   end;
+end;
+
+procedure TfrmVendaProd.edtNumeroPedidoExit(Sender: TObject);
+begin
+   if vKey = VK_RETURN then
+        ProcessaConsultaVenda;
+        
+    vKey := VK_CLEAR;
+
+end;
+
+function TfrmVendaProd.ProcessaAlteracao: Boolean;
+begin
+   try
+      Result := False;
+
+      if ProcessaVendaProd then
+      begin
+         TMessageUtil.Informacao('Dados alterados com sucesso.');
+
+         vEstadoTela := etPadrao;
+         DefineEstadoTela;
+         Result := True;
+      end;
+
+   except
+      on E: Exception do
+      begin
+          raise Exception.Create(
+              'Falha ao alterar os dados do cliente [View]: '#13+
+              e.Message);
+      end;
    end;
 end;
 
