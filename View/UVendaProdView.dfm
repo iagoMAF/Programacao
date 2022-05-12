@@ -1,6 +1,6 @@
 object frmVendaProd: TfrmVendaProd
-  Left = 941
-  Top = 222
+  Left = 988
+  Top = 208
   Width = 597
   Height = 486
   Caption = 'Venda'

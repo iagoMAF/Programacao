@@ -100,10 +100,7 @@ type
     function  ProcessaConsulta      : Boolean;
     function  ProcessaConsultaVenda : Boolean;
 
-
-
-
-
+    function  ValorTotalPreco      : Currency;
 
   public
     { Public declarations }
@@ -548,8 +545,8 @@ begin
 end;
 
 function TfrmVendaProd.DadosProduto: Boolean;
-var
-   PrimeiroNumero, SegundoNumero, Resultado : Double;
+//var
+//   PrimeiroNumero, SegundoNumero, Resultado : Double;
 begin
 
    if (vKey = 13) and (dbgVenda.SelectedIndex = 0) then
@@ -577,11 +574,13 @@ begin
 
       cdsVenda.Post;
 
-      PrimeiroNumero := StrToFloat(dbgVenda.columns.items[3].field.text);
-      Resultado := 0;
-      SegundoNumero := edtValorTotal.Value;
-      Resultado := (PrimeiroNumero) + SegundoNumero;
-      edtValorTotal.Value := (Resultado);
+//      PrimeiroNumero := StrToFloat(dbgVenda.columns.items[3].field.text);
+//      Resultado := 0;
+//      SegundoNumero := edtValorTotal.Value;
+//      Resultado := (PrimeiroNumero) + SegundoNumero;
+//      edtValorTotal.Value := (Resultado);
+
+      //ValorTotalColuna;
 
    end
    else
@@ -589,13 +588,9 @@ begin
       TMessageUtil.Alerta('Nenhum produto foi selecionado. ');
    end;
 
-//   PrimeiroNumero := StrToFloat(dbgVenda.columns.items[3].field.text);
-//   Resultado := 0;
-//   SegundoNumero := edtValorTotal.Value;
-//   Resultado := (PrimeiroNumero) + SegundoNumero;
-//   edtValorTotal.Value := (Resultado);
-
    btnMaisProduto.Enabled := True;
+
+   ValorTotalPreco;
 
    if btnMaisProduto.CanFocus then
       btnMaisProduto.SetFocus;
@@ -604,7 +599,47 @@ end;
 
 procedure TfrmVendaProd.btnMaisProdutoClick(Sender: TObject);
 begin
-   DadosProduto;
+
+   try
+      Screen.Cursor  := crHourGlass;
+      if frmCadProdutoPesq = nil then
+         frmCadProdutoPesq := TfrmCadProdutoPesq.Create(Application);
+      frmCadProdutoPesq.ShowModal;
+   finally
+      Screen.Cursor := crDefault;
+   end;
+
+
+   if (frmCadProdutoPesq.mProdutoID <> 0) then
+   begin
+
+      cdsVenda.Insert;
+
+      cdsVendaID.Value         := frmCadProdutoPesq.mProdutoID;
+      cdsVendaDescricao.Text   := frmCadProdutoPesq.mProdutoDescricao;
+      cdsVendaQuantidade.Value := 1;
+      cdsVendaPreco.Value      := frmCadProdutoPesq.mProdutoPreco;
+
+      cdsVenda.Post;
+
+//      PrimeiroNumero := StrToFloat(dbgVenda.columns.items[3].field.text);
+//      Resultado := 0;
+//      SegundoNumero := edtValorTotal.Value;
+//      Resultado := (PrimeiroNumero) + SegundoNumero;
+//      edtValorTotal.Value := (Resultado);
+
+      //ValorTotalColuna;
+
+   end
+   else
+   begin
+      TMessageUtil.Alerta('Nenhum produto foi selecionado. ');
+   end;
+
+   ValorTotalPreco;
+
+//   DadosProduto;
+
 end;
 
 function TfrmVendaProd.ProcessaInclusao: Boolean;
@@ -760,26 +795,6 @@ begin
          Exit;
    end;
 
-//   if (edtPreco.Text = EmptyStr) then
-//   begin
-//      TMessageUtil.Alerta(
-//         'O Campo do preço não pode ficar em branco.');
-//
-//      if edtPreco.CanFocus then
-//         edtPreco.SetFocus;
-//         Exit;
-//   end;
-
-//   if (edtEstoque.Text = EmptyStr) then
-//   begin
-//      TMessageUtil.Alerta(
-//         'O Campo do estoque não pode ficar em branco.');
-//
-//      if edtEstoque.CanFocus then
-//         edtEstoque.SetFocus;
-//         Exit;
-//   end;
-
     Result := True;
 end;
 
@@ -915,6 +930,37 @@ begin
               'Falha ao alterar os dados do cliente [View]: '#13+
               e.Message);
       end;
+   end;
+end;
+
+function TfrmVendaProd.ValorTotalPreco: Currency;
+var
+   xtotal : Currency;
+   xPosic : Integer;
+begin
+   xTotal := 0;
+
+   xPosic := cdsVenda.RecNo;
+
+   cdsVenda.DisableControls;
+
+   try
+
+      cdsVenda.First;
+      while not cdsVenda.EOF do
+      begin
+         xTotal := xTotal + cdsVenda.FieldByName('Preco').AsCurrency;
+         cdsVenda.Next;
+      end;
+
+      cdsVenda.RecNo := xPosic;
+
+      edtValorTotal.Text := FormatFloat('#,0.00', xTotal);
+
+   finally
+
+      cdsVenda.EnableControls;
+
    end;
 end;
 

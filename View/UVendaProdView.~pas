@@ -100,6 +100,8 @@ type
     function  ProcessaConsulta      : Boolean;
     function  ProcessaConsultaVenda : Boolean;
 
+    function  ValorTotalColuna      : Boolean;
+
 
 
 
@@ -278,6 +280,7 @@ begin
 
          dbgVenda.Enabled := True;
          btnMaisProduto.Enabled := True;
+         edtDataPedido.Enabled := False;
 
          if (edtNumeroPedido.Text <> EmptyStr) then
          begin
@@ -286,15 +289,20 @@ begin
             edtNumeroPedido.Enabled := False;
             btnAlterar.Enabled      := False;
             btnConfirmar.Enabled    := True;
+            edtDataPedido.Enabled := False;
 
             if (edtNumeroCliente.CanFocus) then
                (edtNumeroCliente.SetFocus);
+
+            edtNumeroCliente.Enabled := False;
+            edtNomeCliente.Enabled := False;
 
          end
          else
          begin
 
             edtNumeroPedido.Enabled := True;
+            edtDataPedido.Enabled := False;
 
             if (edtNumeroPedido.CanFocus) then
                (edtNumeroPedido.SetFocus);
@@ -571,23 +579,19 @@ begin
 
       cdsVenda.Post;
 
-      PrimeiroNumero := StrToFloat(dbgVenda.columns.items[3].field.text);
-      Resultado := 0;
-      SegundoNumero := edtValorTotal.Value;
-      Resultado := (PrimeiroNumero) + SegundoNumero;
-      edtValorTotal.Value := (Resultado);
+//      PrimeiroNumero := StrToFloat(dbgVenda.columns.items[3].field.text);
+//      Resultado := 0;
+//      SegundoNumero := edtValorTotal.Value;
+//      Resultado := (PrimeiroNumero) + SegundoNumero;
+//      edtValorTotal.Value := (Resultado);
+
+      ValorTotalColuna;
 
    end
    else
    begin
       TMessageUtil.Alerta('Nenhum produto foi selecionado. ');
    end;
-
-//   PrimeiroNumero := StrToFloat(dbgVenda.columns.items[3].field.text);
-//   Resultado := 0;
-//   SegundoNumero := edtValorTotal.Value;
-//   Resultado := (PrimeiroNumero) + SegundoNumero;
-//   edtValorTotal.Value := (Resultado);
 
    btnMaisProduto.Enabled := True;
 
@@ -754,26 +758,6 @@ begin
          Exit;
    end;
 
-//   if (edtPreco.Text = EmptyStr) then
-//   begin
-//      TMessageUtil.Alerta(
-//         'O Campo do preço não pode ficar em branco.');
-//
-//      if edtPreco.CanFocus then
-//         edtPreco.SetFocus;
-//         Exit;
-//   end;
-
-//   if (edtEstoque.Text = EmptyStr) then
-//   begin
-//      TMessageUtil.Alerta(
-//         'O Campo do estoque não pode ficar em branco.');
-//
-//      if edtEstoque.CanFocus then
-//         edtEstoque.SetFocus;
-//         Exit;
-//   end;
-
     Result := True;
 end;
 
@@ -881,8 +865,11 @@ end;
 
 procedure TfrmVendaProd.edtNumeroPedidoExit(Sender: TObject);
 begin
-   if btnConfirmar.CanFocus then
-      btnConfirmar.SetFocus;
+   if vKey = VK_RETURN then
+        ProcessaConsultaVenda;
+        
+    vKey := VK_CLEAR;
+
 end;
 
 function TfrmVendaProd.ProcessaAlteracao: Boolean;
@@ -906,6 +893,27 @@ begin
               'Falha ao alterar os dados do cliente [View]: '#13+
               e.Message);
       end;
+   end;
+end;
+
+function TfrmVendaProd.ValorTotalColuna: Boolean;
+var
+   total : Currency;
+begin
+   Total := 0;
+   cdsVenda.DisableControls;
+
+   try
+      while not cdsVenda.EOF do
+      begin
+         Total := Total + cdsVenda.FieldByName('Preco').AsCurrency;
+         cdsVenda.Next;
+      end;
+   finally
+
+      cdsVenda.EnableControls;
+      edtValorTotal.Text := FormatFloat('#,0.00', Total);
+
    end;
 end;
 
