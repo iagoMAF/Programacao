@@ -41,6 +41,7 @@ type
     edtValorTotal: TNumEdit;
     Label2: TLabel;
     edtDataPedido: TEdit;
+    SpeedButton1: TSpeedButton;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -59,6 +60,9 @@ type
     procedure dbgVendaExit(Sender: TObject);
     procedure btnMaisProdutoClick(Sender: TObject);
     procedure edtNumeroPedidoExit(Sender: TObject);
+    procedure cdsVendaAfterDelete(DataSet: TDataSet);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure btnConsultarExit(Sender: TObject);
   private
     { Private declarations }
 
@@ -74,29 +78,21 @@ type
     procedure CamposEnabled(pOpcao : Boolean);
     procedure LimparTela;
     procedure DefineEstadoTela;
-
     procedure CarregaDadosCliente;
     procedure CarregaDadosTela;
-
 
     //Parte da pesquisa
     procedure ProcessaConfirmacaoPesq;
     procedure ProcessaPesquisaEntrada;
 
     function  DadosProduto          : Boolean;
-
-
     function  ProcessaConfirmacao   : Boolean;
     function  ProcessaInclusao      : Boolean;
     function  ProcessaAlteracao     : Boolean;
-
     function  ProcessaVendaProd     : Boolean;
-
     function  ProcessaVenda         : Boolean;
     function  ProcessaGridVenda     : Boolean;
-
     function  ValidaVenda           : Boolean;
-
     function  ProcessaConsulta      : Boolean;
     function  ProcessaConsultaVenda : Boolean;
 
@@ -104,12 +100,10 @@ type
 
   public
     { Public declarations }
-
     mProdutoID        : Integer;
     mProdutoDescricao : String;
    // mProdutoEstoque   : Integer;
     mProdutoPreco     : Double;
-
   end;
 
 var
@@ -122,11 +116,8 @@ implementation
 procedure TfrmVendaProd.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
-
    vKey := Key;
-
    case vKey of
-
       VK_RETURN: //Tecla <Enter>
       begin
          Perform(WM_NEXTDlgCtl, 0, 0);
@@ -136,25 +127,20 @@ begin
       begin
          if (vEstadoTela <> etPadrao)then
          begin
-
              if (TMessageUtil.Pergunta(
                'Deseja realmente sair cancelar essa operação? ')) then
              begin
                vEstadoTela := etPadrao;
                DefineEstadoTela;
              end;
-
          end
          else
          begin
-
             if (TMessageUtil.Pergunta(
                'Deseja sair dessa rotina?' ))then
                Close;
-
          end;
       end;
-
    end;
 end;
 
@@ -162,10 +148,8 @@ procedure TfrmVendaProd.CamposEnabled(pOpcao: Boolean);
 var
    i : Integer;
 begin
-
    for i := 0 to pred(ComponentCount) do
    begin
-
       if (Components[i] is TEdit) then
          (Components[i] as TEdit).Enabled     := pOpcao;
 
@@ -174,9 +158,7 @@ begin
 
       if (Components[i] is TNumEdit) then
          (Components[i] as TNumEdit).Enabled  := pOpcao;
-
    end;
-
 end;
 
 
@@ -191,10 +173,8 @@ procedure TfrmVendaProd.LimparTela;
 var
    i : Integer;
 begin
-
    for i := 0 to pred(ComponentCount) do
    begin
-
       if (Components[i] is TEdit) then
          (Components[i] as TEdit).Text     := EmptyStr;
 
@@ -203,17 +183,13 @@ begin
 
       if (Components[i] is TNumEdit) then
          (Components[i] as TNumEdit).Text  := EmptyStr;
-
    end;
-
    if (not cdsVenda.IsEmpty) then
       (cdsVenda.EmptyDataSet);
-
 end;
 
 procedure TfrmVendaProd.DefineEstadoTela;
 begin
-
    btnIncluir.Enabled   := (vEstadoTela in [etPadrao]);
    btnAlterar.Enabled   := (vEstadoTela in [etPadrao]);
    btnConsultar.Enabled := (vEstadoTela in [etPadrao]);
@@ -230,10 +206,8 @@ begin
 
       etPadrao:
       begin
-
          CamposEnabled(False);
          LimparTela;
-
          stbBarraStatus.Panels[0].Text := EmptyStr;
          stbBarraStatus.Panels[0].Text := EmptyStr;
          edtDataPedido.Text := DateToStr(Date);
@@ -244,89 +218,71 @@ begin
             (btnIncluir.SetFocus);
 
          Application.ProcessMessages;
-
       end;
 
       etIncluir:
       begin
-
          stbBarraStatus.Panels[0].Text := 'Inclusão de Venda';
-         edtDataPedido.Text := DateToStr(Date);
-
+         edtDataPedido.Text      := DateToStr(Date);
          CamposEnabled(True);
-
-         dbgVenda.Enabled := True;
-
+         dbgVenda.Enabled        := True;
          edtNumeroPedido.Enabled := False;
          edtDataPedido.Enabled   := False;
          edtValorTotal.Enabled   := False;
 
+         btnMaisProduto.Enabled := True;
 
          if (edtNumeroCliente.CanFocus) then
             (edtNumeroCliente.SetFocus);
-
       end;
 
       etAlterar:
       begin
-
          stbBarraStatus.Panels[0].Text := 'Alteração';
-         edtDataPedido.Text := DateToStr(Date);
-
-         dbgVenda.Enabled := True;
+         edtDataPedido.Text     := DateToStr(Date);
+         dbgVenda.Enabled       := True;
          btnMaisProduto.Enabled := True;
-         edtDataPedido.Enabled := False;
+         edtDataPedido.Enabled  := False;
 
          if (edtNumeroPedido.Text <> EmptyStr) then
          begin
-
             CamposEnabled(True);
             edtNumeroPedido.Enabled := False;
             btnAlterar.Enabled      := False;
             btnConfirmar.Enabled    := True;
-            edtDataPedido.Enabled := False;
+            edtDataPedido.Enabled   := False;
 
             if (edtNumeroCliente.CanFocus) then
                (edtNumeroCliente.SetFocus);
 
             edtNumeroCliente.Enabled := False;
             edtNomeCliente.Enabled := False;
-
          end
          else
          begin
-
             edtNumeroPedido.Enabled := True;
-            edtDataPedido.Enabled := False;
+            edtDataPedido.Enabled   := False;
 
             if (edtNumeroPedido.CanFocus) then
                (edtNumeroPedido.SetFocus);
-
          end;
-
       end;
 
       etPesquisar:
       begin
-
          stbBarraStatus.Panels[0].Text := 'Pesquisa';
          edtDataPedido.Text := DateToStr(Date);
-
       end;
 
       etConsultar:
       begin
-
          stbBarraStatus.Panels[0].Text := 'Consulta';
          edtDataPedido.Text := DateToStr(Date);
-
          dbgVenda.Enabled := False;
-
          CamposEnabled(False);
 
          if (edtNumeroPedido.Text <> EmptyStr) then
          begin
-
             edtNumeroPedido.Enabled := False;
             btnAlterar.Enabled      := True;
             btnConfirmar.Enabled    := False;
@@ -336,18 +292,14 @@ begin
          end
          else
          begin
-
             edtNumeroPedido.Enabled := True;
 
             if (edtNumeroPedido.CanFocus) then
                (edtNumeroPedido.SetFocus);
-
          end;
-
       end;
 
    end;
-
 end;
 
 procedure TfrmVendaProd.btnIncluirClick(Sender: TObject);
@@ -394,7 +346,6 @@ end;
 
 procedure TfrmVendaProd.btnSairClick(Sender: TObject);
 begin
-
    if (vEstadoTela <> etPadrao) then
    begin
 
@@ -405,11 +356,9 @@ begin
          vEstadoTela := etPadrao;
          DefineEstadoTela;
       end;
-
    end
    else
       close;
-
 end;
 
 procedure TfrmVendaProd.FormShow(Sender: TObject);
@@ -423,18 +372,19 @@ begin
    if (vObjCliente = nil) then
       Exit;
 
-    edtNumeroCliente.Text     := IntToStr(vObjCliente.Id);
-    edtNomeCliente.Text       := vObjCliente.Nome;
+   edtNumeroCliente.Text  := IntToStr(vObjCliente.Id);
+   edtNomeCliente.Text    := vObjCliente.Nome;
 
 end;
 
 procedure TfrmVendaProd.edtNumeroClienteExit(Sender: TObject);
 begin
-
   if vKey = VK_RETURN then
         ProcessaConsulta;
     vKey := VK_CLEAR;
 
+   if btnMaisProduto.CanFocus then
+      btnMaisProduto.SetFocus;
 end;
 
 function TfrmVendaProd.ProcessaConfirmacao: Boolean;
@@ -463,45 +413,44 @@ function TfrmVendaProd.ProcessaConsulta: Boolean;
 begin
 
    try
-        Result := False;
+      Result := False;
 
-        if (edtNumeroCliente.Text = EmptyStr) then
-        begin
-            TMessageUtil.Alerta('Código do cliente não pode ficar em branco.');
+      if (edtNumeroCliente.Text = EmptyStr) then
+      begin
+         TMessageUtil.Alerta('Código do cliente não pode ficar em branco.');
 
-            if edtNumeroCliente.CanFocus then
-               edtNumeroCliente.SetFocus;
+         if edtNumeroCliente.CanFocus then
+            edtNumeroCliente.SetFocus;
 
-            Exit;
-        end;
+         Exit;
+      end;
 
-        vObjCliente :=
-             TCliente(TPessoaController.getInstancia.BuscaPessoa(
-                  StrToIntDef(edtNumeroCliente.Text, 0)));
+      vObjCliente :=
+         TCliente(TPessoaController.getInstancia.BuscaPessoa(
+            StrToIntDef(edtNumeroCliente.Text, 0)));
 
-        if (vObjCliente <> nil) then
-            CarregaDadosCliente
-        else
-        begin
-            TMessageUtil.Alerta(
-              'Nenhum cliente encontrado para o código informado. '#13 +
-              'Confirme o código do cliente ou cadastre caso necessário. '#13+
-              'Cadastro -> Clientes');
+      if (vObjCliente <> nil) then
+         CarregaDadosCliente
+      else
+      begin
+         TMessageUtil.Alerta(
+            'Nenhum cliente encontrado para o código informado. '#13 +
+            'Confirme o código do cliente ou cadastre caso necessário. '#13+
+            'Cadastro -> Clientes');
 
-            LimparTela;
+         LimparTela;
 
-            if (edtNumeroCliente.CanFocus) then
-               (edtNumeroCliente.SetFocus);
+         if (edtNumeroCliente.CanFocus) then
+            (edtNumeroCliente.SetFocus);
 
-            Exit;
-        end;
+         Exit;
+      end;
 
-        DefineEstadoTela;
+      DefineEstadoTela;
+      Result := True;
 
-        Result := True;
-
-        if dbgVenda.CanFocus then
-           dbgVenda.Setfocus;
+      if dbgVenda.CanFocus then
+         dbgVenda.Setfocus;
 
    except
         on E: Exception do
@@ -511,17 +460,14 @@ begin
               e.Message);
         end;
    end;
-
 end;
 
 procedure TfrmVendaProd.dbgVendaKeyPress(Sender: TObject; var Key: Char);
 begin
-
    if (vKey = 13) and (dbgVenda.SelectedIndex = 0) then
    begin
       DadosProduto;
    end;
-
 end;
 
 procedure TfrmVendaProd.ProcessaConfirmacaoPesq;
@@ -548,30 +494,23 @@ function TfrmVendaProd.DadosProduto: Boolean;
 //var
 //   PrimeiroNumero, SegundoNumero, Resultado : Double;
 begin
-
    if (vKey = 13) and (dbgVenda.SelectedIndex = 0) then
    try
-
-         Screen.Cursor  := crHourGlass;
-         if frmCadProdutoPesq = nil then
-         frmCadProdutoPesq := TfrmCadProdutoPesq.Create(Application);
-         frmCadProdutoPesq.ShowModal;
-
+      Screen.Cursor  := crHourGlass;
+      if frmCadProdutoPesq = nil then
+      frmCadProdutoPesq := TfrmCadProdutoPesq.Create(Application);
+      frmCadProdutoPesq.ShowModal;
    finally
-         Screen.Cursor := crDefault;
+      Screen.Cursor := crDefault;
    end;
-
 
    if (frmCadProdutoPesq.mProdutoID <> 0) then
    begin
-
       cdsVenda.Insert;
-
       cdsVendaID.Value         := frmCadProdutoPesq.mProdutoID;
       cdsVendaDescricao.Text   := frmCadProdutoPesq.mProdutoDescricao;
       cdsVendaQuantidade.Value := 1;
       cdsVendaPreco.Value      := frmCadProdutoPesq.mProdutoPreco;
-
       cdsVenda.Post;
 
 //      PrimeiroNumero := StrToFloat(dbgVenda.columns.items[3].field.text);
@@ -579,27 +518,20 @@ begin
 //      SegundoNumero := edtValorTotal.Value;
 //      Resultado := (PrimeiroNumero) + SegundoNumero;
 //      edtValorTotal.Value := (Resultado);
-
-      //ValorTotalColuna;
-
+//      ValorTotalColuna;
    end
    else
    begin
       TMessageUtil.Alerta('Nenhum produto foi selecionado. ');
    end;
-
    btnMaisProduto.Enabled := True;
-
    ValorTotalPreco;
-
    if btnMaisProduto.CanFocus then
       btnMaisProduto.SetFocus;
-
 end;
 
 procedure TfrmVendaProd.btnMaisProdutoClick(Sender: TObject);
 begin
-
    try
       Screen.Cursor  := crHourGlass;
       if frmCadProdutoPesq = nil then
@@ -609,7 +541,6 @@ begin
       Screen.Cursor := crDefault;
    end;
 
-
    if (frmCadProdutoPesq.mProdutoID <> 0) then
    begin
 
@@ -621,14 +552,12 @@ begin
       cdsVendaPreco.Value      := frmCadProdutoPesq.mProdutoPreco;
 
       cdsVenda.Post;
-
 //      PrimeiroNumero := StrToFloat(dbgVenda.columns.items[3].field.text);
 //      Resultado := 0;
 //      SegundoNumero := edtValorTotal.Value;
 //      Resultado := (PrimeiroNumero) + SegundoNumero;
 //      edtValorTotal.Value := (Resultado);
-
-      //ValorTotalColuna;
+//      ValorTotalColuna;
 
    end
    else
@@ -647,20 +576,14 @@ begin
 
    try
       Result := False;
-
       if ProcessaVendaProd then
       begin
-
          TMessageUtil.Informacao('Venda cadastrada com sucesso.'#13+
             'Código cadastrado: '+ IntToStr(vObjVendaProd.Id));
-
          vEstadoTela := etPadrao;
          DefineEstadoTela;
-
          Result := True;
-
       end;
-
    except
       on E: Exception do
       begin
@@ -669,14 +592,11 @@ begin
             e.Message);
       end;
    end;
-
-
 end;
 
 function TfrmVendaProd.ProcessaVendaProd: Boolean;
 begin
    try
-
       Result := False;
       if (ProcessaVenda) and
          (ProcessaGridVenda) then
@@ -684,19 +604,15 @@ begin
         // Gravação no Banco de dados
          TVendaProdController.getInstancia.GravaVendaProd(
          vObjVendaProd, vObjColGridVenda);
-
          Result := True;
       end;
-
    except
-
       on E : Exception do
       begin
          Raise Exception.Create(
             'Falha ao gravar os dados da Venda [View]. '#13+
             e.Message);
       end;
-
    end;
 end;
 
@@ -704,13 +620,11 @@ function TfrmVendaProd.ProcessaVenda: Boolean;
 begin
    try
         Result := False;
-
        if not ValidaVenda then
             Exit;
-
         if vEstadoTela = etIncluir then
         begin
-            if vObjVendaProd = nil then
+            if vObjVendaProd  = nil then
                vObjVendaProd := TVendaProd.Create;
         end
         else
@@ -722,24 +636,18 @@ begin
 
         if (vObjVendaProd = nil) then
             Exit;
-
         vObjVendaProd.DataVenda  := StrToDate(edtDataPedido.Text);
         vObjVendaProd.TotalVenda := StrToFloat(edtValorTotal.Text);
         vObjVendaProd.Id_Cliente := StrToInt(edtNumeroCliente.Text);
         //vObjVendaProd. := StrToInt(edtEstoque.Text);
-
-
         Result := True;
-
    except
-
     on E: Exception do
         begin
             Raise Exception.Create(
               'Falha ao gravar os dados dessa Venda. [View]: '#13+
               e.Message);
         end;
-        
    end;
 end;
 
@@ -749,17 +657,13 @@ var
 begin
    if (vObjVendaProd = nil) then
       Exit;
-
    edtNumeroPedido.Text  := IntToStr(vObjVendaProd.Id);
    edtNumeroCliente.Text := IntToStr(vObjVendaProd.Id_Cliente);
    edtDataPedido.Text    := DateToStr(vObjVendaProd.DataVenda);
    edtValorTotal.Value   := (vObjVendaProd.TotalVenda);
-
    if (vObjColGridVenda <> nil) then
    begin
-
       cdsVenda.First;
-
       for i := 0 to pred(vObjColGridVenda.Count) do
       begin
 
@@ -773,18 +677,13 @@ begin
          ProcessaConsulta;
 
          cdsVenda.Append;
-
       end;
    end;
-
-
-
 end;
 
 function TfrmVendaProd.ValidaVenda: Boolean;
 begin
    Result := False;
-
    if (edtNumeroCliente.Text = EmptyStr) then
    begin
       TMessageUtil.Alerta(
@@ -794,7 +693,6 @@ begin
          edtNumeroCliente.SetFocus;
          Exit;
    end;
-
     Result := True;
 end;
 
@@ -804,40 +702,30 @@ var
    xID_Venda   : Integer;
 begin
    try
-
       Result := False;
-
       xGridVenda  := nil;
       xID_Venda   := 0;
 
       if (vObjColGridVenda <> nil) then
         FreeAndNil(vObjColGridVenda);
-
       vObjColGridVenda := TColGridVenda.Create;
 
       if (vEstadoTela = etAlterar) then
-          xID_Venda := StrToIntDef(edtNumeroPedido.Text, 0);
+          xID_Venda  := StrToIntDef(edtNumeroPedido.Text, 0);
 
       cdsVenda.First;
-
       while  not cdsVenda.Eof do
       begin
-      
          xGridVenda               := TGridVenda.Create;
          xGridVenda.ID_Venda      := xID_Venda;
          xGridVenda.ID_Produto    := cdsVendaID.Value;
          xGridVenda.Descricao     := cdsVendaDescricao.Text;
          xGridVenda.Quantidade    := cdsVendaQuantidade.Value;
          xGridVenda.ValorUnitario := cdsVendaPreco.Value;
-
          vObjColGridVenda.Add(xGridVenda);
-
          cdsVenda.Next;
-
       end;
-
       Result := True;
-
    except
       on E : Exception do
       begin
@@ -852,19 +740,16 @@ function TfrmVendaProd.ProcessaConsultaVenda: Boolean;
 begin
    try
         Result := False;
-
         if (edtNumeroPedido.Text = EmptyStr) then
         begin
             TMessageUtil.Alerta(
                'Código do numero da venda não pode ficar em branco.');
-
             if edtNumeroPedido.CanFocus then
                edtNumeroPedido.SetFocus;
-
             Exit;
         end;
 
-        vObjVendaProd :=
+        vObjVendaProd    :=
              TVendaProd(TVendaProdController.getInstancia.BuscaVendaProd(
                   StrToIntDef(edtNumeroPedido.Text, 0)));
 
@@ -878,17 +763,12 @@ begin
         begin
             TMessageUtil.Alerta(
               'Nenhuma venda encontrada para o código informado.');
-
             LimparTela;
-
             if (edtNumeroPedido.CanFocus) then
                (edtNumeroPedido.SetFocus);
-
             Exit;
         end;
-
         DefineEstadoTela;
-
         Result := True;
    except
         on E: Exception do
@@ -904,25 +784,20 @@ procedure TfrmVendaProd.edtNumeroPedidoExit(Sender: TObject);
 begin
    if vKey = VK_RETURN then
         ProcessaConsultaVenda;
-        
-    vKey := VK_CLEAR;
-
+    vKey  := VK_CLEAR;
 end;
 
 function TfrmVendaProd.ProcessaAlteracao: Boolean;
 begin
    try
       Result := False;
-
       if ProcessaVendaProd then
       begin
          TMessageUtil.Informacao('Dados alterados com sucesso.');
-
          vEstadoTela := etPadrao;
          DefineEstadoTela;
          Result := True;
       end;
-
    except
       on E: Exception do
       begin
@@ -939,29 +814,42 @@ var
    xPosic : Integer;
 begin
    xTotal := 0;
-
    xPosic := cdsVenda.RecNo;
-
    cdsVenda.DisableControls;
-
    try
-
       cdsVenda.First;
       while not cdsVenda.EOF do
       begin
          xTotal := xTotal + cdsVenda.FieldByName('Preco').AsCurrency;
          cdsVenda.Next;
       end;
-
-      cdsVenda.RecNo := xPosic;
-
+      cdsVenda.RecNo     := xPosic;
       edtValorTotal.Text := FormatFloat('#,0.00', xTotal);
-
    finally
-
       cdsVenda.EnableControls;
-
    end;
+end;
+
+procedure TfrmVendaProd.cdsVendaAfterDelete(DataSet: TDataSet);
+begin
+   //cdsVenda.Refresh;
+   ValorTotalPreco;
+end;
+
+procedure TfrmVendaProd.SpeedButton1Click(Sender: TObject);
+begin
+   TMessageUtil.Informacao(
+   'Para deletar um produto da venda, basta selecionar a linha do produto e '#13+
+   'utilizar as teclas Ctrl + Shift + Del  ao mesmo tempo.'#13+
+   'Essa função de deletar um produto, serve no modo de inclusão ou no de   '#13+
+   'alteração das vendas.                                                   '#13+
+   'Lembrando que essa ação é irreversível.');
+end;
+
+procedure TfrmVendaProd.btnConsultarExit(Sender: TObject);
+begin
+   if btnAlterar.CanFocus then
+      btnAlterar.SetFocus;
 end;
 
 end.

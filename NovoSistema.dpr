@@ -34,7 +34,9 @@ uses
   UVendaProd in 'Model\UVendaProd.pas',
   UVendaProdController in 'Controller\UVendaProdController.pas',
   UVendaProdDao in 'Model\UVendaProdDao.pas',
-  UComercio in 'Model\UComercio.pas';
+  UComercio in 'Model\UComercio.pas',
+  UGridVenda in 'Model\UGridVenda.pas',
+  UGridVendaDAO in 'Model\UGridVendaDAO.pas';
 
 {$R *.res}
 
