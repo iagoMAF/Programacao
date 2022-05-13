@@ -62,6 +62,7 @@ type
     procedure edtNumeroPedidoExit(Sender: TObject);
     procedure cdsVendaAfterDelete(DataSet: TDataSet);
     procedure SpeedButton1Click(Sender: TObject);
+    procedure btnConsultarExit(Sender: TObject);
   private
     { Private declarations }
 
@@ -840,9 +841,15 @@ begin
    TMessageUtil.Informacao(
    'Para deletar um produto da venda, basta selecionar a linha do produto e '#13+
    'utilizar as teclas Ctrl + Shift + Del  ao mesmo tempo.'#13+
-   'Essa função de deletar um produto, serve no modo de inclusão ou no de '#13+
-   'alteração das vendas.'#13+
+   'Essa função de deletar um produto, serve no modo de inclusão ou no de   '#13+
+   'alteração das vendas.                                                   '#13+
    'Lembrando que essa ação é irreversível.');
+end;
+
+procedure TfrmVendaProd.btnConsultarExit(Sender: TObject);
+begin
+   if btnAlterar.CanFocus then
+      btnAlterar.SetFocus;
 end;
 
 end.

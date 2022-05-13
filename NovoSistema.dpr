@@ -36,7 +36,8 @@ uses
   UVendaProdDao in 'Model\UVendaProdDao.pas',
   UComercio in 'Model\UComercio.pas',
   UGridVenda in 'Model\UGridVenda.pas',
-  UGridVendaDAO in 'Model\UGridVendaDAO.pas';
+  UGridVendaDAO in 'Model\UGridVendaDAO.pas',
+  UVendaProdPesqView in 'View\UVendaProdPesqView.pas' {frmVendaPesq};
 
 {$R *.res}
 

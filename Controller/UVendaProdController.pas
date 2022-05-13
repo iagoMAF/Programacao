@@ -14,7 +14,7 @@ type
 
         function  ExcluiVendaProd(pVendaProd : TVendaProd)  : Boolean;
         function  BuscaVendaProd(pID : Integer)             : TVendaProd;
-        function  PesquisaVendaProd(pNome : string)         : TColVendaProd;
+        function  PesquisaVendaProd(pId : String)         : TColVendaProd;
 
         // Busca Grid
         function  BuscaGridVenda(pID_VendaProd :  Integer ) : TColGridVenda;
@@ -205,37 +205,37 @@ begin
 end;
 
 function TVendaProdController.PesquisaVendaProd(
-  pNome: string): TColVendaProd;
+  pId: String): TColVendaProd;
 var
    xVendaProdDAO : TVendaProdDAO;
    xCondicao   : string;
 begin
-//   try
-//      try
-//         Result := nil;
-//
-//         xVendaProdDAO := TVendaProdDAO.Create(TConexao.get.getConn);
-//
-//         xCondicao  :=
-//            IfThen( pNome <> EmptyStr,
-//               'WHERE                                           '#13+
-//               '    (DESCRICAO LIKE UPPER(''%'+ pNome + '%''))  '#13+
-//               'ORDER BY DESCRICAO, ID', EmptyStr);
-//
-//         Result := xVendaProd.RetornaLista(xCondicao);
-//
-//      finally
-//         if (xVendaProdDAO <> nil) then
-//            (FreeAndNil(xVendaProdDAO));
-//      end;
-//   except
-//      on E: Exception do
-//      begin
-//         raise Exception.Create(
-//            'Falha ao buscas os dados do produto [Controller]: '#13+
-//            e.Message);
-//      end;
-//   end;
+   try
+      try
+         Result := nil;
+
+         xVendaProdDAO := TVendaProdDAO.Create(TConexao.get.getConn);
+
+         xCondicao  :=
+            IfThen( pId <> EmptyStr,
+               'WHERE                            '#13+
+               '    (ID LIKE UPPER(''%'+ pID + '%'' ) )'#13+
+               'ORDER BY ID, ID', EmptyStr);
+
+         Result := xVendaProdDAO.RetornaLista(xCondicao);
+
+      finally
+         if (xVendaProdDAO <> nil) then
+            (FreeAndNil(xVendaProdDAO));
+      end;
+   except
+      on E: Exception do
+      begin
+         raise Exception.Create(
+            'Falha ao buscas os dados do produto [Controller]: '#13+
+            e.Message);
+      end;
+   end;
 end;
 
 function TVendaProdController.RetornaCondicaoVendaProd(

@@ -106,6 +106,7 @@ object frmVendaProd: TfrmVendaProd
       Caption = '&Consultar'
       TabOrder = 4
       OnClick = btnConsultarClick
+      OnExit = btnConsultarExit
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
