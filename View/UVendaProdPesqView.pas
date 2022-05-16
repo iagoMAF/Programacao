@@ -5,7 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, DB, DBClient, Grids, DBGrids, StdCtrls, Buttons, ExtCtrls,
-  ComCtrls, UVendaProdController, uMessageUtil, UVendaProd;
+  ComCtrls, UVendaProdController, uMessageUtil, UVendaProd, UCliente,
+  UPessoaController, UPessoa;
 
 type
   TfrmVendaPesq = class(TForm)
@@ -29,6 +30,7 @@ type
     cdsVendaClienteNomeCliente: TStringField;
     cdsVendaClienteDataVenda: TDateField;
     cdsVendaClienteValorTotal: TFloatField;
+    cdsVendaClienteIDCliente: TIntegerField;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure btnFiltrarClick(Sender: TObject);
@@ -44,9 +46,14 @@ type
 
    vKey : Word;
 
+   vObjCliente : TCliente;
+
    procedure LimparTela;
    procedure ProcessaConfirmacao;
    procedure ProcessaPesquisa;
+
+   procedure CarregaNomeClienteGrid;
+   procedure ProcessaConsultaCliente;
 
   public
     { Public declarations }
@@ -54,6 +61,7 @@ type
     mNomeCliente : String;
     mValorTotal  : Double;
     mDataVenda   : TDateTime;
+    mIDCliente   : String;
   end;
 
 var
@@ -115,6 +123,7 @@ begin
       mNomeCliente := cdsVendaClienteNomeCliente.Text;
       mDataVenda   := cdsVendaClienteDataVenda.Value;
       mValorTotal  := cdsVendaClienteValorTotal.Value;
+      mIDCliente   := cdsVendaClienteIDCliente.Text;
       Self.ModalResult  := mrOk;
       LimparTela;
       Close;
@@ -130,7 +139,7 @@ end;
 
 procedure TfrmVendaPesq.ProcessaPesquisa;
 var
-  xListaVendaProd : TColVendaProd;
+  xListaVendaProd   : TColVendaProd;
   xAux          : Integer;
 begin
    try
@@ -140,6 +149,10 @@ begin
          xListaVendaProd :=
             TVendaProdController.getInstancia.PesquisaVendaProd(Trim(
                (edtCodigoVenda.Text)));
+
+//         vObjCliente :=
+//            TCliente(TPessoaController.getInstancia.BuscaPessoa(
+//               StrToIntDef(cdsVendaClienteIDCliente.Text, 0)));
 
          cdsVendaCliente.EmptyDataSet;
 
@@ -152,6 +165,18 @@ begin
 
                cdsVendaClienteVendaID.Value := xListaVendaProd.Retorna(xAux).Id;
               // cdsVendaClienteNomeCliente.Text  := xListaVendaProd.Retorna(xAux).Nome;
+
+              cdsVendaClienteIDCliente.Value :=
+                  xListaVendaProd.Retorna(xAux).Id_Cliente;
+
+               vObjCliente :=
+                  TCliente(TPessoaController.getInstancia.BuscaPessoa(
+                  StrToIntDef(cdsVendaClienteIDCliente.Text, 0)));
+
+
+               if (vObjCliente <> nil) then
+                  cdsVendaClienteNomeCliente.Text := vObjCliente.Nome;
+
                cdsVendaClienteDataVenda.Value :=
                   xListaVendaProd.Retorna(xAux).DataVenda;
                cdsVendaClienteValorTotal.Value :=
@@ -195,6 +220,7 @@ begin
   // mNomeCliente := EmptyStr;
    mValorTotal := 0;
    mDataVenda  := 0;
+   mIDCliente  := EmptyStr;
    ProcessaPesquisa;
 end;
 
@@ -204,7 +230,9 @@ begin
   // mNomeCliente := EmptyStr;
    mValorTotal := 0;
    mDataVenda  := 0;
-   ProcessaPesquisa;
+   mIDCliente  := EmptyStr;
+   //ProcessaPesquisa;
+   ProcessaConfirmacao;
 end;
 
 procedure TfrmVendaPesq.btnLimparClick(Sender: TObject);
@@ -218,6 +246,7 @@ begin
   // mNomeCliente := EmptyStr;
    mValorTotal := 0;
    mDataVenda  := 0;
+   mIDCliente  := EmptyStr;
    Close;
 end;
 
@@ -237,6 +266,25 @@ begin
    if (Key =  VK_RETURN) and
        (btnConfirmar.CanFocus) then
        (btnConfirmar.SetFocus);
+end;
+
+procedure TfrmVendaPesq.CarregaNomeClienteGrid;
+begin
+   if (vObjCliente = nil) then
+      Exit;
+
+   //edtNumeroCliente.Text             := IntToStr(vObjCliente.Id);
+   cdsVendaClienteNomeCliente.Text   := vObjCliente.Nome;
+end;
+
+procedure TfrmVendaPesq.ProcessaConsultaCliente;
+begin
+   vObjCliente :=
+         TCliente(TPessoaController.getInstancia.BuscaPessoa(
+            StrToIntDef(cdsVendaClienteIDCliente.Text, 0)));
+
+   CarregaNomeClienteGrid;
+
 end;
 
 end.

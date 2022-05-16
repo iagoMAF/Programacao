@@ -283,7 +283,8 @@ begin
          begin
             edtNumeroPedido.Text := (frmVendaPesq.mVendaID);
             vEstadoTela    := etConsultar;
-            ProcessaConsulta;
+            //ProcessaConsulta;
+            ProcessaConsultaVenda;
          end
          else
          begin

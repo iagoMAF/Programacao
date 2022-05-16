@@ -7,7 +7,7 @@ uses
   Dialogs, ExtCtrls, ComCtrls, DB, DBClient, Grids, DBGrids, StdCtrls,
   Mask, Buttons, uMessageUtil, UEnumerationUtil, NumEdit, UCliente,
   UCadProdutoPesqView, UPessoaController, UVendaProd, UVendaProdController,
-  UComercio, UGridVenda, UClassFuncoes, frxClass, frxDBSet;
+  UComercio, UGridVenda, UClassFuncoes, frxClass, frxDBSet, UVendaProdPesqView;
 
 type
   TfrmVendaProd = class(TForm)
@@ -272,6 +272,30 @@ begin
       begin
          stbBarraStatus.Panels[0].Text := 'Pesquisa';
          edtDataPedido.Text := DateToStr(Date);
+
+         if (frmVendaPesq = nil) then
+             frmVendaPesq := TfrmVendaPesq.Create(nil);
+
+         frmVendaPesq.ShowModal;
+
+
+         if (frmVendaPesq.mVendaID <> EmptyStr) then
+         begin
+            edtNumeroPedido.Text := (frmVendaPesq.mVendaID);
+            vEstadoTela    := etConsultar;
+            ProcessaConsulta;
+         end
+         else
+         begin
+            vEstadoTela := etPadrao;
+            DefineEstadoTela;
+         end;
+
+         frmVendaPesq.mVendaID := EmptyStr;
+         //frmVendaPesq.mNomeCliente := EmptyStr;
+         frmVendaPesq.mValorTotal := 0;
+         frmVendaPesq.mDataVenda := 0;
+
       end;
 
       etConsultar:
@@ -322,7 +346,8 @@ end;
 
 procedure TfrmVendaProd.btnPesquisarClick(Sender: TObject);
 begin
-   // Click Pesquisar
+   vEstadoTela := etPesquisar;
+   DefineEstadoTela;
 end;
 
 procedure TfrmVendaProd.btnConfirmarClick(Sender: TObject);

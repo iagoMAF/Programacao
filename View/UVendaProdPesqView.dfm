@@ -257,7 +257,7 @@ object frmVendaPesq: TfrmVendaPesq
             Expanded = False
             FieldName = 'NomeCliente'
             Title.Caption = 'Cliente'
-            Width = 393
+            Width = 338
             Visible = True
           end
           item
@@ -272,6 +272,11 @@ object frmVendaPesq: TfrmVendaPesq
             FieldName = 'ValorTotal'
             Title.Caption = 'Valor'
             Width = 78
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'IDCliente'
             Visible = True
           end>
       end
@@ -288,8 +293,7 @@ object frmVendaPesq: TfrmVendaPesq
     FieldDefs = <
       item
         Name = 'VendaID'
-        DataType = ftString
-        Size = 20
+        DataType = ftInteger
       end
       item
         Name = 'NomeCliente'
@@ -303,6 +307,10 @@ object frmVendaPesq: TfrmVendaPesq
       item
         Name = 'ValorTotal'
         DataType = ftFloat
+      end
+      item
+        Name = 'IDCliente'
+        DataType = ftInteger
       end>
     IndexDefs = <>
     Params = <>
@@ -311,10 +319,11 @@ object frmVendaPesq: TfrmVendaPesq
     Left = 44
     Top = 145
     Data = {
-      6F0000009619E0BD0100000018000000040000000000030000006F000756656E
+      810000009619E0BD01000000180000000500000000000300000081000756656E
       6461494404000100000000000B4E6F6D65436C69656E74650100490000000100
       055749445448020002006400094461746156656E646104000600000000000A56
-      616C6F72546F74616C08000400000000000000}
+      616C6F72546F74616C0800040000000000094944436C69656E74650400010000
+      0000000000}
     object cdsVendaClienteVendaID: TIntegerField
       FieldName = 'VendaID'
     end
@@ -327,6 +336,9 @@ object frmVendaPesq: TfrmVendaPesq
     end
     object cdsVendaClienteValorTotal: TFloatField
       FieldName = 'ValorTotal'
+    end
+    object cdsVendaClienteIDCliente: TIntegerField
+      FieldName = 'IDCliente'
     end
   end
 end
