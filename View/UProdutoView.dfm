@@ -394,6 +394,7 @@ object frmProduto: TfrmProduto
       CharCase = ecUpperCase
       MaxLength = 2
       TabOrder = 2
+      OnKeyPress = edtUnidadeKeyPress
     end
     object edtDescricao: TEdit
       Left = 232
@@ -403,6 +404,7 @@ object frmProduto: TfrmProduto
       CharCase = ecUpperCase
       MaxLength = 20
       TabOrder = 3
+      OnKeyPress = edtDescricaoKeyPress
     end
   end
 end

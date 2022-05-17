@@ -451,6 +451,7 @@ object frmClientes: TfrmClientes
       Height = 21
       CharCase = ecUpperCase
       TabOrder = 4
+      OnKeyPress = edtNomeKeyPress
     end
     object grbEndereco: TGroupBox
       Left = 24
@@ -542,37 +543,47 @@ object frmClientes: TfrmClientes
         Top = 21
         Width = 505
         Height = 21
+        CharCase = ecUpperCase
         MaxLength = 100
         TabOrder = 0
+        OnKeyPress = edtEnderecoKeyPress
       end
       object edtNumero: TEdit
         Left = 59
         Top = 49
         Width = 121
         Height = 21
+        CharCase = ecUpperCase
         TabOrder = 1
+        OnKeyPress = edtNumeroKeyPress
       end
       object edtComplemento: TEdit
         Left = 265
         Top = 48
         Width = 312
         Height = 21
+        CharCase = ecUpperCase
         TabOrder = 2
+        OnKeyPress = edtComplementoKeyPress
       end
       object edtBairro: TEdit
         Left = 47
         Top = 79
         Width = 530
         Height = 21
+        CharCase = ecUpperCase
         TabOrder = 3
+        OnKeyPress = edtBairroKeyPress
       end
       object cmbUF: TComboBox
         Left = 36
         Top = 106
         Width = 76
         Height = 21
+        CharCase = ecUpperCase
         ItemHeight = 13
         TabOrder = 4
+        OnKeyPress = cmbUFKeyPress
         Items.Strings = (
           'SP'
           'MG')
@@ -582,7 +593,9 @@ object frmClientes: TfrmClientes
         Top = 105
         Width = 417
         Height = 21
+        CharCase = ecUpperCase
         TabOrder = 5
+        OnKeyPress = edtCidadeKeyPress
       end
     end
   end

@@ -44,6 +44,8 @@ type
     procedure FormKeyUp(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure edtCodigoExit(Sender: TObject);
+    procedure edtUnidadeKeyPress(Sender: TObject; var Key: Char);
+    procedure edtDescricaoKeyPress(Sender: TObject; var Key: Char);
 //    procedure edtUnidadeChange(Sender: TObject);
   private
     { Private declarations }
@@ -646,6 +648,18 @@ begin
             e.Message);
       end;
    end;
+end;
+
+procedure TfrmProduto.edtUnidadeKeyPress(Sender: TObject; var Key: Char);
+begin
+   if not (Key in['a'..'z','A'..'Z',Chr(8),Chr(32)]) then
+      Key:= #0
+end;
+
+procedure TfrmProduto.edtDescricaoKeyPress(Sender: TObject; var Key: Char);
+begin
+   if not (Key in['a'..'z','A'..'Z',Chr(8),Chr(32)]) then
+      Key:= #0
 end;
 
 end.

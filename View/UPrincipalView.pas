@@ -111,7 +111,6 @@ end;
 procedure TfrmPrincipal.Unidade1Click(Sender: TObject);
 begin
    try
-
       Screen.Cursor := crHourGlass;
 
       if frmProduto  = nil then

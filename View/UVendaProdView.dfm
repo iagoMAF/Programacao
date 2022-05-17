@@ -471,6 +471,7 @@ object frmVendaProd: TfrmVendaProd
       Height = 21
       TabOrder = 1
       OnExit = edtNumeroClienteExit
+      OnKeyPress = edtNumeroClienteKeyPress
     end
     object edtNomeCliente: TEdit
       Left = 117

@@ -82,6 +82,8 @@ var
 
 implementation
 
+uses UCadProdutoPesqView;
+
 {$R *.dfm}
 
 
@@ -289,6 +291,34 @@ begin
          end;
       end;
 
+      etPesquisar:
+      begin
+         stbBarraStatus.Panels[0].Text := 'Pesquisa';
+
+            if (frmCadProdutoPesq = nil ) then
+                frmCadProdutoPesq := TfrmCadProdutoPesq.Create(Application);
+
+            frmCadProdutoPesq.ShowModal;
+
+            if (frmCadProdutoPesq.mProdutoID <> 0) then
+            begin
+               edtCodigo.Text := IntToStr(frmCadProdutoPesq.mProdutoID);
+               vEstadoTela    := etConsultar;
+               ProcessaConsulta;
+            end
+            else
+            begin
+               vEstadoTela := etPadrao;
+               DefineEstadoTela;
+            end;
+
+            frmCadProdutoPesq.mProdutoID        := 0;
+            frmCadProdutoPesq.mProdutoDescricao := EmptyStr;
+
+            if edtDescricao.CanFocus then
+               edtDescricao.SetFocus;
+      end;
+
    end;
 end;
 
@@ -318,7 +348,8 @@ end;
 
 procedure TfrmCadProduto.btnPesquisarClick(Sender: TObject);
 begin
-   //btnPesquisar
+   vEstadoTela := etPesquisar;
+   DefineEstadoTela;
 end;
 
 procedure TfrmCadProduto.btnConfirmarClick(Sender: TObject);

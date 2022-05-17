@@ -44,6 +44,7 @@ type
     procedure FormKeyUp(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure edtCodigoExit(Sender: TObject);
+//    procedure edtUnidadeChange(Sender: TObject);
   private
     { Private declarations }
     vKey : Word;
@@ -648,3 +649,9 @@ begin
 end;
 
 end.
+procedure TfrmProduto.edtUnidadeChange(Sender: TObject);
+begin
+
+end;
+
+

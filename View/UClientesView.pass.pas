@@ -1,4 +1,4 @@
-unit UClientesView.pass;                      
+unit UClientesView.pass;
 
 interface
 
@@ -75,6 +75,13 @@ type
     procedure rdgTipoPessoaClick(Sender: TObject);
    // procedure edtCPFCNPJChange(Sender: TObject);
     procedure edtCPFCNPJExit(Sender: TObject);
+    procedure edtNumeroKeyPress(Sender: TObject; var Key: Char);
+    procedure edtNomeKeyPress(Sender: TObject; var Key: Char);
+    procedure edtEnderecoKeyPress(Sender: TObject; var Key: Char);
+    procedure edtComplementoKeyPress(Sender: TObject; var Key: Char);
+    procedure edtBairroKeyPress(Sender: TObject; var Key: Char);
+    procedure edtCidadeKeyPress(Sender: TObject; var Key: Char);
+    procedure cmbUFKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
     vKey : Word;
@@ -106,6 +113,8 @@ type
     function  ValidaEndereco            : Boolean;
     function  ValidaCPF(CPF : string)   : Boolean;
     function  ValidaCNPJ(CNPJ : string) : Boolean;
+
+    function ValidateField(var Key: Char; TipoFiltro: Byte = 0) : Boolean;
 
   public
     { Public declarations }
@@ -1098,6 +1107,67 @@ begin
       Result := false
 
    end;
+end;
+
+function TfrmClientes.ValidateField(var Key: Char;
+  TipoFiltro: Byte): Boolean;
+function IsDigit(Key : Char) : Boolean;
+   begin
+      Result := (Key in ['0'..'9']);
+   end;
+begin
+   if not (Key in [#8, #37, #38, #39, #40, #46]) then
+   case TipoFiltro of
+
+      2 : if not (IsDigit(Key)) then Key := #0;
+
+   else
+        raise Exception.Create('Tipo de filtro inválido.');
+   end;
+   
+   Result := (not (Key = #0));
+end;
+
+procedure TfrmClientes.edtNumeroKeyPress(Sender: TObject; var Key: Char);
+begin
+   ValidateField(Key, 2);
+end;
+
+procedure TfrmClientes.edtNomeKeyPress(Sender: TObject; var Key: Char);
+begin
+   if not (Key in['a'..'z','A'..'Z',Chr(8),Chr(32)]) then
+      Key:= #0
+end;
+
+procedure TfrmClientes.edtEnderecoKeyPress(Sender: TObject; var Key: Char);
+begin
+   if not (Key in['a'..'z','A'..'Z',Chr(8),Chr(32)]) then
+      Key:= #0
+end;
+
+procedure TfrmClientes.edtComplementoKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+   if not (Key in['a'..'z','A'..'Z',Chr(8),Chr(32)]) then
+      Key:= #0
+end;
+
+procedure TfrmClientes.edtBairroKeyPress(Sender: TObject; var Key: Char);
+begin
+   if not (Key in['a'..'z','A'..'Z',Chr(8),Chr(32)]) then
+      Key:= #0
+end;
+
+procedure TfrmClientes.edtCidadeKeyPress(Sender: TObject; var Key: Char);
+begin
+   if not (Key in['a'..'z','A'..'Z',Chr(8),Chr(32)]) then
+      Key:= #0
+end;
+
+procedure TfrmClientes.cmbUFKeyPress(Sender: TObject; var Key: Char);
+begin
+   if not (Key in['a'..'z','A'..'Z',Chr(8),Chr(32)]) then
+      Key:= #0
 end;
 
 end.

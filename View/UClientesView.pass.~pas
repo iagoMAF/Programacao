@@ -1,4 +1,4 @@
-unit UClientesView.pass;                      
+unit UClientesView.pass;
 
 interface
 
@@ -75,6 +75,7 @@ type
     procedure rdgTipoPessoaClick(Sender: TObject);
    // procedure edtCPFCNPJChange(Sender: TObject);
     procedure edtCPFCNPJExit(Sender: TObject);
+    procedure edtNumeroKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
     vKey : Word;
@@ -106,6 +107,8 @@ type
     function  ValidaEndereco            : Boolean;
     function  ValidaCPF(CPF : string)   : Boolean;
     function  ValidaCNPJ(CNPJ : string) : Boolean;
+
+    function ValidateField(var Key: Char; TipoFiltro: Byte = 0) : Boolean;
 
   public
     { Public declarations }
@@ -709,12 +712,14 @@ begin
     begin
       for i := 0 to pred(vObjColEndereco.Count) do
       begin
+
         edtEndereco.Text    := vObjColEndereco.Retorna(i).Endereco;
         edtNumero.Text      := vObjColEndereco.Retorna(i).Numero;
         edtComplemento.Text := vObjColEndereco.Retorna(i).Complemento;
         edtBairro.Text      := vObjColEndereco.Retorna(i).Bairro;
         cmbUF.Text          := vObjColEndereco.Retorna(i).UF;
         edtCidade.Text      := vObjColEndereco.Retorna(i).Cidade;
+
       end;
     end;
 end;
@@ -1096,6 +1101,30 @@ begin
       Result := false
 
    end;
+end;
+
+function TfrmClientes.ValidateField(var Key: Char;
+  TipoFiltro: Byte): Boolean;
+function IsDigit(Key : Char) : Boolean;
+   begin
+      Result := (Key in ['0'..'9']);
+   end;
+begin
+   if not (Key in [#8, #37, #38, #39, #40, #46]) then
+   case TipoFiltro of
+
+      2 : if not (IsDigit(Key)) then Key := #0;
+
+   else
+        raise Exception.Create('Tipo de filtro inválido.');
+   end;
+   
+   Result := (not (Key = #0));
+end;
+
+procedure TfrmClientes.edtNumeroKeyPress(Sender: TObject; var Key: Char);
+begin
+   ValidateField(Key, 2);
 end;
 
 end.

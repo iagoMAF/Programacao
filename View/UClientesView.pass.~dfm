@@ -551,6 +551,7 @@ object frmClientes: TfrmClientes
         Width = 121
         Height = 21
         TabOrder = 1
+        OnKeyPress = edtNumeroKeyPress
       end
       object edtComplemento: TEdit
         Left = 265

@@ -68,6 +68,7 @@ type
       Shift: TShiftState);
     procedure dbgVendaColEnter(Sender: TObject);
     procedure dbgVendaEnter(Sender: TObject);
+    procedure edtNumeroClienteKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
 
@@ -102,6 +103,8 @@ type
     function  ValidaVenda           : Boolean;
     function  ProcessaConsulta      : Boolean;
     function  ProcessaConsultaVenda : Boolean;
+
+    function ValidateField(var Key: Char; TipoFiltro: Byte = 0) : Boolean;
 
     function  ValorTotalPreco      : Currency;
 
@@ -682,35 +685,35 @@ end;
 function TfrmVendaProd.ProcessaVenda: Boolean;
 begin
    try
-        Result := False;
-       if not ValidaVenda then
+      Result := False;
+      if not ValidaVenda then
+         Exit;
+      if vEstadoTela = etIncluir then
+      begin
+         if vObjVendaProd  = nil then
+            vObjVendaProd := TVendaProd.Create;
+      end
+      else
+      if vEstadoTela = etAlterar then
+      begin
+         if vObjVendaProd = nil then
             Exit;
-        if vEstadoTela = etIncluir then
-        begin
-            if vObjVendaProd  = nil then
-               vObjVendaProd := TVendaProd.Create;
-        end
-        else
-        if vEstadoTela = etAlterar then
-        begin
-            if vObjVendaProd = nil then
-                Exit;
-        end;
+      end;
 
-        if (vObjVendaProd = nil) then
-            Exit;
-        vObjVendaProd.DataVenda  := StrToDate(edtDataPedido.Text);
-        vObjVendaProd.TotalVenda := StrToFloat(edtValorTotal.Text);
-        vObjVendaProd.Id_Cliente := StrToInt(edtNumeroCliente.Text);
-        //vObjVendaProd. := StrToInt(edtEstoque.Text);
-        Result := True;
+      if (vObjVendaProd = nil) then
+         Exit;
+      vObjVendaProd.DataVenda  := StrToDate(edtDataPedido.Text);
+      vObjVendaProd.TotalVenda := StrToFloat(edtValorTotal.Text);
+      vObjVendaProd.Id_Cliente := StrToInt(edtNumeroCliente.Text);
+      //vObjVendaProd. := StrToInt(edtEstoque.Text);
+      Result := True;
    except
-    on E: Exception do
-        begin
-            Raise Exception.Create(
-              'Falha ao gravar os dados dessa Venda. [View]: '#13+
-              e.Message);
-        end;
+      on E: Exception do
+      begin
+         Raise Exception.Create(
+            'Falha ao gravar os dados dessa Venda. [View]: '#13+
+            e.Message);
+      end;
    end;
 end;
 
@@ -808,44 +811,44 @@ end;
 function TfrmVendaProd.ProcessaConsultaVenda: Boolean;
 begin
    try
-        Result := False;
-        if (edtNumeroPedido.Text = EmptyStr) then
-        begin
-            TMessageUtil.Alerta(
-               'Código do numero da venda não pode ficar em branco.');
-            if edtNumeroPedido.CanFocus then
-               edtNumeroPedido.SetFocus;
-            Exit;
-        end;
+      Result := False;
+      if (edtNumeroPedido.Text = EmptyStr) then
+      begin
+         TMessageUtil.Alerta(
+            'Código do numero da venda não pode ficar em branco.');
+         if edtNumeroPedido.CanFocus then
+            edtNumeroPedido.SetFocus;
+         Exit;
+      end;
 
-        vObjVendaProd    :=
-             TVendaProd(TVendaProdController.getInstancia.BuscaVendaProd(
-                  StrToIntDef(edtNumeroPedido.Text, 0)));
+      vObjVendaProd    :=
+         TVendaProd(TVendaProdController.getInstancia.BuscaVendaProd(
+            StrToIntDef(edtNumeroPedido.Text, 0)));
 
-        vObjColGridVenda :=
-             TVendaProdController.getInstancia.BuscaGridVenda(
-                  StrToIntDef(edtNumeroPedido.Text, 0));
+      vObjColGridVenda :=
+         TVendaProdController.getInstancia.BuscaGridVenda(
+            StrToIntDef(edtNumeroPedido.Text, 0));
 
-        if (vObjVendaProd <> nil) then
-            CarregaDadosTela
-        else
-        begin
-            TMessageUtil.Alerta(
-              'Nenhuma venda encontrada para o código informado.');
-            LimparTela;
-            if (edtNumeroPedido.CanFocus) then
-               (edtNumeroPedido.SetFocus);
-            Exit;
-        end;
-        DefineEstadoTela;
-        Result := True;
+      if (vObjVendaProd <> nil) then
+         CarregaDadosTela
+      else
+      begin
+         TMessageUtil.Alerta(
+            'Nenhuma venda encontrada para o código informado.');
+         LimparTela;
+         if (edtNumeroPedido.CanFocus) then
+            (edtNumeroPedido.SetFocus);
+         Exit;
+      end;
+      DefineEstadoTela;
+      Result := True;
    except
-        on E: Exception do
-        begin
-          raise Exception.Create(
-              'Falha ao consultar os dados da venda [View]. '#13+
-              e.Message);
-        end;
+      on E: Exception do
+      begin
+         raise Exception.Create(
+            'Falha ao consultar os dados da venda [View]. '#13+
+            e.Message);
+      end;
    end;
 end;
 
@@ -952,7 +955,30 @@ end;
 procedure TfrmVendaProd.CarregaValorTotalProduto;
 begin
    cdsVendaValorTotalProduto.Value :=
-          cdsVendaQuantidade.Value * cdsVendaPreco.Value;
+      cdsVendaQuantidade.Value * cdsVendaPreco.Value;
+end;
+
+function TfrmVendaProd.ValidateField(var Key: Char;
+  TipoFiltro: Byte): Boolean;
+
+function IsDigit(Key : Char) : Boolean;
+   begin
+      Result := (Key in ['0'..'9']);
+   end;
+begin
+   if not (Key in [#8, #37, #38, #39, #40, #46]) then
+   case TipoFiltro of
+      2 : if not (IsDigit(Key)) then Key := #0;
+   else
+        raise Exception.Create('Tipo de filtro inválido.');
+   end;
+   Result := (not (Key = #0));
+end;
+
+procedure TfrmVendaProd.edtNumeroClienteKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+   ValidateField(Key, 2);
 end;
 
 end.

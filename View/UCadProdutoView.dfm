@@ -414,6 +414,7 @@ object frmCadProduto: TfrmCadProduto
       Height = 21
       CharCase = ecUpperCase
       TabOrder = 1
+      OnKeyPress = edtDescricaoKeyPress
     end
     object edtPreco: TNumEdit
       Left = 88
