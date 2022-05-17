@@ -338,6 +338,7 @@ object frmVendaPesq: TfrmVendaPesq
     end
     object cdsVendaClienteValorTotal: TFloatField
       FieldName = 'ValorTotal'
+      DisplayFormat = '#0.00'
     end
     object cdsVendaClienteIDCliente: TIntegerField
       FieldName = 'IDCliente'

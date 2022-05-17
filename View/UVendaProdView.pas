@@ -42,6 +42,7 @@ type
     Label2: TLabel;
     edtDataPedido: TEdit;
     SpeedButton1: TSpeedButton;
+    cdsVendaValorTotalProduto: TFloatField;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -65,6 +66,8 @@ type
     procedure btnConsultarExit(Sender: TObject);
     procedure dbgVendaKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure dbgVendaColEnter(Sender: TObject);
+    procedure dbgVendaEnter(Sender: TObject);
   private
     { Private declarations }
 
@@ -82,6 +85,8 @@ type
     procedure DefineEstadoTela;
     procedure CarregaDadosCliente;
     procedure CarregaDadosTela;
+
+    procedure CarregaValorTotalProduto;
 
     //Parte da pesquisa
     procedure ProcessaConfirmacaoPesq;
@@ -228,6 +233,9 @@ begin
          edtDataPedido.Text      := DateToStr(Date);
          CamposEnabled(True);
          dbgVenda.Enabled        := True;
+
+         //dbgVenda.Columns[0].ReadOnly := True;
+
          edtNumeroPedido.Enabled := False;
          edtDataPedido.Enabled   := False;
          edtValorTotal.Enabled   := False;
@@ -243,6 +251,9 @@ begin
          stbBarraStatus.Panels[0].Text := 'Alteração';
          edtDataPedido.Text     := DateToStr(Date);
          dbgVenda.Enabled       := True;
+
+         //dbgVenda.Columns[1].ReadOnly := False;
+
          btnMaisProduto.Enabled := True;
          edtDataPedido.Enabled  := False;
 
@@ -272,7 +283,9 @@ begin
 
       etPesquisar:
       begin
+
          stbBarraStatus.Panels[0].Text := 'Pesquisa';
+         dbgVenda.Enabled := False;
          edtDataPedido.Text := DateToStr(Date);
 
          if (frmVendaPesq = nil) then
@@ -299,13 +312,18 @@ begin
          frmVendaPesq.mValorTotal := 0;
          frmVendaPesq.mDataVenda := 0;
 
+
       end;
 
       etConsultar:
       begin
          stbBarraStatus.Panels[0].Text := 'Consulta';
          edtDataPedido.Text := DateToStr(Date);
+
          dbgVenda.Enabled := False;
+
+         //dbgVenda.Columns[1].ReadOnly := False;
+
          CamposEnabled(False);
 
          if (edtNumeroPedido.Text <> EmptyStr) then
@@ -345,6 +363,7 @@ procedure TfrmVendaProd.btnConsultarClick(Sender: TObject);
 begin
    vEstadoTela := etConsultar;
    DefineEstadoTela;
+
 end;
 
 procedure TfrmVendaProd.btnPesquisarClick(Sender: TObject);
@@ -516,6 +535,12 @@ end;
 procedure TfrmVendaProd.dbgVendaExit(Sender: TObject);
 begin
    //ProcessaConfirmacaoPesq;
+
+   cdsVendaValorTotalProduto.Value :=
+          cdsVendaQuantidade.Value * cdsVendaPreco.Value;
+
+   ValorTotalPreco;
+
 end;
 
 function TfrmVendaProd.DadosProduto: Boolean;
@@ -539,6 +564,9 @@ begin
       cdsVendaDescricao.Text   := frmCadProdutoPesq.mProdutoDescricao;
       cdsVendaQuantidade.Value := 1;
       cdsVendaPreco.Value      := frmCadProdutoPesq.mProdutoPreco;
+      cdsVendaValorTotalProduto.Value :=
+          cdsVendaQuantidade.Value * cdsVendaPreco.Value;
+
       cdsVenda.Post;
 
 //      PrimeiroNumero := StrToFloat(dbgVenda.columns.items[3].field.text);
@@ -578,6 +606,13 @@ begin
       cdsVendaDescricao.Text   := frmCadProdutoPesq.mProdutoDescricao;
       cdsVendaQuantidade.Value := 1;
       cdsVendaPreco.Value      := frmCadProdutoPesq.mProdutoPreco;
+
+      //cdsVendaValorTotalProduto.Value := 1;
+
+
+      cdsVendaValorTotalProduto.Value :=
+          cdsVendaQuantidade.Value * cdsVendaPreco.Value;
+
 
       cdsVenda.Post;
 //      PrimeiroNumero := StrToFloat(dbgVenda.columns.items[3].field.text);
@@ -702,6 +737,10 @@ begin
          cdsVendaDescricao.Text   := vObjColGridVenda.Retorna(i).Descricao;
          cdsVendaQuantidade.Value := vObjColGridVenda.Retorna(i).Quantidade;
 
+         //cdsVendaValorTotalProduto.Value := vObjColGridVenda.Retorna(i).ValorTotalProduto;
+
+         CarregaValorTotalProduto;
+
          ProcessaConsulta;
 
          cdsVenda.Append;
@@ -750,6 +789,8 @@ begin
          xGridVenda.Descricao     := cdsVendaDescricao.Text;
          xGridVenda.Quantidade    := cdsVendaQuantidade.Value;
          xGridVenda.ValorUnitario := cdsVendaPreco.Value;
+         //xGridVenda.ValorTotalProduto := cdsVendaValorTotalProduto.Value;
+
          vObjColGridVenda.Add(xGridVenda);
          cdsVenda.Next;
       end;
@@ -848,7 +889,7 @@ begin
       cdsVenda.First;
       while not cdsVenda.EOF do
       begin
-         xTotal := xTotal + cdsVenda.FieldByName('Preco').AsCurrency;
+         xTotal := xTotal + cdsVenda.FieldByName('ValorTotalProduto').AsCurrency;
          cdsVenda.Next;
       end;
       cdsVenda.RecNo     := xPosic;
@@ -889,6 +930,29 @@ begin
          begin
             cdsVenda.Delete;
          end;
+end;
+
+procedure TfrmVendaProd.dbgVendaColEnter(Sender: TObject);
+begin
+//   dbgVenda.Columns[0].ReadOnly := True;
+//   dbgVenda.Columns[1].ReadOnly := True;
+//   dbgVenda.Columns[3].ReadOnly := True;
+//   dbgVenda.Columns[4].ReadOnly := True;
+end;
+
+procedure TfrmVendaProd.dbgVendaEnter(Sender: TObject);
+begin
+   cdsVenda.Edit;
+   dbgVenda.Columns[0].ReadOnly := True;
+   dbgVenda.Columns[1].ReadOnly := True;
+   dbgVenda.Columns[3].ReadOnly := True;
+   dbgVenda.Columns[4].ReadOnly := True;
+end;
+
+procedure TfrmVendaProd.CarregaValorTotalProduto;
+begin
+   cdsVendaValorTotalProduto.Value :=
+          cdsVendaQuantidade.Value * cdsVendaPreco.Value;
 end;
 
 end.

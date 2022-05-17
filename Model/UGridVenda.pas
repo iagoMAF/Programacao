@@ -13,6 +13,7 @@ type
          vDescricao     : String;
          vValorUnitario : Double;
          vQuantidade    : Integer;
+        // vValorTotalProduto : Double;
 
     public
       constructor Create;
@@ -24,6 +25,7 @@ type
       property Descricao     : String  read vDescricao  write vDescricao;
       property Quantidade    : Integer read vQuantidade write vQuantidade;
       property ValorUnitario : Double  read vValorUnitario write vValorUnitario;
+     // property ValorTotalProduto : Double read vValorTotalProduto write vValorTotalProduto;
 
    end;
 
