@@ -14,6 +14,7 @@ object frmVendaPesq: TfrmVendaPesq
   OldCreateOrder = False
   Position = poDesktopCenter
   OnKeyDown = FormKeyDown
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object StatusBar1: TStatusBar
@@ -238,6 +239,7 @@ object frmVendaPesq: TfrmVendaPesq
         Width = 689
         Height = 145
         DataSource = dtsVendaCliente
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgMultiSelect]
         TabOrder = 0
         TitleFont.Charset = DEFAULT_CHARSET
         TitleFont.Color = clWindowText
@@ -336,6 +338,7 @@ object frmVendaPesq: TfrmVendaPesq
     end
     object cdsVendaClienteValorTotal: TFloatField
       FieldName = 'ValorTotal'
+      DisplayFormat = '#0.00'
     end
     object cdsVendaClienteIDCliente: TIntegerField
       FieldName = 'IDCliente'

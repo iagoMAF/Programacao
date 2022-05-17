@@ -172,7 +172,7 @@ begin
 
                cdsCadProduto.Post;
 
-            end;                                                   ,
+            end;
          end;
 
          if (cdsCadProduto.RecordCount = 0) then

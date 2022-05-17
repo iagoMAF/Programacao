@@ -63,6 +63,8 @@ type
     procedure cdsVendaAfterDelete(DataSet: TDataSet);
     procedure SpeedButton1Click(Sender: TObject);
     procedure btnConsultarExit(Sender: TObject);
+    procedure dbgVendaKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
     { Private declarations }
 
@@ -866,16 +868,27 @@ procedure TfrmVendaProd.SpeedButton1Click(Sender: TObject);
 begin
    TMessageUtil.Informacao(
    'Para deletar um produto da venda, basta selecionar a linha do produto e '#13+
-   'utilizar as teclas Ctrl + Shift + Del  ao mesmo tempo.'#13+
+   'utilizar a tecla "DELETE".'#13+
    'Essa função de deletar um produto, serve no modo de inclusão ou no de   '#13+
    'alteração das vendas.                                                   '#13+
-   'Lembrando que essa ação é irreversível.');
+   'Lembrando que essa ação é irreversível caso salve a alteração.');
 end;
 
 procedure TfrmVendaProd.btnConsultarExit(Sender: TObject);
 begin
    if btnAlterar.CanFocus then
       btnAlterar.SetFocus;
+end;
+
+procedure TfrmVendaProd.dbgVendaKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+   if key = VK_DELETE then
+      if (TMessageUtil.Pergunta(
+         'Deseja realmente excluir esse produto da venda? '))then
+         begin
+            cdsVenda.Delete;
+         end;
 end;
 
 end.

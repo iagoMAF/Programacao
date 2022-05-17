@@ -41,6 +41,7 @@ type
     procedure dbgVendaClienteDblClick(Sender: TObject);
     procedure dbgVendaClienteKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
 
@@ -164,7 +165,6 @@ begin
                cdsVendaCliente.Append;
 
                cdsVendaClienteVendaID.Value := xListaVendaProd.Retorna(xAux).Id;
-              // cdsVendaClienteNomeCliente.Text  := xListaVendaProd.Retorna(xAux).Nome;
 
               cdsVendaClienteIDCliente.Value :=
                   xListaVendaProd.Retorna(xAux).Id_Cliente;
@@ -172,7 +172,6 @@ begin
                vObjCliente :=
                   TCliente(TPessoaController.getInstancia.BuscaPessoa(
                   StrToIntDef(cdsVendaClienteIDCliente.Text, 0)));
-
 
                if (vObjCliente <> nil) then
                   cdsVendaClienteNomeCliente.Text := vObjCliente.Nome;
@@ -285,6 +284,11 @@ begin
 
    CarregaNomeClienteGrid;
 
+end;
+
+procedure TfrmVendaPesq.FormShow(Sender: TObject);
+begin
+   LimparTela;
 end;
 
 end.

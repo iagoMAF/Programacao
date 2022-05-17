@@ -1,6 +1,6 @@
 object frmVendaProd: TfrmVendaProd
-  Left = 921
-  Top = 195
+  Left = 609
+  Top = 183
   Width = 597
   Height = 486
   Caption = 'Venda'
@@ -499,6 +499,7 @@ object frmVendaProd: TfrmVendaProd
         TitleFont.Height = -11
         TitleFont.Name = 'MS Sans Serif'
         TitleFont.Style = []
+        OnKeyDown = dbgVendaKeyDown
         OnKeyPress = dbgVendaKeyPress
         Columns = <
           item
@@ -615,6 +616,7 @@ object frmVendaProd: TfrmVendaProd
     object cdsVendaPreco: TFloatField
       DisplayWidth = 12
       FieldName = 'Preco'
+      DisplayFormat = '#0.00'
     end
   end
 end

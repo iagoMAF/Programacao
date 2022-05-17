@@ -234,6 +234,7 @@ object frmCadProdutoPesq: TfrmCadProdutoPesq
         Width = 657
         Height = 137
         DataSource = dtsCadProduto
+        Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect]
         TabOrder = 0
         TitleFont.Charset = DEFAULT_CHARSET
         TitleFont.Color = clWindowText
@@ -306,6 +307,7 @@ object frmCadProdutoPesq: TfrmCadProdutoPesq
     object cdsCadProdutoPreco: TFloatField
       DisplayWidth = 19
       FieldName = 'Preco'
+      DisplayFormat = '#0.00'
     end
   end
 end
