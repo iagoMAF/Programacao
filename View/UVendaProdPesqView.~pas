@@ -283,7 +283,6 @@ begin
             StrToIntDef(cdsVendaClienteIDCliente.Text, 0)));
 
    CarregaNomeClienteGrid;
-
 end;
 
 procedure TfrmVendaPesq.FormShow(Sender: TObject);

@@ -52,7 +52,6 @@ type
    procedure LimparTela;
    procedure ProcessaConfirmacao;
    procedure ProcessaPesquisa;
-
    procedure CarregaNomeClienteGrid;
    procedure ProcessaConsultaCliente;
 
@@ -109,11 +108,11 @@ begin
          (Components[i] as TEdit).Text := EmptyStr;
    end;
 
-    if (not cdsVendaCliente.IsEmpty) then
-       (cdsVendaCliente.EmptyDataSet);
+   if (not cdsVendaCliente.IsEmpty) then
+      (cdsVendaCliente.EmptyDataSet);
 
-    if (edtCodigoVenda.CanFocus) then
-       (edtCodigoVenda.SetFocus);
+   if (edtCodigoVenda.CanFocus) then
+      (edtCodigoVenda.SetFocus);
 end;
 
 procedure TfrmVendaPesq.ProcessaConfirmacao;
@@ -182,7 +181,6 @@ begin
                   xListaVendaProd.Retorna(xAux).TotalVenda;
 
                cdsVendaCliente.Post;
-
             end;
          end;
 
@@ -198,7 +196,6 @@ begin
             if dbgVendaCliente.CanFocus then
                dbgVendaCliente.SetFocus;
          end;
-
       finally
          if (xListaVendaProd <> nil) then
             FreeAndNil(xListaVendaProd);
@@ -263,15 +260,14 @@ procedure TfrmVendaPesq.dbgVendaClienteKeyDown(Sender: TObject;
   var Key: Word; Shift: TShiftState);
 begin
    if (Key =  VK_RETURN) and
-       (btnConfirmar.CanFocus) then
-       (btnConfirmar.SetFocus);
+      (btnConfirmar.CanFocus) then
+      (btnConfirmar.SetFocus);
 end;
 
 procedure TfrmVendaPesq.CarregaNomeClienteGrid;
 begin
    if (vObjCliente = nil) then
       Exit;
-
    //edtNumeroCliente.Text             := IntToStr(vObjCliente.Id);
    cdsVendaClienteNomeCliente.Text   := vObjCliente.Nome;
 end;
@@ -279,9 +275,8 @@ end;
 procedure TfrmVendaPesq.ProcessaConsultaCliente;
 begin
    vObjCliente :=
-         TCliente(TPessoaController.getInstancia.BuscaPessoa(
-            StrToIntDef(cdsVendaClienteIDCliente.Text, 0)));
-
+      TCliente(TPessoaController.getInstancia.BuscaPessoa(
+         StrToIntDef(cdsVendaClienteIDCliente.Text, 0)));
    CarregaNomeClienteGrid;
 end;
 

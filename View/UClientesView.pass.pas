@@ -240,89 +240,90 @@ end;
 
 Procedure TfrmClientes.DefineEstadoTela;
 begin
-      btnIncluir.Enabled     := (vEstadoTela in [etPadrao]);
-      btnAlterar.Enabled     := (vEstadoTela in [etPadrao]);
-      btnExcluir.Enabled     := (vEstadoTela in [etPadrao]);
-      btnConsultar.Enabled   := (vEstadoTela in [etPadrao]);
-      btnListar.Enabled      := (vEstadoTela in [etPadrao]);
-      btnPesquisar.Enabled   := (vEstadoTela in [etPadrao]);
+   btnIncluir.Enabled     := (vEstadoTela in [etPadrao]);
+   btnAlterar.Enabled     := (vEstadoTela in [etPadrao]);
+   btnExcluir.Enabled     := (vEstadoTela in [etPadrao]);
+   btnConsultar.Enabled   := (vEstadoTela in [etPadrao]);
+   btnListar.Enabled      := (vEstadoTela in [etPadrao]);
+   btnPesquisar.Enabled   := (vEstadoTela in [etPadrao]);
 
-      btnConfirmar.Enabled :=
-        vEstadoTela in [etIncluir, etAlterar, etExcluir, etConsultar];
+   btnConfirmar.Enabled :=
+      vEstadoTela in [etIncluir, etAlterar, etExcluir, etConsultar];
 
-      btnCancelar.Enabled :=
-        vEstadoTela in [etIncluir, etAlterar, etExcluir, etConsultar];
+   btnCancelar.Enabled :=
+      vEstadoTela in [etIncluir, etAlterar, etExcluir, etConsultar];
 
-      case vEstadoTela of
-          etPadrao:
-          begin
-            CamposEnabled(False);
-            LimpaTela;
+   case vEstadoTela of
+      etPadrao:
+      begin
+         CamposEnabled(False);
+         LimpaTela;
 
-            stbBarraStatus.Panels[0].Text := EmptyStr;
-            stbBarraStatus.Panels[1].Text := EmptyStr;
+         stbBarraStatus.Panels[0].Text := EmptyStr;
+         stbBarraStatus.Panels[1].Text := EmptyStr;
 
-            if (frmClientes <> nil) and
-               (frmClientes.Active) and
-               (btnIncluir.CanFocus) then
-               btnIncluir.SetFocus;
+         if (frmClientes <> nil) and
+            (frmClientes.Active) and
+            (btnIncluir.CanFocus) then
+            btnIncluir.SetFocus;
 
-            Application.ProcessMessages;
-          end;
+         Application.ProcessMessages;
+      end;
 
-          etIncluir:
-          begin
-            stbBarraStatus.Panels[0].Text := 'Inclusão';
+      etIncluir:
+      begin
+         stbBarraStatus.Panels[0].Text := 'Inclusão';
+         CamposEnabled(True);
+
+         edtCodigo.Enabled := False;
+
+         chkAtivo.Checked := True;
+
+         if edtNome.CanFocus then
+         edtNome.SetFocus;
+      end;
+
+      etAlterar:
+      begin
+         stbBarraStatus.Panels[0].Text := 'Alteração';
+
+         if (edtCodigo.Text <> EmptyStr) then
+         begin
             CamposEnabled(True);
 
-            edtCodigo.Enabled := False;
+            edtCodigo.Enabled    := False;
+            btnAlterar.Enabled   := False;
+            btnConfirmar.Enabled := True;
 
-            chkAtivo.Checked := True;
+            if (chkAtivo.CanFocus) then
+               chkAtivo.SetFocus;
+         end
+         else
+         begin
+            lblCodigo.Enabled := True;
+            edtCodigo.Enabled := True;
 
-            if edtNome.CanFocus then
-            edtNome.SetFocus;
-          end;
+            if (edtCodigo.CanFocus) then
+               edtCodigo.SetFocus;
 
-          etAlterar:
-          begin
-            stbBarraStatus.Panels[0].Text := 'Alteração';
+         end;
+      end;
 
-            if (edtCodigo.Text <> EmptyStr) then
-            begin
-              CamposEnabled(True);
+      etExcluir:
+      begin
+         stbBarraStatus.Panels[0].Text := 'Exclusão';
 
-              edtCodigo.Enabled    := False;
-              btnAlterar.Enabled   := False;
-              btnConfirmar.Enabled := True;
+         if (edtCodigo.Text <> EmptyStr) then
+            ProcessaExclusao
+         else
+         begin
+            lblCodigo.Enabled := True;
+            edtCodigo.Enabled := True;
 
-              if (chkAtivo.CanFocus) then
-                  chkAtivo.SetFocus;
-            end
-            else
-            begin
-                lblCodigo.Enabled := True;
-                edtCodigo.Enabled := True;
-
-              if (edtCodigo.CanFocus) then
-                  edtCodigo.SetFocus;
-
-            end;
-          end;
-
-          etExcluir:
-          begin
-            stbBarraStatus.Panels[0].Text := 'Exclusão';
-
-            if (edtCodigo.Text <> EmptyStr) then
-                ProcessaExclusao
-            else
-            begin
-                lblCodigo.Enabled := True;
-                edtCodigo.Enabled := True;
-                if (edtCodigo.CanFocus) then
-                    edtCodigo.SetFocus;
-            end;
-          end;
+            if (edtCodigo.CanFocus) then
+               edtCodigo.SetFocus;
+         end;
+      end;
 
           etConsultar:
           begin
@@ -421,44 +422,44 @@ end;
 
 procedure TfrmClientes.btnConsultarClick(Sender: TObject);
 begin
-    vEstadoTela := etConsultar;
-    DefineEstadoTela;
+   vEstadoTela := etConsultar;
+   DefineEstadoTela;
 end;
 
 procedure TfrmClientes.btnListarClick(Sender: TObject);
 begin
-    vEstadoTela := etListar;
-    DefineEstadoTela;
+   vEstadoTela := etListar;
+   DefineEstadoTela;
 end;
 
 procedure TfrmClientes.btnPesquisarClick(Sender: TObject);
 begin
-    vEstadoTela := etPesquisar;
-    DefineEstadoTela;
+   vEstadoTela := etPesquisar;
+   DefineEstadoTela;
 end;
 
 procedure TfrmClientes.btnConfirmarClick(Sender: TObject);
 begin
-    ProcessaConfirmacao;
+   ProcessaConfirmacao;
 end;
 
 procedure TfrmClientes.btnCancelarClick(Sender: TObject);
 begin
-    vEstadoTela := etPadrao;
-    DefineEstadoTela;
+   vEstadoTela := etPadrao;
+   DefineEstadoTela;
 end;
 
 procedure TfrmClientes.btnSairClick(Sender: TObject);
 begin
-    if (vEstadoTela <> etPadrao) then
-    begin
-        if (TMessageUtil.Pergunta('Deseja realmente fechar essa tela?')) then
-        begin
-          vEstadoTela := etPadrao;
-          DefineEstadoTela;
-        end;
-    end
-    else
+   if (vEstadoTela <> etPadrao) then
+   begin
+      if (TMessageUtil.Pergunta('Deseja realmente fechar essa tela?')) then
+      begin
+         vEstadoTela := etPadrao;
+         DefineEstadoTela;
+      end;
+   end
+   else
       Close;
 end;
 
@@ -481,76 +482,71 @@ end;
 
 function TfrmClientes.ProcessaConfirmacao: Boolean;
 begin
-    Result := False;
-
-    try
+   Result := False;
+   try
       case vEstadoTela of
-          etIncluir   : Result    := ProcessaInclusao;
-          etAlterar   : Result    := ProcessaAlteracao;
-          etExcluir   : Result    := ProcessaExclusao;
-          etConsultar : Result    := ProcessaConsulta;
+         etIncluir   : Result    := ProcessaInclusao;
+         etAlterar   : Result    := ProcessaAlteracao;
+         etExcluir   : Result    := ProcessaExclusao;
+         etConsultar : Result    := ProcessaConsulta;
       end;
-
       if not Result then
-        Exit;
-    except
+         Exit;
+   except
       on E: Exception do
-        TMessageUtil.Alerta(E.Message);
-    end;
-    Result := True;
+         TMessageUtil.Alerta(E.Message);
+   end;
+   Result := True;
 end;
 
 function TfrmClientes.ProcessaInclusao: Boolean;
 begin
-    try
-        Result := False;
-
-        if ProcessaCliente then
-        begin
-          TMessageUtil.Informacao('Cliente cadastrado com sucesso.'#13+
+   try
+      Result := False;
+      if ProcessaCliente then
+      begin
+         TMessageUtil.Informacao('Cliente cadastrado com sucesso.'#13+
             'Código cadastrado: '+ IntToStr(vObjCliente.Id));
-
-            vEstadoTela := etPadrao;
-            DefineEstadoTela;
-
-            Result := True;
-        end;
-    except
+         vEstadoTela := etPadrao;
+         DefineEstadoTela;
+         Result := True;
+      end;
+   except
       on E: Exception do
       begin
           Raise Exception.Create(
             'Falha ao incluir os dados do cliente [View]: '#13+
             e.Message);
       end;
-    end;
+   end;
 end;
 
 function TfrmClientes.ProcessaCliente: Boolean;
 begin
-  try
-    Result := False;
-    if (ProcessaPessoa) and
-       (ProcessaEndereco) then
-    begin
+   try
+      Result := False;
+      if (ProcessaPessoa) and
+         (ProcessaEndereco) then
+      begin
         // Gravação no Banco de dados
-        TPessoaController.getInstancia.GravaPessoa(
+         TPessoaController.getInstancia.GravaPessoa(
             vObjCliente, vObjColEndereco);
 
-        Result := True;
-    end;
-  except
+         Result := True;
+      end;
+   except
       on E : Exception do
       begin
-        Raise Exception.Create(
-          'Falha ao gravar os dados do cliente [View]. '#13+
-          e.Message);
+         Raise Exception.Create(
+            'Falha ao gravar os dados do cliente [View]. '#13+
+            e.Message);
       end;
-  end;
+   end;
 end;
 
 function TfrmClientes.ProcessaPessoa: Boolean;
 begin
-    try
+   try
       Result := False;
 
       if not ValidaCliente then
@@ -558,34 +554,33 @@ begin
 
       if vEstadoTela = etIncluir then
       begin
-          if vObjCliente = nil  then
-             vObjCliente := TCliente.Create;
+         if vObjCliente = nil  then
+            vObjCliente := TCliente.Create;
       end
       else
       if vEstadoTeLa = etAlterar then
       begin
-          if vObjCliente = nil then
-             Exit;
+         if vObjCliente = nil then
+            Exit;
       end;
 
       if (vObjCliente = nil) then
-             Exit;
+         Exit;
 
       vObjCliente.Tipo_Pessoa         := 0; //Cliente
       vObjCliente.Nome                := edtNome.Text;
       vObjCliente.Fisica_Juridica     := rdgTipoPessoa.ItemIndex;
       vObjCliente.Ativo               := chkAtivo.Checked;
       vObjCliente.IdentificadorPessoa := edtCPFCNPJ.Text;
-
       Result := True;
-    except
+   except
       on E: Exception do
       begin
         Raise Exception.Create(
           'Falha ao processar os dados da pessoas [View] '#13+
           e.Message);
       end;
-    end;
+   end;
 end;
 
 function TfrmClientes.ProcessaEndereco: Boolean;
@@ -593,7 +588,7 @@ var
   xEndereco  : TEndereco;
   xID_Pessoa : Integer;
 begin
-  try
+   try
       Result := False;
 
       xEndereco  := nil;
@@ -622,32 +617,29 @@ begin
       xEndereco.Cidade        := edtCidade.Text;
 
       vObjColEndereco.Add(xEndereco);
-
       Result := True;
-  except
-    on E : Exception do
-    begin
-      Raise Exception.Create(
-      'Falha ao preencher os dados de endereço [View]. '#13+
-      e.Message);
-    end;
-  end;
+
+   except
+      on E : Exception do
+      begin
+         Raise Exception.Create(
+         'Falha ao preencher os dados de endereço [View]. '#13+
+         e.Message);
+      end;
+   end;
 end;
 
 function TfrmClientes.ValidaCliente: Boolean;
 begin
-    Result := False;
-
-    if (edtNome.Text = EmptyStr) then
-    begin
-        TMessageUtil.Alerta('Nome do Cliente não pode ficar em branco.');
-
-        if edtNome.CanFocus then
-           edtNome.SetFocus;
-        Exit;
-    end;
-
-    Result := True;
+   Result := False;
+   if (edtNome.Text = EmptyStr) then
+   begin
+      TMessageUtil.Alerta('Nome do Cliente não pode ficar em branco.');
+      if edtNome.CanFocus then
+         edtNome.SetFocus;
+      Exit;
+   end;
+   Result := True;
 end;
 
 function TfrmClientes.ProcessaConsulta: Boolean;
@@ -705,53 +697,49 @@ procedure TfrmClientes.CarregaDadosTela;
 var
   i : Integer;
 begin
-    if (vObjCliente = nil) then
+   if (vObjCliente = nil) then
       Exit;
 
-    edtCodigo.Text            := IntToStr(vObjCliente.Id);
-    rdgTipoPessoa.ItemIndex   := vObjCliente.Fisica_Juridica;
-    edtNome.Text              := vObjCliente.Nome;
-    chkAtivo.Checked          := vObjCliente.Ativo;
-    edtCPFCNPJ.Text           := vObjCliente.IdentificadorPessoa;
+   edtCodigo.Text            := IntToStr(vObjCliente.Id);
+   rdgTipoPessoa.ItemIndex   := vObjCliente.Fisica_Juridica;
+   edtNome.Text              := vObjCliente.Nome;
+   chkAtivo.Checked          := vObjCliente.Ativo;
+   edtCPFCNPJ.Text           := vObjCliente.IdentificadorPessoa;
 
-    if (vObjColEndereco <> nil) then
-    begin
+   if (vObjColEndereco <> nil) then
+   begin
       for i := 0 to pred(vObjColEndereco.Count) do
       begin
-
-        edtEndereco.Text    := vObjColEndereco.Retorna(i).Endereco;
-        edtNumero.Text      := vObjColEndereco.Retorna(i).Numero;
-        edtComplemento.Text := vObjColEndereco.Retorna(i).Complemento;
-        edtBairro.Text      := vObjColEndereco.Retorna(i).Bairro;
-        cmbUF.Text          := vObjColEndereco.Retorna(i).UF;
-        edtCidade.Text      := vObjColEndereco.Retorna(i).Cidade;
-
+         edtEndereco.Text    := vObjColEndereco.Retorna(i).Endereco;
+         edtNumero.Text      := vObjColEndereco.Retorna(i).Numero;
+         edtComplemento.Text := vObjColEndereco.Retorna(i).Complemento;
+         edtBairro.Text      := vObjColEndereco.Retorna(i).Bairro;
+         cmbUF.Text          := vObjColEndereco.Retorna(i).UF;
+         edtCidade.Text      := vObjColEndereco.Retorna(i).Cidade;
       end;
-    end;
+   end;
 end;
 
 function TfrmClientes.ProcessaAlteracao: Boolean;
 begin
-    try
-        Result := False;
+   try
+      Result := False;
+      if ProcessaCliente then
+      begin
+         TMessageUtil.Informacao('Dados alterados com sucesso.');
+         vEstadoTela := etPadrao;
+         DefineEstadoTela;
+         Result := True;
+      end;
 
-        if ProcessaCliente then
-        begin
-           TMessageUtil.Informacao('Dados alterados com sucesso.');
-
-           vEstadoTela := etPadrao;
-           DefineEstadoTela;
-           Result := True;
-        end;
-
-    except
-        on E: Exception do
-        begin
-          raise Exception.Create(
-              'Falha ao alterar os dados do cliente [View]: '#13+
-              e.Message);
-        end;
-    end;
+   except
+      on E: Exception do
+      begin
+         raise Exception.Create(
+            'Falha ao alterar os dados do cliente [View]: '#13+
+            e.Message);
+      end;
+   end;
 end;
 
 procedure TfrmClientes.edtCodigoExit(Sender: TObject);
@@ -850,28 +838,28 @@ begin
         end;
     end;
 
-    if (Trim(cmbUF.Text) =  EmptyStr) then
-    begin
-        TMessageUtil.Alerta(
-          'UF não pode ficar em branco. ');
+   if (Trim(cmbUF.Text) =  EmptyStr) then
+   begin
+      TMessageUtil.Alerta(
+         'UF não pode ficar em branco. ');
 
-        if (cmbUF.CanFocus)then
-        begin
-            cmbUF.SetFocus;
-        Exit;
-        end;
-    end;
+      if (cmbUF.CanFocus)then
+      begin
+         cmbUF.SetFocus;
+         Exit;
+      end;
+   end;
 
     if (Trim(edtCidade.Text) = EmptyStr) then
     begin
-        TMessageUtil.Alerta(
-        'Cidade não pode ficar em branco');
+      TMessageUtil.Alerta(
+         'Cidade não pode ficar em branco');
 
-        if (edtCidade.CanFocus) then
-        begin
-            edtCidade.SetFocus;
-        Exit;
-        end;
+      if (edtCidade.CanFocus) then
+      begin
+         edtCidade.SetFocus;
+      Exit;
+      end;
     end;
 
     Result := True;
@@ -879,21 +867,21 @@ end;
 
 procedure TfrmClientes.rdgTipoPessoaClick(Sender: TObject);
 begin
-    if rdgTipoPessoa.ItemIndex = 1 then
-    begin
+   if rdgTipoPessoa.ItemIndex = 1 then
+   begin
       edtCPFCNPJ.Clear;
       edtCPFCNPJ.EditMask := '00\.000\.000\/0000\-00;1;_'
-    end
-    else
-    begin
+   end
+   else
+   begin
       edtCPFCNPJ.Clear;
       edtCPFCNPJ.EditMask := '000\.000\.000\-00;1;_';
-    end;
+   end;
 end;
 
 function TfrmClientes.ProcessaListagem: Boolean;
 begin
-    try
+   try
       if (not cdsCliente.Active) then
         Exit;
 
@@ -915,11 +903,11 @@ begin
         QuotedStr('Nome da empresa');
       frxListagemCliente.ShowReport();
 
-    finally
+   finally
       vEstadoTela := etPadrao;
       DefineEstadoTela;
       cdsCliente.EmptyDataSet;
-    end;
+   end;
 end;
 
 
@@ -927,7 +915,6 @@ function TfrmClientes.ValidaCPF(CPF: string): Boolean;
 var xDigito10, xDigito11, xAux : string;
     xS, i, xR, xPeso  : Integer;
 begin
-
    xAux := TFuncoes.SoNumero(edtCPFCNPJ.Text);
 
    if (xAux = '00000000000') or (xAux = '11111111111') or
@@ -941,10 +928,8 @@ begin
       Exit;
    end;
 
-
    try
       // Calculando o primeiro Digito Verificador
-
       xS := 0;
       //Peso igual a 10, pois, o primiero digito verificador não foi calculado
       xPeso := 10;
@@ -990,11 +975,8 @@ begin
          Result := true
       else
          Result := false;
-
    except
-
       Result := false
-
    end;
 end;
 
@@ -1003,7 +985,6 @@ procedure TfrmClientes.edtCPFCNPJExit(Sender: TObject);
 var
    xAux : string;
 begin
-
    xAux := TFuncoes.SoNumero(edtCPFCNPJ.Text);
 
    if (rdgTipoPessoa.ItemIndex <> 1) then
@@ -1033,14 +1014,12 @@ begin
               // edtCPFCNPJ.SetFocus;
          end;
       end;
-
 end;
 
 function TfrmClientes.ValidaCNPJ(CNPJ: string): Boolean;
 var   xDigito13, xDigito14, xAux: string;
       xSM, i, xR, xPeso: integer;
 begin
-
    xAux := TFuncoes.SoNumero(edtCPFCNPJ.Text);
 
    if (xAux = '00000000000000') or (xAux = '11111111111111') or
@@ -1055,9 +1034,7 @@ begin
    end;
 
    try
-
     //Calculando o primeiro digito verificador
-
       xSM := 0;
       xPeso := 2;
       for i := 12 downto 1 do
@@ -1075,9 +1052,7 @@ begin
       else
          str((11 - xR):1, xDigito13);
 
-
       //Calculando o segundo Digito Verificador
-
       xSM := 0;
       xPeso := 2;
 
@@ -1103,9 +1078,7 @@ begin
          Result := false;
 
    except
-
       Result := false
-
    end;
 end;
 
@@ -1118,13 +1091,10 @@ function IsDigit(Key : Char) : Boolean;
 begin
    if not (Key in [#8, #37, #38, #39, #40, #46]) then
    case TipoFiltro of
-
       2 : if not (IsDigit(Key)) then Key := #0;
-
    else
         raise Exception.Create('Tipo de filtro inválido.');
    end;
-   
    Result := (not (Key = #0));
 end;
 
