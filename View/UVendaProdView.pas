@@ -52,6 +52,7 @@ type
     cdsListaVendaDataListagem: TDateField;
     frxDBListaVenda: TfrxDBDataset;
     frxDBListaDadosVenda: TfrxDBDataset;
+    cdsListaVendaNomeCliente: TStringField;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -281,6 +282,7 @@ begin
             btnAlterar.Enabled      := False;
             btnConfirmar.Enabled    := True;
             edtDataPedido.Enabled   := False;
+            cdsVenda.Edit;
 
             if (edtNumeroCliente.CanFocus) then
                (edtNumeroCliente.SetFocus);
@@ -1009,6 +1011,7 @@ begin
       cdsListaVendaIDVenda.Value            := edtNumeroPedido.Text;
       cdsListaVendaDataListagem.Text        := edtDataPedido.Text;
       cdsListaVendaValorTotalListagem.Value := edtValorTotal.Value;
+      cdsListaVendaNomeCliente.Text         := edtNomeCliente.Text;
       cdsListaVenda.Post;
 
       cdsVenda.First;
