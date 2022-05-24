@@ -242,6 +242,7 @@ object frmCadProdutoPesq: TfrmCadProdutoPesq
         TitleFont.Name = 'MS Sans Serif'
         TitleFont.Style = []
         OnDblClick = dbgCadProdutoDblClick
+        OnEnter = dbgCadProdutoEnter
         OnKeyDown = dbgCadProdutoKeyDown
         Columns = <
           item

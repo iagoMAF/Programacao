@@ -39,6 +39,7 @@ type
     procedure dbgCadProdutoKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormShow(Sender: TObject);
+    procedure dbgCadProdutoEnter(Sender: TObject);
   private
     { Private declarations }
 
@@ -258,6 +259,15 @@ procedure TfrmCadProdutoPesq.FormShow(Sender: TObject);
 begin
    if edtNome.CanFocus then
       edtNome.SetFocus;
+end;
+
+procedure TfrmCadProdutoPesq.dbgCadProdutoEnter(Sender: TObject);
+begin
+   cdsCadProduto.Edit;
+   dbgCadProduto.Columns[0].ReadOnly := True;
+   dbgCadProduto.Columns[1].ReadOnly := True;
+   dbgCadProduto.Columns[2].ReadOnly := True;
+   dbgCadProduto.Columns[3].ReadOnly := True;
 end;
 
 end.

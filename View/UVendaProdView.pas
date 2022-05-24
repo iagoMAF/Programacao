@@ -7,7 +7,8 @@ uses
   Dialogs, ExtCtrls, ComCtrls, DB, DBClient, Grids, DBGrids, StdCtrls,
   Mask, Buttons, uMessageUtil, UEnumerationUtil, NumEdit, UCliente,
   UCadProdutoPesqView, UPessoaController, UVendaProd, UVendaProdController,
-  UComercio, UGridVenda, UClassFuncoes, frxClass, frxDBSet, UVendaProdPesqView;
+  UComercio, UGridVenda, UClassFuncoes, frxClass, frxDBSet, UVendaProdPesqView,
+  ADODB;
 
 type
   TfrmVendaProd = class(TForm)
@@ -43,6 +44,14 @@ type
     edtDataPedido: TEdit;
     SpeedButton1: TSpeedButton;
     cdsVendaValorTotalProduto: TFloatField;
+    btnListar: TBitBtn;
+    frxListagemVenda: TfrxReport;
+    cdsListaVenda: TClientDataSet;
+    cdsListaVendaIDVenda: TStringField;
+    cdsListaVendaValorTotalListagem: TFloatField;
+    cdsListaVendaDataListagem: TDateField;
+    frxDBListaVenda: TfrxDBDataset;
+    frxDBListaDadosVenda: TfrxDBDataset;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -69,6 +78,7 @@ type
     procedure dbgVendaColEnter(Sender: TObject);
     procedure dbgVendaEnter(Sender: TObject);
     procedure edtNumeroClienteKeyPress(Sender: TObject; var Key: Char);
+    procedure btnListarClick(Sender: TObject);
   private
     { Private declarations }
     vKey : Word;
@@ -100,8 +110,9 @@ type
     function  ValidaVenda           : Boolean;
     function  ProcessaConsulta      : Boolean;
     function  ProcessaConsultaVenda : Boolean;
-    function ValidateField(var Key: Char; TipoFiltro: Byte = 0) : Boolean;
+    function  ValidateField(var Key: Char; TipoFiltro: Byte = 0) : Boolean;
     function  ValorTotalPreco      : Currency;
+    function  ProcessaListagemVenda : Boolean;
 
   public
     { Public declarations }
@@ -189,8 +200,16 @@ begin
       if (Components[i] is TNumEdit) then
          (Components[i] as TNumEdit).Text  := EmptyStr;
    end;
+
    if (not cdsVenda.IsEmpty) then
       (cdsVenda.EmptyDataSet);
+
+   if (vObjVendaProd <> nil) then
+      FreeAndNil(vObjVendaProd);
+
+   if (vObjColGridVenda <> nil) then
+      FreeAndNil(vObjColGridVenda);
+
 end;
 
 procedure TfrmVendaProd.DefineEstadoTela;
@@ -211,11 +230,13 @@ begin
 
       etPadrao:
       begin
+
          CamposEnabled(False);
          LimparTela;
          stbBarraStatus.Panels[0].Text := EmptyStr;
          stbBarraStatus.Panels[0].Text := EmptyStr;
          edtDataPedido.Text := DateToStr(Date);
+         btnListar.Enabled := False;
 
          if (frmVendaProd <> nil) and
             (frmVendaProd.Active) and
@@ -281,7 +302,7 @@ begin
       begin
          stbBarraStatus.Panels[0].Text := 'Pesquisa';
          dbgVenda.Enabled := False;
-         edtDataPedido.Text := DateToStr(Date);
+         //edtDataPedido.Text := DateToStr(Date);
 
          if (frmVendaPesq = nil) then
             frmVendaPesq := TfrmVendaPesq.Create(nil);
@@ -294,6 +315,7 @@ begin
             vEstadoTela    := etConsultar;
             //ProcessaConsulta;
             ProcessaConsultaVenda;
+            btnListar.Enabled := True;
          end
          else
          begin
@@ -310,7 +332,7 @@ begin
       etConsultar:
       begin
          stbBarraStatus.Panels[0].Text := 'Consulta';
-         edtDataPedido.Text := DateToStr(Date);
+         //edtDataPedido.Text := DateToStr(Date);
          dbgVenda.Enabled   := False;
 //       dbgVenda.Columns[1].ReadOnly  := False;
          CamposEnabled(False);
@@ -327,6 +349,23 @@ begin
          else
          begin
             edtNumeroPedido.Enabled := True;
+
+            if (edtNumeroPedido.CanFocus) then
+               (edtNumeroPedido.SetFocus);
+         end;
+      end;
+
+      etListar:
+      begin
+
+         stbBarraStatus.Panels[0].Text := 'Listagem';
+
+         if (edtNumeroPedido.Text <> EmptyStr) then
+            ProcessaListagemVenda
+         else
+         begin
+//          lblCodigo.Enabled         := True;
+            edtNumeroPedido.Enabled   := True;
 
             if (edtNumeroPedido.CanFocus) then
                (edtNumeroPedido.SetFocus);
@@ -383,7 +422,7 @@ begin
    if (vEstadoTela <> etPadrao) then
    begin
       if (TMessageUtil.Pergunta(
-         'Deseja realmente sair desaa rotina?')) then
+         'Deseja realmente sair dessa rotina?')) then
       begin
          vEstadoTela := etPadrao;
          DefineEstadoTela;
@@ -607,9 +646,18 @@ begin
       begin
          TMessageUtil.Informacao('Venda cadastrada com sucesso.'#13+
             'Código cadastrado: '+ IntToStr(vObjVendaProd.Id));
-         vEstadoTela := etPadrao;
-         DefineEstadoTela;
-         Result := True;
+
+         if (TMessageUtil.Pergunta(
+               'Deseja imprimir a NF? ')) then
+               ProcessaListagemVenda;
+            begin
+               vEstadoTela := etPadrao;
+               DefineEstadoTela;
+            end;
+
+//         vEstadoTela := etPadrao;
+//         DefineEstadoTela;
+//         Result := True;
       end;
    except
       on E: Exception do
@@ -694,7 +742,7 @@ begin
       for i := 0 to pred(vObjColGridVenda.Count) do
       begin
          cdsVenda.Edit;
-         cdsVendaID.Value         := vObjColGridVenda.Retorna(i).Id;
+         cdsVendaID.Value         := vObjColGridVenda.Retorna(i).ID_Produto;
          cdsVendaPreco.Value      := vObjColGridVenda.Retorna(i).ValorUnitario;
          cdsVendaDescricao.Text   := vObjColGridVenda.Retorna(i).Descricao;
          cdsVendaQuantidade.Value := vObjColGridVenda.Retorna(i).Quantidade;
@@ -732,8 +780,10 @@ begin
       xGridVenda := nil;
       xID_Venda  := 0;
 
+
       if (vObjColGridVenda <> nil) then
          FreeAndNil(vObjColGridVenda);
+
       vObjColGridVenda := TColGridVenda.Create;
 
       if (vEstadoTela = etAlterar) then
@@ -813,6 +863,8 @@ begin
    if vKey = VK_RETURN then
       ProcessaConsultaVenda;
    vKey  := VK_CLEAR;
+
+   btnListar.Enabled := True;
 end;
 
 function TfrmVendaProd.ProcessaAlteracao: Boolean;
@@ -851,8 +903,8 @@ begin
          xTotal := xTotal + cdsVenda.FieldByName('ValorTotalProduto').AsCurrency;
          cdsVenda.Next;
       end;
-      cdsVenda.RecNo     := xPosic;
-      edtValorTotal.Text := FormatFloat('#,0.00', xTotal);
+      cdsVenda.RecNo      := xPosic;
+      edtValorTotal.Value :=  xTotal;
    finally
       cdsVenda.EnableControls;
    end;
@@ -935,6 +987,42 @@ procedure TfrmVendaProd.edtNumeroClienteKeyPress(Sender: TObject;
   var Key: Char);
 begin
    ValidateField(Key, 2);
+end;
+
+procedure TfrmVendaProd.btnListarClick(Sender: TObject);
+begin
+   vEstadoTela := etListar;
+   DefineEstadoTela;
+end;
+
+function TfrmVendaProd.ProcessaListagemVenda: Boolean;
+var
+   xGridVenda  : TGridVenda;
+begin
+   try
+      if (not cdsListaVenda.Active)
+      // and (not cdsVenda.Active)
+      then
+         Exit;
+
+      cdsListaVenda.Append;
+      cdsListaVendaIDVenda.Value            := edtNumeroPedido.Text;
+      cdsListaVendaDataListagem.Text        := edtDataPedido.Text;
+      cdsListaVendaValorTotalListagem.Value := edtValorTotal.Value;
+      cdsListaVenda.Post;
+
+      cdsVenda.First;
+
+      frxListagemVenda.Variables['DATAHORA']    :=
+         QuotedStr(FormatDateTime('DD/MM/YYYY hh:mm', Date + Time));
+      frxListagemVenda.Variables['NOMEEMPRESA'] :=
+         QuotedStr('EMPRESA TESTE');
+      frxListagemVenda.ShowReport();
+
+   finally
+      vEstadoTela := etPadrao;
+      DefineEstadoTela;
+   end;
 end;
 
 end.
