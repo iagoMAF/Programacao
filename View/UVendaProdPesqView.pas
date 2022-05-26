@@ -165,6 +165,7 @@ begin
          begin
             for xAux := 0 to pred(xListaVendaProd.Count) do
             begin
+               cdsVendaCliente.Edit;
 
                cdsVendaCliente.Append;
 
@@ -188,11 +189,14 @@ begin
                cdsVendaClienteValorTotal.Value :=
                   xListaVendaProd.Retorna(xAux).TotalVenda;
 
+
                cdsVendaCliente.Post;
 
-
-
-
+               if (cdsVendaClienteAtivo.Value = False) then
+               begin
+                  cdsVendaCliente.Edit;
+                  cdsVendaCliente.Delete;
+               end;
 
             end;
          end;
@@ -209,6 +213,8 @@ begin
             if dbgVendaCliente.CanFocus then
                dbgVendaCliente.SetFocus;
          end;
+
+
       finally
          if (xListaVendaProd <> nil) then
             FreeAndNil(xListaVendaProd);
@@ -262,7 +268,7 @@ end;
 
 procedure TfrmVendaPesq.cdsVendaClienteBeforeDelete(DataSet: TDataSet);
 begin
-   Abort;
+  //Abort;
 end;
 
 procedure TfrmVendaPesq.dbgVendaClienteDblClick(Sender: TObject);

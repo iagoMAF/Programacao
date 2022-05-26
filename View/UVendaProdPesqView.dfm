@@ -280,11 +280,6 @@ object frmVendaPesq: TfrmVendaPesq
             Expanded = False
             FieldName = 'IDCliente'
             Visible = True
-          end
-          item
-            Expanded = False
-            FieldName = 'Ativo'
-            Visible = True
           end>
       end
     end
