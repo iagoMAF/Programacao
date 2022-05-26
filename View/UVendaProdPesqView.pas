@@ -31,6 +31,7 @@ type
     cdsVendaClienteDataVenda: TDateField;
     cdsVendaClienteValorTotal: TFloatField;
     cdsVendaClienteIDCliente: TIntegerField;
+    cdsVendaClienteAtivo: TBooleanField;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure btnFiltrarClick(Sender: TObject);
@@ -57,11 +58,12 @@ type
 
   public
     { Public declarations }
-    mVendaID     : String;
-    mNomeCliente : String;
-    mValorTotal  : Double;
-    mDataVenda   : TDateTime;
-    mIDCliente   : String;
+    mVendaID      : String;
+    mNomeCliente  : String;
+    mValorTotal   : Double;
+    mDataVenda    : TDateTime;
+    mIDCliente    : String;
+    mClienteAtivo : Boolean;
   end;
 
 var
@@ -119,11 +121,12 @@ procedure TfrmVendaPesq.ProcessaConfirmacao;
 begin
    if (not cdsVendaCliente.IsEmpty) then
    begin
-      mVendaID     := cdsVendaClienteVendaID.Text;
-      mNomeCliente := cdsVendaClienteNomeCliente.Text;
-      mDataVenda   := cdsVendaClienteDataVenda.Value;
-      mValorTotal  := cdsVendaClienteValorTotal.Value;
-      mIDCliente   := cdsVendaClienteIDCliente.Text;
+      mVendaID      := cdsVendaClienteVendaID.Text;
+      mNomeCliente  := cdsVendaClienteNomeCliente.Text;
+      mClienteAtivo := cdsVendaClienteAtivo.Value;
+      mDataVenda    := cdsVendaClienteDataVenda.Value;
+      mValorTotal   := cdsVendaClienteValorTotal.Value;
+      mIDCliente    := cdsVendaClienteIDCliente.Text;
       Self.ModalResult  := mrOk;
       LimparTela;
       Close;
@@ -144,6 +147,8 @@ var
 begin
    try
       try
+
+
          xListaVendaProd   := TColVendaProd.Create;
 
          xListaVendaProd :=
@@ -173,7 +178,10 @@ begin
                   StrToIntDef(cdsVendaClienteIDCliente.Text, 0)));
 
                if (vObjCliente <> nil) then
+               begin
                   cdsVendaClienteNomeCliente.Text := vObjCliente.Nome;
+                  cdsVendaClienteAtivo.Value := vObjCliente.Ativo;
+               end;
 
                cdsVendaClienteDataVenda.Value :=
                   xListaVendaProd.Retorna(xAux).DataVenda;
@@ -181,6 +189,11 @@ begin
                   xListaVendaProd.Retorna(xAux).TotalVenda;
 
                cdsVendaCliente.Post;
+
+
+
+
+
             end;
          end;
 
@@ -214,6 +227,7 @@ procedure TfrmVendaPesq.btnFiltrarClick(Sender: TObject);
 begin
    mVendaID    := EmptyStr;
   // mNomeCliente := EmptyStr;
+   //mClienteAtivo := 0;
    mValorTotal := 0;
    mDataVenda  := 0;
    mIDCliente  := EmptyStr;
@@ -270,6 +284,7 @@ begin
       Exit;
    //edtNumeroCliente.Text             := IntToStr(vObjCliente.Id);
    cdsVendaClienteNomeCliente.Text   := vObjCliente.Nome;
+   cdsVendaClienteAtivo.Value := vObjCliente.Ativo;
 end;
 
 procedure TfrmVendaPesq.ProcessaConsultaCliente;

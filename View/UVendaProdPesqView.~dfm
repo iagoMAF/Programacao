@@ -259,7 +259,7 @@ object frmVendaPesq: TfrmVendaPesq
             Expanded = False
             FieldName = 'NomeCliente'
             Title.Caption = 'Cliente'
-            Width = 338
+            Width = 277
             Visible = True
           end
           item
@@ -279,6 +279,11 @@ object frmVendaPesq: TfrmVendaPesq
           item
             Expanded = False
             FieldName = 'IDCliente'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'Ativo'
             Visible = True
           end>
       end
@@ -313,6 +318,10 @@ object frmVendaPesq: TfrmVendaPesq
       item
         Name = 'IDCliente'
         DataType = ftInteger
+      end
+      item
+        Name = 'Ativo'
+        DataType = ftBoolean
       end>
     IndexDefs = <>
     Params = <>
@@ -321,11 +330,11 @@ object frmVendaPesq: TfrmVendaPesq
     Left = 44
     Top = 145
     Data = {
-      810000009619E0BD01000000180000000500000000000300000081000756656E
+      8F0000009619E0BD0100000018000000060000000000030000008F000756656E
       6461494404000100000000000B4E6F6D65436C69656E74650100490000000100
       055749445448020002006400094461746156656E646104000600000000000A56
       616C6F72546F74616C0800040000000000094944436C69656E74650400010000
-      0000000000}
+      00000005417469766F02000300000000000000}
     object cdsVendaClienteVendaID: TIntegerField
       FieldName = 'VendaID'
     end
@@ -342,6 +351,9 @@ object frmVendaPesq: TfrmVendaPesq
     end
     object cdsVendaClienteIDCliente: TIntegerField
       FieldName = 'IDCliente'
+    end
+    object cdsVendaClienteAtivo: TBooleanField
+      FieldName = 'Ativo'
     end
   end
 end

@@ -31,6 +31,7 @@ type
     cdsVendaClienteDataVenda: TDateField;
     cdsVendaClienteValorTotal: TFloatField;
     cdsVendaClienteIDCliente: TIntegerField;
+    cdsVendaClienteAtivo: TBooleanField;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure btnFiltrarClick(Sender: TObject);
@@ -52,17 +53,17 @@ type
    procedure LimparTela;
    procedure ProcessaConfirmacao;
    procedure ProcessaPesquisa;
-
    procedure CarregaNomeClienteGrid;
    procedure ProcessaConsultaCliente;
 
   public
     { Public declarations }
-    mVendaID     : String;
-    mNomeCliente : String;
-    mValorTotal  : Double;
-    mDataVenda   : TDateTime;
-    mIDCliente   : String;
+    mVendaID      : String;
+    mNomeCliente  : String;
+    mValorTotal   : Double;
+    mDataVenda    : TDateTime;
+    mIDCliente    : String;
+    mClienteAtivo : Boolean;
   end;
 
 var
@@ -109,22 +110,23 @@ begin
          (Components[i] as TEdit).Text := EmptyStr;
    end;
 
-    if (not cdsVendaCliente.IsEmpty) then
-       (cdsVendaCliente.EmptyDataSet);
+   if (not cdsVendaCliente.IsEmpty) then
+      (cdsVendaCliente.EmptyDataSet);
 
-    if (edtCodigoVenda.CanFocus) then
-       (edtCodigoVenda.SetFocus);
+   if (edtCodigoVenda.CanFocus) then
+      (edtCodigoVenda.SetFocus);
 end;
 
 procedure TfrmVendaPesq.ProcessaConfirmacao;
 begin
    if (not cdsVendaCliente.IsEmpty) then
    begin
-      mVendaID     := cdsVendaClienteVendaID.Text;
-      mNomeCliente := cdsVendaClienteNomeCliente.Text;
-      mDataVenda   := cdsVendaClienteDataVenda.Value;
-      mValorTotal  := cdsVendaClienteValorTotal.Value;
-      mIDCliente   := cdsVendaClienteIDCliente.Text;
+      mVendaID      := cdsVendaClienteVendaID.Text;
+      mNomeCliente  := cdsVendaClienteNomeCliente.Text;
+      mClienteAtivo := cdsVendaClienteAtivo.Value;
+      mDataVenda    := cdsVendaClienteDataVenda.Value;
+      mValorTotal   := cdsVendaClienteValorTotal.Value;
+      mIDCliente    := cdsVendaClienteIDCliente.Text;
       Self.ModalResult  := mrOk;
       LimparTela;
       Close;
@@ -145,6 +147,8 @@ var
 begin
    try
       try
+
+
          xListaVendaProd   := TColVendaProd.Create;
 
          xListaVendaProd :=
@@ -174,7 +178,10 @@ begin
                   StrToIntDef(cdsVendaClienteIDCliente.Text, 0)));
 
                if (vObjCliente <> nil) then
+               begin
                   cdsVendaClienteNomeCliente.Text := vObjCliente.Nome;
+                  cdsVendaClienteAtivo.Value := vObjCliente.Ativo;
+               end;
 
                cdsVendaClienteDataVenda.Value :=
                   xListaVendaProd.Retorna(xAux).DataVenda;
@@ -182,7 +189,6 @@ begin
                   xListaVendaProd.Retorna(xAux).TotalVenda;
 
                cdsVendaCliente.Post;
-
             end;
          end;
 
@@ -198,7 +204,6 @@ begin
             if dbgVendaCliente.CanFocus then
                dbgVendaCliente.SetFocus;
          end;
-
       finally
          if (xListaVendaProd <> nil) then
             FreeAndNil(xListaVendaProd);
@@ -217,6 +222,7 @@ procedure TfrmVendaPesq.btnFiltrarClick(Sender: TObject);
 begin
    mVendaID    := EmptyStr;
   // mNomeCliente := EmptyStr;
+   //mClienteAtivo := 0;
    mValorTotal := 0;
    mDataVenda  := 0;
    mIDCliente  := EmptyStr;
@@ -263,25 +269,24 @@ procedure TfrmVendaPesq.dbgVendaClienteKeyDown(Sender: TObject;
   var Key: Word; Shift: TShiftState);
 begin
    if (Key =  VK_RETURN) and
-       (btnConfirmar.CanFocus) then
-       (btnConfirmar.SetFocus);
+      (btnConfirmar.CanFocus) then
+      (btnConfirmar.SetFocus);
 end;
 
 procedure TfrmVendaPesq.CarregaNomeClienteGrid;
 begin
    if (vObjCliente = nil) then
       Exit;
-
    //edtNumeroCliente.Text             := IntToStr(vObjCliente.Id);
    cdsVendaClienteNomeCliente.Text   := vObjCliente.Nome;
+   cdsVendaClienteAtivo.Value := vObjCliente.Ativo;
 end;
 
 procedure TfrmVendaPesq.ProcessaConsultaCliente;
 begin
    vObjCliente :=
-         TCliente(TPessoaController.getInstancia.BuscaPessoa(
-            StrToIntDef(cdsVendaClienteIDCliente.Text, 0)));
-
+      TCliente(TPessoaController.getInstancia.BuscaPessoa(
+         StrToIntDef(cdsVendaClienteIDCliente.Text, 0)));
    CarregaNomeClienteGrid;
 end;
 

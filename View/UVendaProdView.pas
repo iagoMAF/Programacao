@@ -52,6 +52,7 @@ type
     frxDBListaVenda: TfrxDBDataset;
     frxDBListaDadosVenda: TfrxDBDataset;
     cdsListaVendaNomeCliente: TStringField;
+    chkAtivo: TCheckBox;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -174,6 +175,9 @@ begin
 
       if (Components[i] is TNumEdit) then
          (Components[i] as TNumEdit).Enabled  := pOpcao;
+
+      if (Components[i] is TCheckBox) then
+        (Components[i] as TCheckBox).Enabled := pOpcao;
    end;
 end;
 
@@ -199,6 +203,9 @@ begin
 
       if (Components[i] is TNumEdit) then
          (Components[i] as TNumEdit).Text  := EmptyStr;
+
+      if (Components[i] is TCheckBox) then // Então, define o seu padrão desmarcando
+         (Components[i] as TCheckBox).Checked := False;
    end;
 
    if (not cdsVenda.IsEmpty) then
@@ -237,6 +244,7 @@ begin
          stbBarraStatus.Panels[0].Text := EmptyStr;
          edtDataPedido.Text := DateToStr(Date);
          //btnListar.Enabled := False;
+         chkAtivo.Enabled := False;
 
          if (frmVendaProd <> nil) and
             (frmVendaProd.Active) and
@@ -252,6 +260,7 @@ begin
          edtDataPedido.Text      := DateToStr(Date);
          CamposEnabled(True);
          dbgVenda.Enabled        := True;
+         chkAtivo.Enabled := False;
 
          //dbgVenda.Columns[0].ReadOnly := True;
 
@@ -313,6 +322,7 @@ begin
          stbBarraStatus.Panels[0].Text := 'Pesquisa';
          dbgVenda.Enabled := False;
          //edtDataPedido.Text := DateToStr(Date);
+         chkAtivo.Enabled := False;
 
          if (frmVendaPesq = nil) then
             frmVendaPesq := TfrmVendaPesq.Create(nil);
@@ -346,6 +356,7 @@ begin
          dbgVenda.Enabled   := False;
 //       dbgVenda.Columns[1].ReadOnly  := False;
          CamposEnabled(False);
+         chkAtivo.Enabled := False;
 
          if (edtNumeroPedido.Text <> EmptyStr) then
          begin
@@ -371,6 +382,7 @@ begin
          stbBarraStatus.Panels[0].Text := 'Listagem';
          btnCancelar.Enabled := True;
          btnMaisProduto.Enabled := False;
+         chkAtivo.Enabled := False;
 
          if (edtNumeroPedido.Text <> EmptyStr) then
             ProcessaListagemVenda
@@ -456,6 +468,8 @@ begin
 
    edtNumeroCliente.Text  := IntToStr(vObjCliente.Id);
    edtNomeCliente.Text    := vObjCliente.Nome;
+   chkAtivo.Checked       := vObjCliente.Ativo;
+
 end;
 
 procedure TfrmVendaProd.edtNumeroClienteExit(Sender: TObject);
@@ -656,6 +670,19 @@ function TfrmVendaProd.ProcessaInclusao: Boolean;
 begin
    try
       Result := False;
+      if (chkAtivo.Checked = False) then
+      begin
+          TMessageUtil.Alerta(
+            'Não é possivel realizar a venda para um cliente que não está ativo. '#13+
+            'Confira os dados do cliente em Cadastro -> Cliente.                 '#13+
+            'Caso necessario coloque o cliente ativo.');
+
+         if edtNumeroCliente.Canfocus then
+            edtNumeroCliente.SetFocus;
+         Exit;
+      end;
+
+
       if ProcessaVendaProd then
       begin
          TMessageUtil.Informacao('Venda cadastrada com sucesso.'#13+

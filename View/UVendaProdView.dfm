@@ -477,7 +477,7 @@ object frmVendaProd: TfrmVendaProd
     object edtNomeCliente: TEdit
       Left = 117
       Top = 32
-      Width = 444
+      Width = 364
       Height = 21
       TabOrder = 2
     end
@@ -595,6 +595,15 @@ object frmVendaProd: TfrmVendaProd
       Width = 73
       Height = 21
       TabOrder = 6
+    end
+    object chkAtivo: TCheckBox
+      Left = 490
+      Top = 33
+      Width = 60
+      Height = 17
+      Caption = 'Ativo'
+      Enabled = False
+      TabOrder = 7
     end
   end
   object dtsVenda: TDataSource
