@@ -45,6 +45,7 @@ type
     procedure edtCodigoExit(Sender: TObject);
     procedure edtPrecoExit(Sender: TObject);
     procedure edtEstoqueKeyPress(Sender: TObject; var Key: Char);
+    procedure edtDescricaoKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
     vKey : Word;
@@ -749,5 +750,12 @@ begin
 
 end;
 
+
+procedure TfrmCadProduto.edtDescricaoKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+   if not (Key in['a'..'z','A'..'Z',Chr(8),Chr(32)]) then
+      Key:= #0
+end;
 
 end.

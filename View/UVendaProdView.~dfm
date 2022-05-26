@@ -395,7 +395,6 @@ object frmVendaProd: TfrmVendaProd
       Width = 75
       Height = 25
       Caption = '&Listar'
-      Enabled = False
       TabOrder = 8
       OnClick = btnListarClick
       Glyph.Data = {
@@ -667,7 +666,7 @@ object frmVendaProd: TfrmVendaProd
     Params = <>
     StoreDefs = True
     AfterDelete = cdsVendaAfterDelete
-    Left = 54
+    Left = 56
     Top = 125
     Data = {
       7E0000009619E0BD0100000018000000050000000000030000007E0002494404
@@ -1250,7 +1249,7 @@ object frmVendaProd: TfrmVendaProd
         end
       end
       object Memo30: TfrxMemoView
-        Left = 515.016080000000000000
+        Left = 503.016080000000000000
         Top = 328.039580000000000000
         Width = 105.826840000000000000
         Height = 18.897650000000000000
@@ -1265,7 +1264,7 @@ object frmVendaProd: TfrmVendaProd
         ParentFont = False
       end
       object Memo31: TfrxMemoView
-        Left = 619.961040000000000000
+        Left = 607.961040000000000000
         Top = 328.039580000000000000
         Width = 90.708720000000000000
         Height = 18.897650000000000000

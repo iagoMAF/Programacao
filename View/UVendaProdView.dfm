@@ -395,7 +395,6 @@ object frmVendaProd: TfrmVendaProd
       Width = 75
       Height = 25
       Caption = '&Listar'
-      Enabled = False
       TabOrder = 8
       OnClick = btnListarClick
       Glyph.Data = {

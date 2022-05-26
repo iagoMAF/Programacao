@@ -153,6 +153,9 @@ begin
 
     if (btnIncluir.CanFocus) then
        (btnIncluir.SetFocus);
+
+   if (vObjProduto <> nil) then
+      FreeAndNil(vObjProduto);
 end;
 
 procedure TfrmProduto.DefineEstadoTela;

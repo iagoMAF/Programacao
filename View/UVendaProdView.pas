@@ -145,7 +145,7 @@ begin
          if (vEstadoTela <> etPadrao)then
          begin
             if (TMessageUtil.Pergunta(
-               'Deseja realmente sair cancelar essa operação? ')) then
+               'Deseja realmente sair dessa essa operação? ')) then
             begin
                vEstadoTela := etPadrao;
                DefineEstadoTela;
@@ -237,7 +237,7 @@ begin
          stbBarraStatus.Panels[0].Text := EmptyStr;
          stbBarraStatus.Panels[0].Text := EmptyStr;
          edtDataPedido.Text := DateToStr(Date);
-         btnListar.Enabled := False;
+         //btnListar.Enabled := False;
 
          if (frmVendaProd <> nil) and
             (frmVendaProd.Active) and
@@ -272,7 +272,10 @@ begin
          dbgVenda.Enabled       := True;
 
          //dbgVenda.Columns[1].ReadOnly := False;
-         btnMaisProduto.Enabled := True;
+
+         if (edtNumeroPedido.Text <> EmptyStr) then
+            btnMaisProduto.Enabled := True;
+
          edtDataPedido.Enabled  := False;
 
          if (edtNumeroPedido.Text <> EmptyStr) then
@@ -298,6 +301,7 @@ begin
             if (edtNumeroPedido.CanFocus) then
                (edtNumeroPedido.SetFocus);
          end;
+
       end;
 
       etPesquisar:
@@ -361,6 +365,8 @@ begin
       begin
 
          stbBarraStatus.Panels[0].Text := 'Listagem';
+         btnCancelar.Enabled := True;
+         btnMaisProduto.Enabled := False;
 
          if (edtNumeroPedido.Text <> EmptyStr) then
             ProcessaListagemVenda
@@ -484,7 +490,7 @@ begin
       Result := False;
       if (edtNumeroCliente.Text = EmptyStr) then
       begin
-         TMessageUtil.Alerta('Código do cliente não pode ficar em branco.');
+         TMessageUtil.Alerta('O código do cliente não pode ficar em branco.');
 
          if edtNumeroCliente.CanFocus then
             edtNumeroCliente.SetFocus;
@@ -553,6 +559,7 @@ end;
 procedure TfrmVendaProd.dbgVendaExit(Sender: TObject);
 begin
    //ProcessaConfirmacaoPesq;
+   cdsVenda.Edit;
    cdsVendaValorTotalProduto.Value :=
       cdsVendaQuantidade.Value * cdsVendaPreco.Value;
    ValorTotalPreco;
@@ -619,12 +626,13 @@ begin
       cdsVendaQuantidade.Value := 1;
       cdsVendaPreco.Value      := frmCadProdutoPesq.mProdutoPreco;
 
-      //cdsVendaValorTotalProduto.Value := 1;
-
       cdsVendaValorTotalProduto.Value :=
          cdsVendaQuantidade.Value * cdsVendaPreco.Value;
 
       cdsVenda.Post;
+      frmCadProdutoPesq.mProdutoID :=0;
+
+
 //      PrimeiroNumero := StrToFloat(dbgVenda.columns.items[3].field.text);
 //      Resultado := 0;
 //      SegundoNumero := edtValorTotal.Value;
@@ -741,6 +749,7 @@ begin
    if (vObjColGridVenda <> nil) then
    begin
       cdsVenda.First;
+      cdsVenda.Edit;
       for i := 0 to pred(vObjColGridVenda.Count) do
       begin
          cdsVenda.Edit;
@@ -751,9 +760,11 @@ begin
          //cdsVendaValorTotalProduto.Value := vObjColGridVenda.Retorna(i).ValorTotalProduto;
 
          CarregaValorTotalProduto;
-         ProcessaConsulta;
+//         ProcessaConsulta;
          cdsVenda.Append;
+         //cdsVenda.Edit;
       end;
+         ProcessaConsulta;
    end;
 end;
 
@@ -792,6 +803,7 @@ begin
           xID_Venda  := StrToIntDef(edtNumeroPedido.Text, 0);
 
       cdsVenda.First;
+      //cdsVenda.Edit;
       while  not cdsVenda.Eof do
       begin
          xGridVenda               := TGridVenda.Create;
@@ -898,6 +910,7 @@ begin
    xTotal := 0;
    xPosic := cdsVenda.RecNo;
    cdsVenda.DisableControls;
+   //cdsVenda.Edit;
    try
       cdsVenda.First;
       while not cdsVenda.EOF do
@@ -964,6 +977,7 @@ end;
 
 procedure TfrmVendaProd.CarregaValorTotalProduto;
 begin
+   cdsVenda.Edit;
    cdsVendaValorTotalProduto.Value :=
       cdsVendaQuantidade.Value * cdsVendaPreco.Value;
 end;
@@ -1006,6 +1020,8 @@ begin
       // and (not cdsVenda.Active)
       then
          Exit;
+
+      
 
       cdsListaVenda.Append;
       cdsListaVendaIDVenda.Value            := edtNumeroPedido.Text;

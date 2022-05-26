@@ -165,6 +165,9 @@ begin
          (Components[i] as TNumEdit).Text := EmptyStr;
 
    end;
+
+   if (vObjCadProduto <> nil) then
+      FreeAndNil(vObjCadProduto);
 end;
 
 procedure TfrmCadProduto.DefineEstadoTela;
