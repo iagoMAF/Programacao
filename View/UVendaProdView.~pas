@@ -18,7 +18,6 @@ type
     btnConsultar: TBitBtn;
     btnSair: TBitBtn;
     btnPesquisar: TBitBtn;
-    btnAlterar: TBitBtn;
     lblNumeroPedido: TLabel;
     edtNumeroPedido: TEdit;
     lblCliente: TLabel;
@@ -57,7 +56,7 @@ type
       Shift: TShiftState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnIncluirClick(Sender: TObject);
-    procedure btnAlterarClick(Sender: TObject);
+ //   procedure btnAlterarClick(Sender: TObject);
     procedure btnConsultarClick(Sender: TObject);
     procedure btnPesquisarClick(Sender: TObject);
     procedure btnConfirmarClick(Sender: TObject);
@@ -216,7 +215,7 @@ end;
 procedure TfrmVendaProd.DefineEstadoTela;
 begin
    btnIncluir.Enabled   := (vEstadoTela in [etPadrao]);
-   btnAlterar.Enabled   := (vEstadoTela in [etPadrao]);
+  // btnAlterar.Enabled   := (vEstadoTela in [etPadrao]);
    btnConsultar.Enabled := (vEstadoTela in [etPadrao]);
    btnPesquisar.Enabled := (vEstadoTela in [etPadrao]);
    //btnExcluir.Enabled := (vEstadoTela in [etPadrao]);
@@ -265,39 +264,48 @@ begin
             (edtNumeroCliente.SetFocus);
       end;
 
-      etAlterar:
+
+// A function de alterar está disponivel, basta apenas adicionar o btn
+// Com o nome btnAlterar e tirar os comentarios das linhas :
+// 218,274 até 308, 397 e 477.
+
+        etAlterar:
       begin
-         stbBarraStatus.Panels[0].Text := 'Alteração';
-         edtDataPedido.Text     := DateToStr(Date);
-         dbgVenda.Enabled       := True;
-
-         //dbgVenda.Columns[1].ReadOnly := False;
-         btnMaisProduto.Enabled := True;
-         edtDataPedido.Enabled  := False;
-
-         if (edtNumeroPedido.Text <> EmptyStr) then
-         begin
-            CamposEnabled(True);
-            edtNumeroPedido.Enabled := False;
-            btnAlterar.Enabled      := False;
-            btnConfirmar.Enabled    := True;
-            edtDataPedido.Enabled   := False;
-            cdsVenda.Edit;
-
-            if (edtNumeroCliente.CanFocus) then
-               (edtNumeroCliente.SetFocus);
-
-            edtNumeroCliente.Enabled := False;
-            edtNomeCliente.Enabled := False;
-         end
-         else
-         begin
-            edtNumeroPedido.Enabled := True;
-            edtDataPedido.Enabled   := False;
-
-            if (edtNumeroPedido.CanFocus) then
-               (edtNumeroPedido.SetFocus);
-         end;
+//         stbBarraStatus.Panels[0].Text := 'Alteração';
+//         edtDataPedido.Text     := DateToStr(Date);
+//         dbgVenda.Enabled       := True;
+//
+//         //dbgVenda.Columns[1].ReadOnly := False;
+//
+//         if (edtNumeroPedido.Text <> EmptyStr) then
+//            btnMaisProduto.Enabled := True;
+//
+//         edtDataPedido.Enabled  := False;
+//
+//         if (edtNumeroPedido.Text <> EmptyStr) then
+//         begin
+//            CamposEnabled(True);
+//            edtNumeroPedido.Enabled := False;
+//            btnAlterar.Enabled      := False;
+//            btnConfirmar.Enabled    := True;
+//            edtDataPedido.Enabled   := False;
+//            cdsVenda.Edit;
+//
+//            if (edtNumeroCliente.CanFocus) then
+//               (edtNumeroCliente.SetFocus);
+//
+//            edtNumeroCliente.Enabled := False;
+//            edtNomeCliente.Enabled := False;
+//         end
+//         else
+//         begin
+//            edtNumeroPedido.Enabled := True;
+//            edtDataPedido.Enabled   := False;
+//
+//            if (edtNumeroPedido.CanFocus) then
+//               (edtNumeroPedido.SetFocus);
+//         end;
+//
       end;
 
       etPesquisar:
@@ -342,11 +350,11 @@ begin
          if (edtNumeroPedido.Text <> EmptyStr) then
          begin
             edtNumeroPedido.Enabled := False;
-            btnAlterar.Enabled      := True;
+            //btnAlterar.Enabled      := True;
             btnConfirmar.Enabled    := False;
 
-            if (btnAlterar.CanFocus) then
-               (btnAlterar.SetFocus);
+//            if (btnAlterar.CanFocus) then
+//               (btnAlterar.SetFocus);
          end
          else
          begin
@@ -384,11 +392,11 @@ begin
    DefineEstadoTela;
 end;
 
-procedure TfrmVendaProd.btnAlterarClick(Sender: TObject);
-begin
-   vEstadoTela := etAlterar;
-   DefineEstadoTela;
-end;
+//procedure TfrmVendaProd.btnAlterarClick(Sender: TObject);
+//begin
+//   vEstadoTela := etAlterar;
+//   DefineEstadoTela;
+//end;
 
 procedure TfrmVendaProd.btnConsultarClick(Sender: TObject);
 begin
@@ -466,7 +474,7 @@ begin
    try
       case vEstadoTela of
          etIncluir   : Result    := ProcessaInclusao;
-         etAlterar   : Result    := ProcessaAlteracao;
+         //etAlterar   : Result    := ProcessaAlteracao;
          //etExcluir   : Result    := ProcessaExclusao;
          etConsultar : Result    := ProcessaConsultaVenda;
       end;
@@ -932,15 +940,13 @@ begin
    TMessageUtil.Informacao(
    'Para deletar um produto da venda, basta selecionar a linha do produto e '#13+
    'utilizar a tecla "DELETE".'#13+
-   'Essa função de deletar um produto, serve no modo de inclusão ou no de   '#13+
-   'alteração das vendas.                                                   '#13+
-   'Lembrando que essa ação é irreversível caso salve a alteração.');
+   'Essa função de deletar um produto, pode ser usada apenas no modo de inclusão.');
 end;
 
 procedure TfrmVendaProd.btnConsultarExit(Sender: TObject);
 begin
-   if btnAlterar.CanFocus then
-      btnAlterar.SetFocus;
+   if btnListar.CanFocus then
+      btnListar.SetFocus;
 end;
 
 procedure TfrmVendaProd.dbgVendaKeyDown(Sender: TObject; var Key: Word;
